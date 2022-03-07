@@ -319,37 +319,6 @@ public class AssetAdministrationShellApiTest {
     }
 
     @Nested
-    @DisplayName("Local-Global Behaviour")
-    class LocalGlobalTests {
-
-        @Test
-        public void testCreateShellExpectSuccess() throws Exception {
-            ObjectNode shellPayload = createShell(true);
-            performShellCreateRequest(toJson(shellPayload));
-            ArrayNode multipleAssetIdParam = emptyArrayNode()
-                    .add(specificAssetId("exampleShellIdPrefix#", "exampleGlobalAssetId"));
-            mvc.perform(
-                            MockMvcRequestBuilders
-                                    .get(LOOKUP_SHELL_BASE_PATH)
-                                    .queryParam("assetIds", toJson(multipleAssetIdParam))
-                                    .accept(MediaType.APPLICATION_JSON)
-                    )
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$", hasSize(1)));
-            String shellId = getId(shellPayload);
-            mvc.perform(
-                            MockMvcRequestBuilders
-                                    .delete(SINGLE_SHELL_BASE_PATH, shellId)
-                                    .accept(MediaType.APPLICATION_JSON)
-                    )
-                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(status().isNoContent());
-        }
-
-    }
-
-    @Nested
     @DisplayName("Shell SpecificAssetId CRUD API")
     class SpecificAssetIdAPITests {
         @Test

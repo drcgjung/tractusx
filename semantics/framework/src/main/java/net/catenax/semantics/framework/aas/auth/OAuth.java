@@ -39,11 +39,7 @@ import org.apache.oltu.oauth2.common.token.BasicOAuthToken;
 
 import feign.Client;
 import feign.Request.Options;
-<<<<<<<< HEAD:semantics/framework/src/main/java/net/catenax/semantics/framework/aas/auth/OAuth.java
-========
 import feign.Request.HttpMethod;
-import net.catenax.semantics.framework.dsc.client.invoker.StringUtil;
->>>>>>>> origin/main:semantics/framework/dsc/src/main/java/net/catenax/semantics/framework/dsc/client/invoker/auth/OAuth.java
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import feign.Response;
@@ -118,11 +114,7 @@ public class OAuth implements RequestInterceptor {
         try {
             accessTokenResponse = oauthClient.accessToken(tokenRequestBuilder.buildBodyMessage());
         } catch (Exception e) {
-<<<<<<<< HEAD:semantics/framework/src/main/java/net/catenax/semantics/framework/aas/auth/OAuth.java
-            throw new RetryableException(400, e.getMessage(), template.request().httpMethod(), e, null, template.request());
-========
             throw new RetryableException(HttpStatus.SC_INTERNAL_SERVER_ERROR,e.getMessage(),HttpMethod.POST,e,null,null);
->>>>>>>> origin/main:semantics/framework/dsc/src/main/java/net/catenax/semantics/framework/dsc/client/invoker/auth/OAuth.java
         }
         if (accessTokenResponse != null && accessTokenResponse.getAccessToken() != null) {
             setAccessToken(accessTokenResponse.getAccessToken(), accessTokenResponse.getExpiresIn());
