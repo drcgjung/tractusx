@@ -15,6 +15,7 @@ import net.catenax.semantics.framework.config.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 
 import javax.sql.DataSource;
 
@@ -22,7 +23,7 @@ import javax.sql.DataSource;
  * spring configuration of the framework tests
  */
 @Configuration
-@ComponentScan(basePackages = {"net.catenax.semantics.framework"})
+@ComponentScan(basePackages = {"net.catenax.semantics.framework"}, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern="net\\.catenax\\.semantics\\.framework.aas.*"))
 public class FrameworkConfiguration extends MockConfiguration {
 
     @Bean

@@ -14,10 +14,10 @@
 
 # Exposed Web Server (Incoming)
 server:
-  port: 4242
+  port: 4244
 openapi:
   dotAASPart2HTTPRESTRegistryAndDiscovery:
     base-path:
 # Delegated Web Server (Outgoing)
 aasproxy:
-  targetUrl: https://catenaxdev042akssrv.germanywestcentral.cloudapp.azure.com/semantics/
+  targetUrl: http://localhost:4242/

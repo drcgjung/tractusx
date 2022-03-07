@@ -35,7 +35,9 @@ public class OAuthSecurityConfig extends WebSecurityConfigurerAdapter {
         http
           .authorizeRequests(auth -> auth
             .antMatchers(HttpMethod.OPTIONS).permitAll()
-            .antMatchers("/**/adapter/**").authenticated())
+            .antMatchers("/**/adapter/**").authenticated()
+            .antMatchers("/**/submodel/**").authenticated()
+          )
           .oauth2ResourceServer()
           .jwt();
     }

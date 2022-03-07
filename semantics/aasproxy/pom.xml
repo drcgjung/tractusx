@@ -178,31 +178,39 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.4.0</version>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>3.0.33</version>
                 <executions>
-                    <execution>
-                        <id>generate-anonymizer-skeletons</id>
+                    <!--<execution>
+                        <id>generate-registry-skeletons</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/../services/src/main/resources/static/aas-registry-openapi.yaml</inputSpec>
-                            <generatorName>spring</generatorName>
+                            <language>spring</language>
                             <generateSupportingFiles>true</generateSupportingFiles>
-                            <packageName>net.catenax.semantics.aas</packageName>
+                            <invokerPackage>net.catenax.semantics.aas</invokerPackage>
                             <modelPackage>net.catenax.semantics.aas.model</modelPackage>
-                            <apiPackage>net.catenax.semantics.aas.api</apiPackage>
-
+                            <apiPackage>net.catenax.semantics.aas.api.registry</apiPackage>
                             <supportingFilesToGenerate>ApiUtil.java,pom.xml</supportingFilesToGenerate>
                             <configOptions>
                                 <oas3>true</oas3>
                                 <delegatePattern>true</delegatePattern>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <artifactVersion>${project.version}</artifactVersion>
+                                <library>spring-boot</library>
+                                <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
+                                <licenseName>Proprietary</licenseName>
+                                <licenseUrl>https://www.t-systems.com</licenseUrl>
                                 <packageName>net.catenax</packageName>
                                 <useSpringfox>false</useSpringfox>
+                                <basePackage>net.catenax.semantics.aas</basePackage>
+                                <configPackage>net.catenax.semantics.aas.config</configPackage>
                             </configOptions>
-                            <invokerPackage>net.catenax.semantics.aas</invokerPackage>
                         </configuration>
                     </execution>
                     <execution>
@@ -211,21 +219,21 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/../services/src/main/resources/static/aas-registry-openapi.yaml</inputSpec>
-                            <generatorName>java</generatorName>
-                            <library>feign</library>
+                            <inputSpec>${project.basedir}/../framework/src/main/resources/static/aas-shell-openapi.yaml</inputSpec>
+                            <language>java</language>
                             <configOptions>
                                 <oas3>true</oas3>
+                                <library>feign</library>xsaa
+                                <java8>true</java8>
                                 <delegatePattern>true</delegatePattern>
                                 <packageName>net.catenax</packageName>
                                 <useSpringfox>false</useSpringfox>
                             </configOptions>
-                            <packageName>net.catenax.semantics.aas.client</packageName>
                             <modelPackage>net.catenax.semantics.aas.model</modelPackage>
-                            <apiPackage>net.catenax.semantics.aas.api</apiPackage>
-                            <invokerPackage>net.catenax.semantics.aas.client</invokerPackage>
+                            <apiPackage>net.catenax.semantics.aas.api.shell</apiPackage>
+                            <invokerPackage>net.catenax.semantics.aas</invokerPackage>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
 

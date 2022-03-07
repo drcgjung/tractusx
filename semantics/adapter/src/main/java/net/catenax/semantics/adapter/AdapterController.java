@@ -57,7 +57,6 @@ public class AdapterController {
      */
     @GetMapping(value = "/hello", produces = "text/plain")
     public ResponseEntity<String> hello() {
-        log.info("getting hello");
         return ResponseEntity.ok("hello");
     }
 

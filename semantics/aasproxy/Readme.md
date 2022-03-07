@@ -42,9 +42,15 @@ the variable '{{auth_url}}' in the environment, e.g. to
 An alternative is to login to the [Catena-X portal](https://catenaxdev042aksportal.germanywestcentral.cloudapp.azure.com) and
 access the bearer token through the Javascript debugging console.
 
-Run 'curl --location --request GET 'http://localhost:4243/semantics/registry/shell-descriptors?page=0&pageSize=10' \
+Run 'curl --location --request GET 'http://localhost:4244/registry/shell-descriptors?page=0&pageSize=10' \
 --header 'Accept: application/json' \
 --header 'Authorization: Bearer ${BEARER_TOKEN}'
 '
 
-to route a discovery call through the proxy to central.
+to route a discovery call through the proxy to central. You will notice that all submodel endpoint URLs in the results 
+will be rewritten to hit the proxy again. That means that (only after the above lookup!) requesting a submodel
+
+`curl --location --request GET 'http://localhost:4244/69ab0d77-c981-41fe-8c0f-bd0c8256228d/aas/urn:bamm:com.catenaX:0.0.1%23Traceability/submodel' \
+--header 'Authorization: Bearer ${BEARER_TOKEN}'`
+
+will be delegated to the actual endpoint using the IDS transport layer.

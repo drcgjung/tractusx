@@ -11,7 +11,7 @@ package net.catenax.semantics.aas.proxy;
 import feign.Client;
 import feign.Feign;
 import lombok.Data;
-import net.catenax.semantics.aas.api.RegistryAndDiscoveryInterfaceApi;
+import net.catenax.semantics.framework.aas.api.RegistryAndDiscoveryInterfaceApi;
 import net.catenax.semantics.framework.auth.BearerTokenIncomingInterceptor;
 import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
 import net.catenax.semantics.framework.auth.BearerTokenWrapper;
