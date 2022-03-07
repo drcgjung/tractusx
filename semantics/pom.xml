@@ -155,7 +155,6 @@
 				<artifactId>jsr305</artifactId>
 				<version>${google.findbugs.version}</version>
 			</dependency>
-
 			<!-- Framework -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>

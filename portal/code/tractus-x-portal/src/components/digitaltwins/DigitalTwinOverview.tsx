@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { IContextualMenuItem, PrimaryButton } from '@fluentui/react';
+import { IContextualMenuItem } from '@fluentui/react';
 import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -101,7 +101,7 @@ function DigitalTwinOverview(){
             <div className="df fwrap mt20">
               {data.items.map(twin => (
                 <Link key={twin.identification} className="m5 p20 bgpanel flex40 br4 bsdatacatalog tdn" to={{
-                  pathname: `/home/digitaltwin/${twin.identification}`
+                  pathname: `/home/digitaltwin/${encodeURIComponent(twin.identification)}`
                 }}>
                   <h2 className='fs24 fg191 bold mb20'>{twin.idShort}</h2>
                   {twin.submodelDescriptors && <DescriptionList title="Submodel count:" description={twin.submodelDescriptors.length}/>}

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2021-2022 Robert Bosch Manufacturing Solutions GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.catenax.semantics.framework.aas.auth;
 
 import java.io.IOException;
@@ -8,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.apache.http.HttpStatus;
 import org.apache.oltu.oauth2.client.HttpClient;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
@@ -23,6 +39,11 @@ import org.apache.oltu.oauth2.common.token.BasicOAuthToken;
 
 import feign.Client;
 import feign.Request.Options;
+<<<<<<<< HEAD:semantics/framework/src/main/java/net/catenax/semantics/framework/aas/auth/OAuth.java
+========
+import feign.Request.HttpMethod;
+import net.catenax.semantics.framework.dsc.client.invoker.StringUtil;
+>>>>>>>> origin/main:semantics/framework/dsc/src/main/java/net/catenax/semantics/framework/dsc/client/invoker/auth/OAuth.java
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import feign.Response;
@@ -30,7 +51,9 @@ import feign.RetryableException;
 import feign.Util;
 import net.catenax.semantics.framework.aas.StringUtil;
 
-
+/**
+ * Oauth authentication as a request interceptor
+ */
 public class OAuth implements RequestInterceptor {
 
     static final int MILLIS_PER_SECOND = 1000;
@@ -95,7 +118,11 @@ public class OAuth implements RequestInterceptor {
         try {
             accessTokenResponse = oauthClient.accessToken(tokenRequestBuilder.buildBodyMessage());
         } catch (Exception e) {
+<<<<<<<< HEAD:semantics/framework/src/main/java/net/catenax/semantics/framework/aas/auth/OAuth.java
             throw new RetryableException(400, e.getMessage(), template.request().httpMethod(), e, null, template.request());
+========
+            throw new RetryableException(HttpStatus.SC_INTERNAL_SERVER_ERROR,e.getMessage(),HttpMethod.POST,e,null,null);
+>>>>>>>> origin/main:semantics/framework/dsc/src/main/java/net/catenax/semantics/framework/dsc/client/invoker/auth/OAuth.java
         }
         if (accessTokenResponse != null && accessTokenResponse.getAccessToken() != null) {
             setAccessToken(accessTokenResponse.getAccessToken(), accessTokenResponse.getExpiresIn());

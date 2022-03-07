@@ -292,3 +292,23 @@ databaseChangeLog:
                   name: IS_UNIQUE
                   type: BOOLEAN
                   defaultValue: false
+  - changeSet:
+      id: 22022022-01
+      author: fmisir
+      changes:
+        - createIndex:
+            tableName: SHELL_IDENTIFIER
+            indexName:  SHELL_IDENTIFIER_IX01
+            columns:
+              - column:
+                  name: NAMESPACE
+              - column:
+                  name: IDENTIFIER
+  - changeSet:
+      id: 02032022-01
+      author: fmisir
+      changes:
+        - dropUniqueConstraint:
+            tableName: SHELL_IDENTIFIER
+            constraintName: SHELL_IDENTIFIER_AK_01
+            uniqueColumns: KEY, FK_SHELL_ID

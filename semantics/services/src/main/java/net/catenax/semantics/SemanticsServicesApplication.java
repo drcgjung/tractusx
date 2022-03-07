@@ -26,9 +26,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Main Adapter Application
- * TODO make sure openapi description is correct, referrer-header should give us a hint.
  */
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication
 @EnableJdbcAuditing
 @ComponentScan(basePackages = {"net.catenax.semantics", "org.openapitools.configuration"})
 public class SemanticsServicesApplication {
@@ -55,7 +54,7 @@ public class SemanticsServicesApplication {
 	SpringDocConfiguration springDocConfiguration(){
 		return new SpringDocConfiguration();
 	}
-	
+
 	@Bean
 	public SpringDocConfigProperties springDocConfigProperties() {
 		return new SpringDocConfigProperties();
