@@ -106,7 +106,7 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      */
     protected Endpoint rewrite(String assetId, String submodelId, Endpoint endpoint) {
         storage.setEndpoint(assetId,submodelId,endpoint.getProtocolInformation().getEndpointAddress());
-        endpoint.getProtocolInformation().setEndpointAddress("http://localhost:4242/"+assetId+"/aas/"+submodelId);
+        endpoint.getProtocolInformation().setEndpointAddress("http://localhost:4242/shells/"+assetId+"/aas/"+submodelId);
         return endpoint;
     }
 

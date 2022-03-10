@@ -37,7 +37,8 @@ import java.security.NoSuchAlgorithmException;
  * TODO make sure openapi description is correct, referrer-header should give us a hint.
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"net.catenax.semantics.framework.aas","net.catenax.semantics.aas","net.catenax.semantics.framework.auth", "org.openapitools.configuration"})
+@ComponentScan(basePackages = {"net.catenax.semantics.framework.aas","net.catenax.semantics.aas","net.catenax.semantics.framework.auth", "org.openapitools.configuration"},
+        excludeFilters = @ComponentScan.Filter(type= FilterType.REGEX,pattern="net\\.catenax\\.semantics\\.framework\\.aas\\.api\\.server\\.AssetIdentifierApiController"))
 //@ImportResource({"classpath*:saynomore.lmx"})
 @Data
 public class Application {

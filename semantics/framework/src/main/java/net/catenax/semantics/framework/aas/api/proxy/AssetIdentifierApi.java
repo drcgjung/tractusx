@@ -9,13 +9,11 @@ import io.swagger.annotations.Api;
 import net.catenax.semantics.framework.aas.model.OperationRequest;
 import net.catenax.semantics.framework.aas.model.OperationResult;
 import net.catenax.semantics.framework.aas.model.Submodel;
-import net.catenax.semantics.framework.aas.model.SubmodelElement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.ResponseEntity;
@@ -36,51 +34,16 @@ public interface AssetIdentifierApi {
 
     AssetIdentifierApiDelegate getDelegate();
 
-    @Operation(summary = "Deletes a Submodel", description = "", tags={ "Submodel Repository Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "Submodel deleted successfully") })
-    @RequestMapping(value = "/{assetIdentifier}/aas/submodels/{submodelIdentifier}",
-        method = RequestMethod.DELETE)
-    default ResponseEntity<Void> deleteSubmodelById(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier) {
-        return getDelegate().deleteSubmodelById(assetIdentifier, submodelIdentifier);
-    }
-
-
-    @Operation(summary = "Deletes a submodel element at a specified path within the submodel elements hierarchy", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "Submodel element deleted successfully") })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}",
-        method = RequestMethod.DELETE)
-    default ResponseEntity<Void> deleteSubmodelElementByPath(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated)", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath) {
-        return getDelegate().deleteSubmodelElementByPath(assetIdentifier, submodelIdentifier, idShortPath);
-    }
-
-
-    @Operation(summary = "Returns all submodel elements including their hierarchy", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "List of found submodel elements", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = SubmodelElement.class)))) })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    default ResponseEntity<List<SubmodelElement>> getAllSubmodelElements(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().getAllSubmodelElements(assetIdentifier, submodelIdentifier, level, content, extent);
-    }
-
-
     @Operation(summary = "Returns the Operation result of an asynchronous invoked Operation", description = "", tags={ "Submodel Interface" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Operation result object", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OperationResult.class))) })
     @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}/operation-results/{handleId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<OperationResult> getOperationAsyncResult(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated), in this case an operation", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.PATH, description = "The returned handle id of an operation’s asynchronous invocation used to request the current state of the operation’s execution (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("handleId") String handleId, @Parameter(in = ParameterIn.QUERY, description = "" ,schema=@Schema(allowableValues={ "normal", "value" }
+    default ResponseEntity<OperationResult> getOperationAsyncResult(@PathVariable(name = "idsOffer",value="", required = false) String idsOffer, @Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated), in this case an operation", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.PATH, description = "The returned handle id of an operation’s asynchronous invocation used to request the current state of the operation’s execution (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("handleId") String handleId, @Parameter(in = ParameterIn.QUERY, description = "" ,schema=@Schema(allowableValues={ "normal", "value" }
 , defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content) {
-        return getDelegate().getOperationAsyncResult(assetIdentifier, submodelIdentifier, idShortPath, handleId, content);
+        return getDelegate().getOperationAsyncResult(idsOffer,assetIdentifier, submodelIdentifier, idShortPath, handleId, content);
     }
-
 
     @Operation(summary = "Returns the Submodel", description = "", tags={ "Submodel Interface" })
     @ApiResponses(value = { 
@@ -88,11 +51,11 @@ public interface AssetIdentifierApi {
     @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<Submodel> getSubmodel(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
+    default ResponseEntity<Submodel> getSubmodel(@PathVariable(name = "idsOffer",value="", required = false) String idsOffer, @Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
 , defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
 , defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
 )) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().getSubmodel(assetIdentifier, submodelIdentifier, level, content, extent);
+        return getDelegate().getSubmodel(idsOffer,assetIdentifier, submodelIdentifier, level, content, extent);
     }
 
 
@@ -102,24 +65,9 @@ public interface AssetIdentifierApi {
     @RequestMapping(value = "/{assetIdentifier}/aas/submodels/{submodelIdentifier}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<Submodel> getSubmodelById(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier) {
-        return getDelegate().getSubmodelById(assetIdentifier, submodelIdentifier);
+    default ResponseEntity<Submodel> getSubmodelById(@PathVariable(name = "idsOffer",value="", required = false) String idsOffer, @Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier) {
+        return getDelegate().getSubmodelById(idsOffer,assetIdentifier, submodelIdentifier);
     }
-
-
-    @Operation(summary = "Returns a specific submodel element from the Submodel at a specified path", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Requested submodel element", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SubmodelElement.class))) })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    default ResponseEntity<SubmodelElement> getSubmodelElementByPath(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated)", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().getSubmodelElementByPath(assetIdentifier, submodelIdentifier, idShortPath, level, content, extent);
-    }
-
 
     @Operation(summary = "Synchronously or asynchronously invokes an Operation at a specified path", description = "", tags={ "Submodel Interface" })
     @ApiResponses(value = { 
@@ -128,82 +76,11 @@ public interface AssetIdentifierApi {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    default ResponseEntity<OperationResult> invokeOperation(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated), in this case an operation", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.DEFAULT, description = "Operation request object", required=true, schema=@Schema()) @Valid @RequestBody OperationRequest body, @Parameter(in = ParameterIn.QUERY, description = "Determines whether an operation invocation is performed asynchronously or synchronously" ,schema=@Schema( defaultValue="false")) @Valid @RequestParam(value = "async", required = false, defaultValue="false") Boolean async, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
+    default ResponseEntity<OperationResult> invokeOperation(@PathVariable(name = "idsOffer",value="", required = false) String idsOffer, @Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated), in this case an operation", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.DEFAULT, description = "Operation request object", required=true, schema=@Schema()) @Valid @RequestBody OperationRequest body, @Parameter(in = ParameterIn.QUERY, description = "Determines whether an operation invocation is performed asynchronously or synchronously" ,schema=@Schema( defaultValue="false")) @Valid @RequestParam(value = "async", required = false, defaultValue="false") Boolean async, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
 , defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content) {
-        return getDelegate().invokeOperation(assetIdentifier, submodelIdentifier, idShortPath, body, async, content);
+        return getDelegate().invokeOperation(idsOffer,assetIdentifier, submodelIdentifier, idShortPath, body, async, content);
     }
 
-
-    @Operation(summary = "Creates a new submodel element", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Submodel element created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SubmodelElement.class))) })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    default ResponseEntity<SubmodelElement> postSubmodelElement(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.DEFAULT, description = "Requested submodel element", required=true, schema=@Schema()) @Valid @RequestBody SubmodelElement body, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().postSubmodelElement(assetIdentifier, submodelIdentifier, body, level, content, extent);
-    }
-
-
-    @Operation(summary = "Creates a new submodel element at a specified path within submodel elements hierarchy", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Submodel element created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SubmodelElement.class))) })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    default ResponseEntity<SubmodelElement> postSubmodelElementByPath(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated)", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.DEFAULT, description = "Requested submodel element", required=true, schema=@Schema()) @Valid @RequestBody SubmodelElement body, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().postSubmodelElementByPath(assetIdentifier, submodelIdentifier, idShortPath, body, level, content, extent);
-    }
-
-
-    @Operation(summary = "Updates the Submodel", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "Submodel updated successfully") })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    default ResponseEntity<Void> putSubmodel(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.DEFAULT, description = "Submodel object", required=true, schema=@Schema()) @Valid @RequestBody Submodel body, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().putSubmodel(assetIdentifier, submodelIdentifier, body, level, content, extent);
-    }
-
-
-    @Operation(summary = "Creates a new or updates an existing Submodel", description = "", tags={ "Submodel Repository Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Submodel created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Submodel.class))),
-        
-        @ApiResponse(responseCode = "204", description = "Submodel updated successfully") })
-    @RequestMapping(value = "/{assetIdentifier}/aas/submodels/{submodelIdentifier}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    default ResponseEntity<Submodel> putSubmodelById(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.DEFAULT, description = "Submodel object", required=true, schema=@Schema()) @Valid @RequestBody Submodel body) {
-        return getDelegate().putSubmodelById(assetIdentifier, submodelIdentifier, body);
-    }
-
-
-    @Operation(summary = "Updates an existing submodel element at a specified path within submodel elements hierarchy", description = "", tags={ "Submodel Interface" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "Submodel element updated successfully") })
-    @RequestMapping(value = "/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    default ResponseEntity<Void> putSubmodelElementByPath(@Parameter(in = ParameterIn.PATH, description = "The Asset Administration Shells’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("assetIdentifier") String assetIdentifier, @Parameter(in = ParameterIn.PATH, description = "The Submodel’s unique id (BASE64-URL-encoded)", required=true, schema=@Schema()) @PathVariable("submodelIdentifier") String submodelIdentifier, @Parameter(in = ParameterIn.PATH, description = "IdShort path to the submodel element (dot-separated)", required=true, schema=@Schema()) @PathVariable("idShortPath") String idShortPath, @Parameter(in = ParameterIn.DEFAULT, description = "Requested submodel element", required=true, schema=@Schema()) @Valid @RequestBody SubmodelElement body, @Parameter(in = ParameterIn.QUERY, description = "Determines the structural depth of the respective resource content" ,schema=@Schema(allowableValues={ "deep", "core" }
-, defaultValue="deep")) @Valid @RequestParam(value = "level", required = false, defaultValue="deep") String level, @Parameter(in = ParameterIn.QUERY, description = "Determines the request or response kind of the resource" ,schema=@Schema(allowableValues={ "normal", "trimmed", "value", "reference", "path" }
-, defaultValue="normal")) @Valid @RequestParam(value = "content", required = false, defaultValue="normal") String content, @Parameter(in = ParameterIn.QUERY, description = "Determines to which extent the resource is being serialized" ,schema=@Schema(allowableValues={ "withBlobValue", "withoutBlobValue" }
-)) @Valid @RequestParam(value = "extent", required = false) String extent) {
-        return getDelegate().putSubmodelElementByPath(assetIdentifier, submodelIdentifier, idShortPath, body, level, content, extent);
-    }
 
 }
 

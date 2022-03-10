@@ -1,47 +1,100 @@
 package net.catenax.semantics.adapter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.catenax.semantics.framework.*;
 import net.catenax.semantics.framework.aas.api.proxy.AssetIdentifierApiDelegate;
 import net.catenax.semantics.framework.aas.model.*;
-import net.catenax.semantics.framework.BaseAdapter;
-import net.catenax.semantics.framework.IdsConnector;
+import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
+import net.catenax.semantics.framework.auth.BearerTokenWrapper;
 import net.catenax.semantics.framework.config.Config;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
- * An adapter for the AAS API
+ * An adapter for the AAS submodel API according to Catena-X Release 1
  */
 @Service
 public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegate {
 
-    public AASAdapter(Config configurationData, IdsConnector connector) {
+    /**
+     * we need the token from the request
+     */
+    private final BearerTokenWrapper tokenWrapper;
+    private final ObjectMapper objectMapper;
+
+    /**
+     * create the adapter in the environment
+     * @param configurationData adapter config
+     * @param connector connector abstraction
+     * @param tokenWrapper session token access
+     * @param objectMapper json conversion utility
+     */
+    public AASAdapter(Config configurationData, IdsConnector connector, BearerTokenWrapper tokenWrapper, ObjectMapper objectMapper) {
         super(configurationData);
         setIdsConnector(connector);
+        this.tokenWrapper=tokenWrapper;
+        this.objectMapper=objectMapper;
     }
 
+    /**
+     * getting the submodel requires a mapping to
+     * internal assets
+     * @param idsOffer name of the ids resource
+     * @param assetIdentifier identifier of the twin
+     * @param submodelIdentifier identifier of the representation
+     * @param level how deep should the data be returned
+     * @param content what mode should the data be returned
+     * @param extent to which data should be returned
+     * @return submodel
+     */
     @Override
-    public ResponseEntity<Submodel> getSubmodel(String assetIdentifier, String submodelIdentifier, String level, String content, String extent) {
-        Submodel model=new Submodel();
-        LangString desc=new LangString();
-        desc.setLanguage("EN_US");
-        desc.setText("Sample Catena-X Submodel Implementation");
-        model.setDescription(List.of(desc));
-        LangString disp=new LangString();
-        disp.setLanguage("EN_US");
-        disp.setText("Catena-X Sample Submodel");
-        model.setDisplayName(List.of(disp));
-        model.setCategory("AAS;BAMM;SQL");
-        model.setIdShort("sql-traceability");
-        model.setIdentification(submodelIdentifier);
-        model.setKind(ModelingKind.TEMPLATE);
-        ModelType modelType=new ModelType();
-        modelType.setName(ModelTypes.ENTITY);
-        model.setModelType(modelType);
-        GlobalReference reference=new GlobalReference();
-        reference.setValue(List.of("urn:bamm:com.catenaX:0.0.1#Traceability"));
-        model.setSemanticId(reference);
-        return ResponseEntity.ok(model);
+    public ResponseEntity<Submodel> getSubmodel(String idsOffer, String assetIdentifier, String submodelIdentifier, String level, String content, String extent) {
+        if(!"deep".equals(level)) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        }
+        if(!"data".equals(content)) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        }
+        if(extent!=null && !"".equals(extent)) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        }
+        IdsRequest request=new IdsRequest();
+        request.setProtocol("HTTP");
+        request.setCommand("GET");
+        request.setParameters(Map.of("aasid",assetIdentifier));
+        request.setAccepts("application/json");
+        request.setOffer(idsOffer);
+        request.setRepresentation(submodelIdentifier);
+        request.setArtifact("json");
+        request.setSecurityToken(tokenWrapper.getToken());
+        request.setCallingConnectors("");
+        IdsResponse idsResponse= idsConnector.perform(request);
+
+        try {
+            IdsMessage responseMessage = idsResponse.getMessage().get();
+            String mediaType=responseMessage.getMediaType();
+            Submodel model;
+            if(responseMessage.getPayload()!=null) {
+                model=objectMapper.readValue(responseMessage.getPayload(),Submodel.class);
+            } else {
+                model=new Submodel();
+            }
+            return ResponseEntity.ok(model);
+        } catch(InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 }

@@ -1,10 +1,11 @@
 package net.catenax.semantics.framework.aas.model;
 
-import java.util.Objects;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -34,6 +35,9 @@ public class Submodel extends Identifiable  {
   @JsonProperty("submodelElements")
   @Valid
   private List<SubmodelElement> submodelElements = null;
+
+  // capture all other fields that jackson does not match
+  private Map<String, Object> data = new HashMap<>();
 
   public Submodel embeddedDataSpecifications(List<EmbeddedDataSpecification> embeddedDataSpecifications) {
     this.embeddedDataSpecifications = embeddedDataSpecifications;
@@ -174,9 +178,21 @@ public class Submodel extends Identifiable  {
         super.equals(o);
   }
 
+  // Capture all other fields that Jackson do not match other members
+  @JsonAnyGetter
+  public Map<String, Object> data() {
+    return data;
+  }
+
+  @JsonAnySetter
+  public void setData(String name, Object value) {
+    data.put(name, value);
+  }
+
+
   @Override
   public int hashCode() {
-    return Objects.hash(embeddedDataSpecifications, qualifiers, semanticId, kind, submodelElements, super.hashCode());
+    return Objects.hash(embeddedDataSpecifications, qualifiers, semanticId, kind, submodelElements, data, super.hashCode());
   }
 
   @Override
@@ -189,6 +205,7 @@ public class Submodel extends Identifiable  {
     sb.append("    semanticId: ").append(toIndentedString(semanticId)).append("\n");
     sb.append("    kind: ").append(toIndentedString(kind)).append("\n");
     sb.append("    submodelElements: ").append(toIndentedString(submodelElements)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -114,6 +114,7 @@
 		<module>framework/edc</module>
 		<module>adapter</module>
 		<module>services</module>
+		<module>aasproxy</module>
     </modules>
 
 	<dependencyManagement>

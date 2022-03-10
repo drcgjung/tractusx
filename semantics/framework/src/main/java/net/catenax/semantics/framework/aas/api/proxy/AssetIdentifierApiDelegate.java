@@ -38,57 +38,9 @@ public interface AssetIdentifierApiDelegate {
     }
 
     /**
-     * @see AssetIdentifierApi#deleteSubmodelById
-     */
-    default ResponseEntity<Void> deleteSubmodelById( String  assetIdentifier,
-         String  submodelIdentifier) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#deleteSubmodelElementByPath
-     */
-    default ResponseEntity<Void> deleteSubmodelElementByPath( String  assetIdentifier,
-         String  submodelIdentifier,
-         String  idShortPath) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#getAllSubmodelElements
-     */
-    default ResponseEntity<List<SubmodelElement>> getAllSubmodelElements( String  assetIdentifier,
-         String  submodelIdentifier,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("[ \"\", \"\" ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
      * @see AssetIdentifierApi#getOperationAsyncResult
      */
-    default ResponseEntity<OperationResult> getOperationAsyncResult( String  assetIdentifier,
+    default ResponseEntity<OperationResult> getOperationAsyncResult( String idsOffer, String  assetIdentifier,
          String  submodelIdentifier,
          String  idShortPath,
          String  handleId,
@@ -111,7 +63,7 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#getSubmodel
      */
-    default ResponseEntity<Submodel> getSubmodel( String  assetIdentifier,
+    default ResponseEntity<Submodel> getSubmodel( String idsOffer, String  assetIdentifier,
          String  submodelIdentifier,
          String  level,
          String  content,
@@ -134,7 +86,7 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#getSubmodelById
      */
-    default ResponseEntity<Submodel> getSubmodelById( String  assetIdentifier,
+    default ResponseEntity<Submodel> getSubmodelById( String idsOffer, String  assetIdentifier,
          String  submodelIdentifier) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
@@ -152,33 +104,9 @@ public interface AssetIdentifierApiDelegate {
     }
 
     /**
-     * @see AssetIdentifierApi#getSubmodelElementByPath
-     */
-    default ResponseEntity<SubmodelElement> getSubmodelElementByPath( String  assetIdentifier,
-         String  submodelIdentifier,
-         String  idShortPath,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("\"\"", SubmodelElement.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
      * @see AssetIdentifierApi#invokeOperation
      */
-    default ResponseEntity<OperationResult> invokeOperation( String  assetIdentifier,
+    default ResponseEntity<OperationResult> invokeOperation(String idsOffer, String  assetIdentifier,
          String  submodelIdentifier,
          String  idShortPath,
          OperationRequest  body,
@@ -193,109 +121,6 @@ public interface AssetIdentifierApiDelegate {
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#postSubmodelElement
-     */
-    default ResponseEntity<SubmodelElement> postSubmodelElement( String  assetIdentifier,
-         String  submodelIdentifier,
-         SubmodelElement  body,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("\"\"", SubmodelElement.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#postSubmodelElementByPath
-     */
-    default ResponseEntity<SubmodelElement> postSubmodelElementByPath( String  assetIdentifier,
-         String  submodelIdentifier,
-         String  idShortPath,
-         SubmodelElement  body,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("\"\"", SubmodelElement.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#putSubmodel
-     */
-    default ResponseEntity<Void> putSubmodel( String  assetIdentifier,
-         String  submodelIdentifier,
-         Submodel  body,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#putSubmodelById
-     */
-    default ResponseEntity<Submodel> putSubmodelById( String  assetIdentifier,
-         String  submodelIdentifier,
-         Submodel  body) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("\"\"", Submodel.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    /**
-     * @see AssetIdentifierApi#putSubmodelElementByPath
-     */
-    default ResponseEntity<Void> putSubmodelElementByPath( String  assetIdentifier,
-         String  submodelIdentifier,
-         String  idShortPath,
-         SubmodelElement  body,
-         String  level,
-         String  content,
-         String  extent) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
         } else {
             log.warn("ObjectMapper or HttpServletRequest not configured in default AssetIdentifierApi interface so no example is generated");
         }

@@ -77,6 +77,7 @@ spring:
         web-allow-others: true
 # How to deal with REST representation problems
   jackson:
+    default-property-inclusion: non_null
     deserialization:
       fail-on-unknown-properties: true
 title: '@project.name@'
@@ -156,25 +157,25 @@ idsadapter:
       paymentMethod: free
       # The representations correspond to aspects/semantic models supported
       representations:
-        material-aspect:
+        brake-material:
           description: Sample Static Material Aspect.
           mediaType: application/json
           model: urn:bamm:com.catenaX:0.0.1#Material
           language: EN
           # The various artifacts of material
           artifacts:
-            brake:
+            json:
               description: Sample File Source
               protocol: FILE
               command: brake-file
-        bom-aspect:
+        brake-traceability:
           description: Sample BOM Aspect.
           mediaType: application/json
           model: urn:bamm:com.catenaX:0.0.1#Traceability
           language: EN
           # The sources/artifacts of BOM
           artifacts:
-            brake:
+            json:
               description: Sample File Source
               protocol: FILE
               command: brake-file
@@ -253,6 +254,7 @@ idsadapter:
     "[SERVICE_URL]": ${idsadapter.serviceUrl}
     "[ADAPTER_URL]": ${idsadapter.adapterUrl}
     "[CONNECTOR_ID]": ${idsadapter.connectorId}
+    "[CONNECTOR_URL]": ${idsadapter.connectorUrl}
     "[PORTAL_URL]": ${idsadapter.portalUrl}
   #
   # Part 4 - Configure Backend Protocol/Commands

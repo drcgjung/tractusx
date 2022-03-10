@@ -20,6 +20,8 @@
 
     <artifactId>aasproxy</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <name>Catena-X Semantic Layer AAS Proxy</name>
+    <description>A Client-Side/Consumer Service which acts like a Registry+AAS Server and hides the intricacies of the IDS-Federated Catena-X AAS Landscape</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
