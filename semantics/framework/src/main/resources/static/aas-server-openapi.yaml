@@ -1,8 +1,8 @@
 ---
 openapi: 3.0.3
 info:
-  title: DotAAS Part 2 | HTTP/REST | Submodel Standalone (Proxy-Mode)
-  description: Proxy version of a Submodel Server as part of Details of the Asset Administration Shell Part 2
+  title: DotAAS Part 2 | HTTP/REST | Submodel Standalone (Server-Mode)
+  description: Server version of a Submodel Server as part of Details of the Asset Administration Shell Part 2
   termsOfService: https://github.com/admin-shell-io/aas-specs
   contact:
     name: Michael Hoffmeister, Torben Miny, Andreas Orzelski, Manuel Sauer, Constantin Ziesche
@@ -10,21 +10,21 @@ info:
 servers:
 - url: /
 paths:
-  /shells/{assetIdentifier}/aas/{submodelIdentifier}/submodel:
+  /{idsResourceId}/shells/{assetIdentifier}/aas/{submodelIdentifier}/submodel:
     get:
       tags:
       - Submodel Interface
       summary: Returns the Submodel
       operationId: GetSubmodel
       parameters:
-       - name: idsResourceId
-         in: path
-         description: Id of the IDS Resource Hosting/Contracting the Shell Server
-         required: false
-         style: simple
-         explode: false
-         schema:
-           type: string
+      - name: idsResourceId
+        in: path
+        description: Id of the IDS Resource Hosting/Contracting the Shell Server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: assetIdentifier
         in: path
         description: The Asset Administration Shells’s unique id (BASE64-URL-encoded)
@@ -88,21 +88,21 @@ paths:
                 $ref: '#/components/schemas/Submodel'
       x-semanticIds:
       - https://admin-shell.io/aas/API/GetSubmodel/1/0/RC02
-  /shells/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}/invoke:
+  /{idsResourceId}/shells/{assetIdentifier}/aas/{submodelIdentifier}/submodel/submodel-elements/{idShortPath}/invoke:
     post:
       tags:
       - Submodel Interface
       summary: Synchronously or asynchronously invokes an Operation at a specified path
       operationId: InvokeOperation
       parameters:
-       - name: idsResourceId
-         in: path
-         description: Id of the IDS Resource Hosting/Contracting the Shell Server
-         required: false
-         style: simple
-         explode: false
-         schema:
-           type: string
+      - name: idsResourceId
+        in: path
+        description: Id of the IDS Resource Hosting/Contracting the Shell Server
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: assetIdentifier
         in: path
         description: The Asset Administration Shells’s unique id (BASE64-URL-encoded)
