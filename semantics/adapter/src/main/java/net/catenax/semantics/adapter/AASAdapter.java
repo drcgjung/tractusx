@@ -59,7 +59,7 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
      * @return submodel
      */
     @Override
-    public ResponseEntity<Submodel> getSubmodel(String idsOffer, String assetIdentifier, String submodelIdentifier, String level, String content, String extent) {
+    public ResponseEntity<Submodel> getSubmodel(String idsOffer, String assetIdentifier, String submodelIdentifier, String level, String content, String extent, Map<String,String> otherParams) {
         if(!"deep".equals(level)) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
         }
@@ -70,13 +70,17 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
         }
         IdsRequest request=new IdsRequest();
-        request.setProtocol("HTTP");
-        request.setCommand("GET");
-        request.setParameters(Map.of("aasid",assetIdentifier));
+        String protocol=otherParams.getOrDefault("protocol","HTTP");
+        request.setProtocol(protocol);
+        String command=otherParams.getOrDefault("command","GET");
+        request.setCommand(command);
+        otherParams.put("aasid",assetIdentifier);
+        request.setParameters(otherParams);
         request.setAccepts("application/json");
         request.setOffer(idsOffer);
         request.setRepresentation(submodelIdentifier);
-        request.setArtifact("json");
+        String artifact = otherParams.getOrDefault("artifact","json");
+        request.setArtifact(artifact);
         request.setSecurityToken(tokenWrapper.getToken());
         request.setCallingConnectors("");
         IdsResponse idsResponse= idsConnector.perform(request);

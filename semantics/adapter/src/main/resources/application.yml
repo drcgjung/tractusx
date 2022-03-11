@@ -230,11 +230,11 @@ idsadapter:
       sourceModel: http://pwc.t-systems.com/datamodel/common
       targetMediaType: application/json
       targetModel: urn:bamm:com.catenaX:0.0.1#Material
-    dcx2twin:
-      file: classpath:dcx2twin.xsl
+    dcx2aas:
+      file: classpath:dcx2aas.xsl
       sourceModel: http://pwc.t-systems.com/datamodel/common
       targetMediaType: application/json
-      targetModel: urn:com.catenaX.semantics:1.2.0-SNAPSHOT#DigitialTwins
+      targetModel: https://admin-shell.io/aas/API/AssetAdministrationShellDescriptor/1/0/RC02
     sql2bom:
       file: classpath:sql2bom.xsl
       sourceModel: urn:com:tsystems:DataSet
@@ -245,11 +245,11 @@ idsadapter:
       sourceModel: urn:com:tsystems:DataSet
       targetMediaType: application/json
       targetModel: urn:bamm:com.catenaX:0.0.1#Material
-    sql2twins:
-      file: classpath:sql2twins.xsl
+    sql2aas:
+      file: classpath:sql2aas.xsl
       sourceModel: urn:com:tsystems:DataSet
       targetMediaType: application/json
-      targetModel: urn:com.catenaX.semantics:1.2.0-SNAPSHOT#DigitialTwins
+      targetModel: https://admin-shell.io/aas/API/AssetAdministrationShellDescriptor/1/0/RC02
   transformationParameters:
     "[SERVICE_URL]": ${idsadapter.serviceUrl}
     "[ADAPTER_URL]": ${idsadapter.adapterUrl}

@@ -1,3 +1,12 @@
+/*
+Copyright (c) 2021-2022 T-Systems International GmbH (Catena-X Consortium)
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+*/
+
 package net.catenax.semantics.framework.aas.api;
 
 import net.catenax.semantics.framework.aas.EncodingUtils;
@@ -11,6 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import feign.*;
+
+/**
+ * Interface to the AAS Registry Profile of Catena-X (Companion to the AAS Server Profile).
+ */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-04T18:11:20.840352600+01:00[Europe/Berlin]")public interface RegistryAndDiscoveryInterfaceApi extends ApiClient.Api {
 

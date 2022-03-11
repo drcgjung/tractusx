@@ -1,3 +1,11 @@
+/*
+Copyright (c) 2021-2022 T-Systems International GmbH (Catena-X Consortium)
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+*/
 package net.catenax.semantics.framework.aas.model;
 
 import java.util.*;
@@ -11,11 +19,10 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * Submodel
+ * AAS Submodel implementation which also capture the "value" or mixed modes.
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-03-04T18:11:14.812382100+01:00[Europe/Berlin]")
-
 
 public class Submodel extends Identifiable  {
   @JsonProperty("embeddedDataSpecifications")
@@ -175,6 +182,7 @@ public class Submodel extends Identifiable  {
         Objects.equals(this.semanticId, submodel.semanticId) &&
         Objects.equals(this.kind, submodel.kind) &&
         Objects.equals(this.submodelElements, submodel.submodelElements) &&
+        Objects.equals(this.data, submodel.data) &&
         super.equals(o);
   }
 

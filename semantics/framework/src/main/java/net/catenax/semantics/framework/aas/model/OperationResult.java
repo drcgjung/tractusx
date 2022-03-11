@@ -1,18 +1,23 @@
+/*
+Copyright (c) 2021-2022 T-Systems International GmbH (Catena-X Consortium)
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+*/
 package net.catenax.semantics.framework.aas.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * OperationResult
+ * AAS OperationResult with support for "value" mode and mixed modes
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-03-04T18:11:14.812382100+01:00[Europe/Berlin]")
@@ -73,6 +78,9 @@ public class OperationResult   {
 
   @JsonProperty("requestId")
   private String requestId = null;
+
+  // capture all other fields that jackson does not match
+  private Map<String, Object> data = new HashMap<>();
 
   public OperationResult executionResult(Result executionResult) {
     this.executionResult = executionResult;
@@ -186,6 +194,16 @@ public class OperationResult   {
     this.requestId = requestId;
   }
 
+  // Capture all other fields that Jackson do not match other members
+  @JsonAnyGetter
+  public Map<String, Object> data() {
+    return data;
+  }
+
+  @JsonAnySetter
+  public void setData(String name, Object value) {
+    data.put(name, value);
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -200,12 +218,13 @@ public class OperationResult   {
         Objects.equals(this.executionState, operationResult.executionState) &&
         Objects.equals(this.inoutputArguments, operationResult.inoutputArguments) &&
         Objects.equals(this.outputArguments, operationResult.outputArguments) &&
-        Objects.equals(this.requestId, operationResult.requestId);
+        Objects.equals(this.requestId, operationResult.requestId) &&
+        Objects.equals(this.data, operationResult.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(executionResult, executionState, inoutputArguments, outputArguments, requestId);
+    return Objects.hash(executionResult, executionState, inoutputArguments, outputArguments, requestId, data);
   }
 
   @Override
@@ -218,6 +237,7 @@ public class OperationResult   {
     sb.append("    inoutputArguments: ").append(toIndentedString(inoutputArguments)).append("\n");
     sb.append("    outputArguments: ").append(toIndentedString(outputArguments)).append("\n");
     sb.append("    requestId: ").append(toIndentedString(requestId)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,3 +1,12 @@
+/*
+Copyright (c) 2021-2022 T-Systems International GmbH (Catena-X Consortium)
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+*/
+
 package net.catenax.semantics.framework.aas.api.proxy;
 
 import net.catenax.semantics.framework.aas.model.OperationRequest;
@@ -14,10 +23,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * A delegate to be called by the {@link AssetIdentifierApiController}}.
+ * A default delegate to be called by both the {@link AssetIdentifierApiController} and {@link net.catenax.semantics.framework.aas.api.server.AssetIdentifierApiController}.
+ * In the former case, the idsResourceId will stay empty. in the latter case, it will be set and can be used.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-03-04T18:11:14.812382100+01:00[Europe/Berlin]")
@@ -40,11 +51,11 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#getOperationAsyncResult
      */
-    default ResponseEntity<OperationResult> getOperationAsyncResult( String idsOffer, String  assetIdentifier,
+    default ResponseEntity<OperationResult> getOperationAsyncResult(String idsResourceId, String  assetIdentifier,
          String  submodelIdentifier,
          String  idShortPath,
          String  handleId,
-         String  content) {
+         String  content, Map<String,String> otherParams) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
@@ -63,11 +74,11 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#getSubmodel
      */
-    default ResponseEntity<Submodel> getSubmodel( String idsOffer, String  assetIdentifier,
+    default ResponseEntity<Submodel> getSubmodel( String idsResourceId, String  assetIdentifier,
          String  submodelIdentifier,
          String  level,
          String  content,
-         String  extent) {
+         String  extent, Map<String,String> otherParams) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
@@ -86,8 +97,8 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#getSubmodelById
      */
-    default ResponseEntity<Submodel> getSubmodelById( String idsOffer, String  assetIdentifier,
-         String  submodelIdentifier) {
+    default ResponseEntity<Submodel> getSubmodelById( String idsResourceId, String  assetIdentifier,
+         String  submodelIdentifier, Map<String,String> otherParams) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
@@ -106,12 +117,12 @@ public interface AssetIdentifierApiDelegate {
     /**
      * @see AssetIdentifierApi#invokeOperation
      */
-    default ResponseEntity<OperationResult> invokeOperation(String idsOffer, String  assetIdentifier,
+    default ResponseEntity<OperationResult> invokeOperation(String idsResourceId, String  assetIdentifier,
          String  submodelIdentifier,
          String  idShortPath,
          OperationRequest  body,
          Boolean  async,
-         String  content) {
+         String  content, Map<String,String> otherParams) {
         if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
             if (getAcceptHeader().get().contains("application/json")) {
                 try {
