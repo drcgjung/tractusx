@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  consumer-control-plane:
+    build:
+      context: .
+      args:
+        JAR: launchers/control-plane/build/libs/edc.jar
+    ports:
+      - "8191:9191" # default
+    environment:
+      EDC_VAULT: vault.properties
+      EDC_KEYSTORE: cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+    volumes:
+      - ${PWD}/config/consumer-control-plane.properties:/app/configuration.properties
+      - ${PWD}/config/consumer-control-plane-vault.properties:/app/vault.properties
+      - ${PWD}/certs/cert.pfx:/app/cert.pfx
+
+  consumer-data-plane:
+    build:
+      context: .
+      args:
+        JAR: launchers/data-plane/build/libs/edc.jar
+    ports:
+      - "8192:9191" # default
+    volumes:
+      - ${PWD}/config/consumer-data-plane.properties:/app/configuration.properties
+
+  api-wrapper:
+    build:
+      context: .
+      args:
+        JAR: launchers/api-wrapper/build/libs/edc.jar
+    ports:
+      - "8193:9191" # default
+    volumes:
+      - ${PWD}/config/api-wrapper.properties:/app/configuration.properties
+
+  provider-control-plane:
+    build:
+      context: .
+      args:
+        JAR: launchers/control-plane/build/libs/edc.jar
+    ports:
+      - "8181:9191" # default
+      - "8184:9192" # validation
+    environment:
+      EDC_VAULT: vault.properties
+      EDC_KEYSTORE: cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+    volumes:
+      - ${PWD}/config/provider-control-plane.properties:/app/configuration.properties
+      - ${PWD}/config/provider-control-plane-vault.properties:/app/vault.properties
+      - ${PWD}/certs/cert.pfx:/app/cert.pfx
+
+  provider-data-plane:
+    build:
+      context: .
+      args:
+        JAR: launchers/data-plane/build/libs/edc.jar
+    ports:
+      - "8182:9191" # default
+      - "8183:9192" # public
+    volumes:
+      - ${PWD}/config/provider-data-plane.properties:/app/configuration.properties
+
+  provider-backend-service:
+    build:
+      context: .
+      args:
+        JAR: launchers/provider-backend-service/build/libs/edc.jar
+    ports:
+      - "8194:9191" # default
+    volumes:
+      - ${PWD}/config/provider-backend-service.properties:/app/configuration.properties
