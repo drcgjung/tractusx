@@ -15,5 +15,6 @@ import lombok.Data;
  */
 @Data
 public class ConfigurationData {
-    protected String targetUrl;
+    protected String registryUrl;
+    protected String wrapperUrl;
 }

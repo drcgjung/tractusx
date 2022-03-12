@@ -1,8 +1,13 @@
 package org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service;
 
+import jakarta.ws.rs.core.MultivaluedMap;
+import java.util.Map;
+import java.util.List;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.HttpUrl;
 import okhttp3.RequestBody;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
@@ -20,24 +25,45 @@ public class HttpProxyService {
         this.httpClient = httpClient;
     }
 
-    public String sendGETRequest(EndpointDataReference dataReference) throws IOException {
+    public String sendGETRequest(EndpointDataReference dataReference, String subUrl, MultivaluedMap<String,String> parameters) throws IOException {
         var url = dataReference.getAddress();
-        var request = new Request.Builder()
-                .url(url)
-                .addHeader(dataReference.getAuthKey(), dataReference.getAuthCode())
-                .build();
+        if(subUrl!=null && !subUrl.isEmpty()) {
+            url=url+"/"+subUrl;
+        }
+        HttpUrl.Builder httpBuilder = HttpUrl.parse(url).newBuilder();
+        for(Map.Entry<String, List<String>> param : parameters.entrySet()) {
+            for (String value : param.getValue()) {
+                httpBuilder=httpBuilder.addQueryParameter(param.getKey(), value);
+            }
+        }
+        var requestBuilder = new Request.Builder()
+                .url(httpBuilder.build())
+                .addHeader(dataReference.getAuthKey(), dataReference.getAuthCode());
+
+        var request = requestBuilder.build();
 
         return sendRequest(request);
     }
 
-    public String sendPOSTRequest(EndpointDataReference dataReference, String data, MediaType mediaType) throws IOException {
+    public String sendPOSTRequest(EndpointDataReference dataReference, String subUrl, MultivaluedMap<String,String> parameters, String data, MediaType mediaType) throws IOException {
         var url = dataReference.getAddress();
-        var request = new Request.Builder()
-                .url(url)
+        if(subUrl!=null && !subUrl.isEmpty()) {
+            url=url+"/"+subUrl;
+        }
+        HttpUrl.Builder httpBuilder = HttpUrl.parse(url).newBuilder();
+        for(Map.Entry<String, List<String>> param : parameters.entrySet()) {
+            for (String value : param.getValue()) {
+                httpBuilder=httpBuilder.addQueryParameter(param.getKey(), value);
+            }
+        }
+        var requestBuilder = new Request.Builder()
+                .url(httpBuilder.build())
                 .addHeader(dataReference.getAuthKey(), dataReference.getAuthCode())
                 .addHeader("Content-Type", mediaType.toString())
-                .post(RequestBody.create(data, mediaType))
-                .build();
+                .post(RequestBody.create(data, mediaType));
+
+
+        var request=requestBuilder.build();
 
         return sendRequest(request);
     }

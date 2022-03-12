@@ -20,7 +20,8 @@ openapi:
     base-path:
 # Delegated Web Server (Outgoing)
 aasproxy:
-  targetUrl: http://localhost:4242/
+  registryUrl: http://localhost:4242/
+  wrapperUrl: http://localhost:8193/api/service
 spring:
   # How to deal with REST representation problems
   jackson:

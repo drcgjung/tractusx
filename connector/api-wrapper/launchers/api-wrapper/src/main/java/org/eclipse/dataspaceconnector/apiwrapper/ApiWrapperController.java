@@ -1,7 +1,10 @@
 package org.eclipse.dataspaceconnector.apiwrapper;
 
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractNegotiationService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractOfferService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.HttpProxyService;
@@ -46,9 +49,9 @@ public class ApiWrapperController {
     }
 
     @GET
-    @Path("/submodel/{assetId}")
-    public String getWrapper(@PathParam("assetId") String assetId) throws InterruptedException {
-
+    @Path("/{assetId}/{subUrl:.+}")
+    public String getWrapper(@PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, @Context UriInfo uriInfo) throws InterruptedException {
+        MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
         // Initialize and negotiate everything
         // TODO do this only if no agreement is already existing
         var agreementId = initializeContractNegotiation(assetId);
@@ -71,7 +74,7 @@ public class ApiWrapperController {
         // Get data through data plane
         String data = "";
         try {
-            data = this.httpProxyService.sendGETRequest(dataReference);
+            data = this.httpProxyService.sendGETRequest(dataReference,subUrl,queryParams);
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);
         }
@@ -79,8 +82,12 @@ public class ApiWrapperController {
     }
 
     @POST
-    @Path("/submodel/{assetId}")
-    public String postWrapper(@PathParam("assetId") String assetId) throws InterruptedException {
+    @Path("/{assetId}/{subUrl:.+}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String postWrapper(@PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
+
+        MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
         // Initialize and negotiate everything
         // TODO do this only if no agreement is already existing
@@ -106,8 +113,10 @@ public class ApiWrapperController {
         try {
             data = this.httpProxyService.sendPOSTRequest(
                     dataReference,
-                    "Random data",
-                    Objects.requireNonNull(okhttp3.MediaType.parse("text/plain"))
+                    subUrl,
+                    queryParams,
+                    body,
+                    Objects.requireNonNull(okhttp3.MediaType.parse("application/json"))
             );
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);

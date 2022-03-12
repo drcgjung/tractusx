@@ -22,6 +22,36 @@
         },
         "constraints": [],
         "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-windchill",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-tdm",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-orga",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
       }
     ],
     "prohibitions": [],
@@ -48,6 +78,36 @@
         "edctype": "dataspaceconnector:permission",
         "uid": null,
         "target": "asset-2",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-orga",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-windchill",
+        "action": {
+          "type": "USE"
+        },
+        "constraints": [],
+        "duties": []
+      },
+      {
+        "edctype": "dataspaceconnector:permission",
+        "uid": null,
+        "target": "offer-tdm",
         "action": {
           "type": "USE"
         },

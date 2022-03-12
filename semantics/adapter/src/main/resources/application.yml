@@ -164,7 +164,7 @@ idsadapter:
           language: EN
           # The various artifacts of material
           artifacts:
-            json:
+            default:
               description: Sample File Source
               protocol: FILE
               command: brake-file
@@ -175,7 +175,7 @@ idsadapter:
           language: EN
           # The sources/artifacts of BOM
           artifacts:
-            json:
+            default:
               description: Sample File Source
               protocol: FILE
               command: brake-file

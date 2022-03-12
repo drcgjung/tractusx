@@ -5,4 +5,4 @@ set -o errtrace
 set -o pipefail
 set -o nounset
 
-curl -X POST -H 'Content-Type: text/plain' --data "Hallo123" "http://localhost:8193/api/service/submodel/asset-2"
+curl -X POST -H 'Content-Type: application/json' --data '{ "Hallo":"123"}' "http://localhost:8193/api/service/asset-2/submodel"
