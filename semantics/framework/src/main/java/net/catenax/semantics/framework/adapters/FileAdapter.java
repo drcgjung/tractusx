@@ -36,9 +36,8 @@ public class FileAdapter<Cmd extends Command, O extends Offer, Ct extends Catalo
     }
 
     @Override
-    public IdsMessage perform(IdsRequest request) throws StatusException {
+    public IdsMessage perform(IdsRequest request, String model) throws StatusException {
         String file = request.getParameters().get("file");
-        String model = request.getParameters().get("model");
         String command = request.getCommand();
         if(configurationData.getCommands().containsKey(command)) {
             Command co = configurationData.getCommands().get(command);

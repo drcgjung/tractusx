@@ -1,10 +1,11 @@
 package net.catenax.semantics.framework.aas.model;
 
-import java.util.Objects;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -30,6 +31,9 @@ public class OperationRequest   {
 
   @JsonProperty("timeout")
   private Integer timeout = null;
+
+  // capture all other fields that jackson does not match
+  private Map<String, Object> data = new HashMap<>();
 
   public OperationRequest inoutputArguments(List<OperationVariable> inoutputArguments) {
     this.inoutputArguments = inoutputArguments;
@@ -123,6 +127,16 @@ public class OperationRequest   {
     this.timeout = timeout;
   }
 
+  // Capture all other fields that Jackson do not match other members
+  @JsonAnyGetter
+  public Map<String, Object> data() {
+    return data;
+  }
+
+  @JsonAnySetter
+  public void setData(String name, Object value) {
+    data.put(name, value);
+  }
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -136,12 +150,13 @@ public class OperationRequest   {
     return Objects.equals(this.inoutputArguments, operationRequest.inoutputArguments) &&
         Objects.equals(this.inputArguments, operationRequest.inputArguments) &&
         Objects.equals(this.requestId, operationRequest.requestId) &&
-        Objects.equals(this.timeout, operationRequest.timeout);
+        Objects.equals(this.timeout, operationRequest.timeout) &&
+        Objects.equals(this.data,operationRequest.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inoutputArguments, inputArguments, requestId, timeout);
+    return Objects.hash(inoutputArguments, inputArguments, requestId, timeout, data);
   }
 
   @Override
@@ -153,6 +168,7 @@ public class OperationRequest   {
     sb.append("    inputArguments: ").append(toIndentedString(inputArguments)).append("\n");
     sb.append("    requestId: ").append(toIndentedString(requestId)).append("\n");
     sb.append("    timeout: ").append(toIndentedString(timeout)).append("\n");
+    sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("}");
     return sb.toString();
   }

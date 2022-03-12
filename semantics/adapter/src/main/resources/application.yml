@@ -211,6 +211,29 @@ idsadapter:
               description: Test Traceability Database.
               protocol: SQL
               command: bom-sql
+
+    # A third operation offer
+    offer-orga:
+      description: Test Operation from Catena-X Organisation.
+      license: https://www.apache.org/licenses/LICENSE-2.0.html
+      language: EN
+      # reference to the contract
+      contract: contract-readall
+      # reference to the catalog
+      catalog: "urn:catalog:catenax"
+      paymentMethod: free
+      # The representations correspond to all Speedboat aspects/semantic models
+      representations:
+        idconversion-aspect:
+          description: Catena-X ID Conversion Aspect.
+          mediaType: application/json
+          model: urn:bamm:com.catenaX:1.0.0#IdConversion
+          language: EN
+          artifacts:
+            anonymize:
+              description: Anonymize Identifiers.
+              protocol: FUNCTION
+              command: net.catenax.semantics.framework.idconversion.Pseudonymizer#convert
   #
   # Part 3 - Define Transformations from Backend data to Aspect data
   #
@@ -263,6 +286,9 @@ idsadapter:
     brake-file:
       file: classpath:Bremse_Windchill.xml
       model: http://pwc.t-systems.com/datamodel/common
+    orga-file:
+      file: classpath:orga_aas.json
+      model: https://admin-shell.io/aas/API/AssetAdministrationShellDescriptor/1/0/RC02
     material-sql:
       aliases:
         material: |
@@ -375,4 +401,8 @@ twinSources:
   -
     protocol: SQL
     command: twin-sql
+    parameters:
+  -
+    protocol: FILE
+    command: orga-file
     parameters:

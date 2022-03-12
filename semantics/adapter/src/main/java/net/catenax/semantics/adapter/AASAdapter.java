@@ -63,10 +63,10 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
         if(!"deep".equals(level)) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
         }
-        if(!"data".equals(content)) {
+        if(!"value".equals(content)) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
         }
-        if(extent!=null && !"".equals(extent)) {
+        if(!"withBlobValue".equals(extent)) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
         }
         IdsRequest request=new IdsRequest();
@@ -79,7 +79,7 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
         request.setAccepts("application/json");
         request.setOffer(idsOffer);
         request.setRepresentation(submodelIdentifier);
-        String artifact = otherParams.getOrDefault("artifact","json");
+        String artifact = otherParams.getOrDefault("artifact","default");
         request.setArtifact(artifact);
         request.setSecurityToken(tokenWrapper.getToken());
         request.setCallingConnectors("");
@@ -95,6 +95,51 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
                 model=new Submodel();
             }
             return ResponseEntity.ok(model);
+        } catch(InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<OperationResult> invokeOperation(String idsResourceId, String  assetIdentifier,
+                                                    String  submodelIdentifier,
+                                                    String  idShortPath,
+                                                    OperationRequest  body,
+                                                    Boolean  async,
+                                                    String  content, Map<String,String> otherParams) {
+        if(!"value".equals(content)) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        }
+        if(async) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        }
+        IdsRequest request=new IdsRequest();
+        String protocol=otherParams.getOrDefault("protocol","HTTP");
+        request.setProtocol(protocol);
+        request.setCommand(otherParams.getOrDefault("command","POST"));
+        otherParams.put("aasid",assetIdentifier);
+        request.setParameters(otherParams);
+        request.setAccepts("application/json");
+        request.setOffer(idsResourceId);
+        try {
+            request.setPayload(objectMapper.writeValueAsString(body));
+            request.setRepresentation(submodelIdentifier);
+            request.setArtifact(idShortPath);
+            request.setSecurityToken(tokenWrapper.getToken());
+            request.setCallingConnectors("");
+            IdsResponse idsResponse= idsConnector.perform(request);
+
+            IdsMessage responseMessage = idsResponse.getMessage().get();
+            String mediaType=responseMessage.getMediaType();
+            OperationResult res;
+            if(responseMessage.getPayload()!=null) {
+                res=objectMapper.readValue(responseMessage.getPayload(),OperationResult.class);
+            } else {
+                res=new OperationResult();
+            }
+            return ResponseEntity.ok(res);
         } catch(InterruptedException | ExecutionException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (JsonProcessingException e) {
