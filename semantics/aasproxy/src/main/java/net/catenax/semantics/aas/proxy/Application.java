@@ -84,14 +84,14 @@ public class Application {
     public RegistryAndDiscoveryInterfaceApi remoteRegistry(ApplicationContext context)  {
         Feign.Builder builder=context.getBean(Feign.Builder.class);
         ConfigurationData config=context.getBean(ConfigurationData.class);
-        return builder.target(RegistryAndDiscoveryInterfaceApi.class,config.getTargetUrl());
+        return builder.target(RegistryAndDiscoveryInterfaceApi.class,config.getRegistryUrl());
     }
 
     @Bean
     public Feign.Builder feignBuilder(ApplicationContext context) throws NoSuchAlgorithmException, KeyManagementException {
         ConfigurationData config=context.getBean(ConfigurationData.class);
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath(config.getTargetUrl());
+        apiClient.setBasePath(config.getRegistryUrl());
         NaiveSSLSocketFactory naiveSSLSocketFactory = new NaiveSSLSocketFactory("localhost");
 
         Client client=null;
@@ -101,7 +101,7 @@ public class Application {
         if(proxyHost!=null && !proxyHost.isEmpty()) {
             boolean noProxy = false;
             for (String noProxyHost : System.getProperty("http.nonProxyHosts","localhost").split("\\|")) {
-                noProxy = noProxy || config.getTargetUrl().contains(noProxyHost.replace("*",""));
+                noProxy = noProxy || config.getRegistryUrl().contains(noProxyHost.replace("*",""));
             }
             if (!noProxy) {
                 client = new Client.Proxied(naiveSSLSocketFactory, null, new Proxy(Proxy.Type.HTTP,
