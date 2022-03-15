@@ -15,7 +15,6 @@
 	<xsl:output method="text" encoding="UTF-8"  omit-xml-declaration="yes" indent="no" media-type="application/json" />
 	<xsl:strip-space elements="*" />
     
-	<xsl:param name="ADAPTER_URL"/>
 	<xsl:param name="CONNECTOR_URL"/>
 
 	<xsl:template match="/">
