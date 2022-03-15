@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- EDC artifacts published on maven local at the commit `a0c4411dbfec1ee8298aecb04a5145d9419503f5` of the [EDC main branch](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector)
+- EDC artifacts published on [EDC patch branch](https://github.com/drcgjung/DataSpaceConnector/tree/release/catena-x)
   - Build & publish to maven local: `./gradlew clean build publishToMavenLocal -x test`
 - Jdk 11
 - Docker and Docker compose
@@ -11,6 +11,9 @@
 
 ```bash
 ./gradlew clean build
+cd ../../semantics
+mvn clean install -DskipTests
+cd ../connector/api-wrapper
 cd launchers
 rm -rf adapter
 rm -rf services
@@ -27,6 +30,11 @@ docker-compose up --build
 # Make a GET call through the EDCs or a POST
 ./1-aas-client-get.sh
 ./2-aas-client-post.sh
+
+# Make AAS calls through the EDCs 
+./3-aas-submodel-get.sh
+./4-aas-submodel-post.sh
+
 ```
 
 ## Open Questions
