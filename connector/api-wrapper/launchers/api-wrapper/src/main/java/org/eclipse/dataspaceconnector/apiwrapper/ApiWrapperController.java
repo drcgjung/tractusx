@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Consumes()
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/service")
@@ -34,6 +37,8 @@ public class ApiWrapperController {
 
     private final String consumerControlPlaneBaseUrl = "http://consumer-control-plane:9191/api";
     private final String providerControlPlaneIDSUrl = "http://provider-control-plane:9191/api/v1/ids/data";
+
+    private final static Pattern RESPONSE_PATTERN = Pattern.compile("\\{\"data\":\"(?<embeddedData>.*)\"\\}");
 
     private final Map<String, EndpointDataReference> endpointDataReferences = new HashMap<>();
 
@@ -75,6 +80,12 @@ public class ApiWrapperController {
         String data = "";
         try {
             data = this.httpProxyService.sendGETRequest(dataReference,subUrl,queryParams);
+            Matcher dataMatcher=RESPONSE_PATTERN.matcher(data);
+            while(dataMatcher.matches()) {
+                data=dataMatcher.group("embeddedData");
+                data=data.replace("\\\"","\"").replace("\\\\","\\");
+                dataMatcher=RESPONSE_PATTERN.matcher(data);
+            }
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);
         }
@@ -118,6 +129,12 @@ public class ApiWrapperController {
                     body,
                     Objects.requireNonNull(okhttp3.MediaType.parse("application/json"))
             );
+            Matcher dataMatcher=RESPONSE_PATTERN.matcher(data);
+            while(dataMatcher.matches()) {
+                data=dataMatcher.group("embeddedData");
+                data=data.replace("\\\"","\"").replace("\\\\","\\");
+                dataMatcher=RESPONSE_PATTERN.matcher(data);
+            }
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);
         }

@@ -27,7 +27,7 @@ public class SubmodelProxy implements AssetIdentifierApiDelegate {
      * we got a rewrite storage for endpoints
      */
     protected final RewriteStorage storage;
-    protected ConfigurationData config;
+    protected final ConfigurationData config;
 
     /**
      * we need to build delegates on the fly
@@ -35,7 +35,7 @@ public class SubmodelProxy implements AssetIdentifierApiDelegate {
     protected final Feign.Builder builder;
 
     protected final static Pattern URL_WITH_PARAMS=Pattern.compile("(?<url>[^\\?]*)(\\?(?<params>[^\\?]*))?");
-    protected final static Pattern URL_EDC=Pattern.compile("edc://(?<idsResourceId>[^\\?/]*)/(?<suburl>[^\\?]*)");
+    protected final static Pattern URL_EDC=Pattern.compile("edc://(?<idsresource>[^\\?/]+)/(?<suburl>[^\\?]*)");
     protected final static Pattern URL_PARAM=Pattern.compile("(\\&amp;)?(?<key>[^\\=\\&]*)\\=(?<value>[^\\=\\&]*)");
 
     /**
@@ -67,7 +67,9 @@ public class SubmodelProxy implements AssetIdentifierApiDelegate {
         }
         Matcher edcMatcher=URL_EDC.matcher(endpoint);
         if(edcMatcher.matches()) {
-            endpoint= config.getWrapperUrl()+"/"+edcMatcher.group("idsResourceId")+"/"+edcMatcher.group("suburl");
+            endpoint=config.getWrapperUrl()+"/";
+            endpoint=endpoint+edcMatcher.group("idsresource")+"/";
+            endpoint=endpoint+edcMatcher.group("suburl");
         }
         SubmodelInterfaceApi api=builder.target(SubmodelInterfaceApi.class,endpoint);
         return new AbstractMap.SimpleImmutableEntry<SubmodelInterfaceApi,Map<String,Object>>(api,params);

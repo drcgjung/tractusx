@@ -11,6 +11,14 @@
 
 ```bash
 ./gradlew clean build
+cd launchers
+rm -rf adapter
+rm -rf services
+rm -rf aasproxy
+ln -s ../../../semantics/adapter .
+ln -s ../../../semantics/services .
+ln -s ../../../semantics/aasproxy .
+cd ..
 docker-compose up --build
 
 # Register assets & contract definition

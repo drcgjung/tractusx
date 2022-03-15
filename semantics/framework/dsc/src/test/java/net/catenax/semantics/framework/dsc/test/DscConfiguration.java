@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.sql.DataSource;
 
@@ -42,4 +43,10 @@ public class DscConfiguration extends MockConfiguration {
     public BearerTokenOutgoingInterceptor getInterceptor() {
         return super.getInterceptor();
     }
+
+    @Bean
+    public ObjectMapper getObjectMapper() {
+        return super.getObjectMapper();
+    }
+
 }

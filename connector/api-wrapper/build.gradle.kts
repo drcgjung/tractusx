@@ -19,10 +19,6 @@ allprojects {
         maven {
             url = uri("https://maven.iais.fraunhofer.de/artifactory/eis-ids-public/")
         }
-        maven {
-            name = "edc-github"
-            url = uri("https://maven.pkg.github.com/eclipse-dataspaceconnector/DataSpaceConnector");
-        }
     }
 
     tasks.withType<Test> {

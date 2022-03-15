@@ -6,7 +6,7 @@
     "asset:prop:policy-id": "use-eu"
   },
   "dataAddress": {
-    "endpoint": "http://localhost:4243/offer-tdm",
+    "endpoint": "http://provider-aas-service:4243/offer-tdm",
     "type": "HttpData"
   }
 }
