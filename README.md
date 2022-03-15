@@ -11,7 +11,7 @@ With the help of a data-sovereign infrastructure (forming an International Datas
 boost productivity and improve sustainability along future value chains. The five areas are quality management, logistics, maintenance, 
 supply chain management and sustainability. Applications supporting production and development are planned for future phases.
 
-The components of the Catena-X Dataspace are:
+The (minimal) components of a Catena-X Dataspace are:
 
 - A Semantic Hub with all the released Catena-X Semantic/Data Models (=Submodels or Aspects).
 - Asset Administration Shell (AAS) Servers per Business Partner to Standardize Access to Catena-X Submodels.
@@ -24,11 +24,14 @@ digital transformation and to make better use of the opportunities offered by di
 
 ## Build & Deploy It
 
-You can build and run Catena-X@Home using this [Walkthrough](connector/api-wrapper/README.md) and the [Docker Compose Manifest](connector/api-wrapper/docker-compose.yml).
+You can build and run Catena-X@Home using this [Walkthrough](connector/api-wrapper/README.md) and the [Docker Compose Manifest](connector/api-wrapper/docker-compose.yml) 
+(which will be complemented with an [Argo-CD](https://argoproj.github.io/cd/) compatible kubernetes HELM chart)
 
 ## Run It
 
 You can interact with the Catena-X API(s) using this [Postman Collection](catenax.postman_collection.json).
+Please do also import the [Localhost Postman Environment](catenax.postman_environment.json) in case you want to
+interact with Catena-X@Home (or adapt according to the target Catena-X environment).
 
 ## Scope
 
