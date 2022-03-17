@@ -10,18 +10,18 @@
 ## Run
 
 ```bash
-./gradlew clean build
 cd ../../semantics
 mvn clean install -DskipTests
 cd ../eclipsedataspaceconnector/api-wrapper
+./gradlew clean build
 cd launchers
 rm -rf adapter
 rm -rf services
-rm -rf aasproxy
 ln -s ../../../semantics/adapter .
 ln -s ../../../semantics/services .
-ln -s ../../../semantics/aasproxy .
-cd ..
+cd aasproxy
+mvn clean install -DskipTests
+cd ../..
 docker-compose up --build
 
 # Register assets & contract definition

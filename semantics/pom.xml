@@ -114,7 +114,6 @@
 		<module>framework/edc</module>
 		<module>adapter</module>
 		<module>services</module>
-		<module>aasproxy</module>
     </modules>
 
 	<dependencyManagement>
@@ -516,14 +515,14 @@
 			<name>maven-central</name>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
-		<repository>
+		<!--<repository>
 			<id>edc-github</id>
 			<name>Catena-X Maven Repository on Github</name>
 			<url>https://maven.pkg.github.com/eclipse-dataspaceconnector/DataSpaceConnector</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
+		</repository>-->
 		<repository>
 			<id>ids-fraunhofer</id>
 			<name>ids fraunhofer repository</name>

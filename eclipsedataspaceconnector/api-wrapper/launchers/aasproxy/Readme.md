@@ -15,7 +15,7 @@ discovering and accessing (data, service) assets associated to digital twins (su
 
 It uses an attached [International Dataspace (IDS) Connector](https://internationaldataspaces.org/) for securely and privately exchanging sovereign and sensible data.
 
-It relies on the [Semantic Framework](https://confluence.catena-x.net/pages/viewpage.action?pageId=25199158) 
+It (temporarily) relies on the [Semantic Framework](https://confluence.catena-x.net/pages/viewpage.action?pageId=25199158) 
 to deal with authentication, validation, federation and IDS-specific implementation issues.
 
 ### Configuration:
