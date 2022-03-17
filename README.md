@@ -24,7 +24,7 @@ digital transformation and to make better use of the opportunities offered by di
 
 ## Build & Deploy It
 
-You can build and run Catena-X@Home using this [Walkthrough](connector/api-wrapper/README.md) and the [Docker Compose Manifest](connector/api-wrapper/docker-compose.yml) 
+You can build and run Catena-X@Home using this [Walkthrough](eclipsedataspaceconnector/api-wrapper/README.md) and the [Docker Compose Manifest](eclipsedataspaceconnector/api-wrapper/docker-compose.yml) 
 (which will be complemented with an [Argo-CD](https://argoproj.github.io/cd/) compatible kubernetes HELM chart)
 
 ## Run It

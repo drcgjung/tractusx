@@ -13,7 +13,7 @@
 ./gradlew clean build
 cd ../../semantics
 mvn clean install -DskipTests
-cd ../connector/api-wrapper
+cd ../eclipsedataspaceconnector/api-wrapper
 cd launchers
 rm -rf adapter
 rm -rf services
