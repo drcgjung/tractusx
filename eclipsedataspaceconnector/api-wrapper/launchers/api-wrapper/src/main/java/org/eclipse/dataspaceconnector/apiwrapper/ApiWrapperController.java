@@ -36,7 +36,7 @@ public class ApiWrapperController {
     private final Map<String, String> header = Map.of("X-Api-Key", "123456");
 
     private final String consumerControlPlaneBaseUrl = "http://consumer-control-plane:9191/api";
-    private final String providerControlPlaneIDSUrl = "http://provider-control-plane:9191/api/v1/ids/data";
+    private final String providerControlPlaneFormat = "%s/api/v1/ids/data";
 
     private final static Pattern RESPONSE_PATTERN = Pattern.compile("\\{\"data\":\"(?<embeddedData>.*)\"\\}");
 
@@ -55,11 +55,14 @@ public class ApiWrapperController {
 
     @GET
     @Path("/{assetId}/{subUrl:.+}")
-    public String getWrapper(@PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, @Context UriInfo uriInfo) throws InterruptedException {
+    public String getWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, @Context UriInfo uriInfo) throws InterruptedException {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+
+        String providerControlPlaneIDSUrl = String.format(providerControlPlaneFormat,providerConnectorUrl);
+
         // Initialize and negotiate everything
         // TODO do this only if no agreement is already existing
-        var agreementId = initializeContractNegotiation(assetId);
+        var agreementId = initializeContractNegotiation(providerControlPlaneIDSUrl,assetId);
 
         // Initiate transfer process
         transferProcessService.initiateHttpProxyTransferProcess(
@@ -96,13 +99,14 @@ public class ApiWrapperController {
     @Path("/{assetId}/{subUrl:.+}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String postWrapper(@PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
+    public String postWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
 
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+        String providerControlPlaneIDSUrl = String.format(providerControlPlaneFormat,providerConnectorUrl);
 
         // Initialize and negotiate everything
         // TODO do this only if no agreement is already existing
-        var agreementId = initializeContractNegotiation(assetId);
+        var agreementId = initializeContractNegotiation(providerControlPlaneIDSUrl, assetId);
 
         // Initiate transfer process
         transferProcessService.initiateHttpProxyTransferProcess(
@@ -148,12 +152,12 @@ public class ApiWrapperController {
         monitor.debug("Endpoint Data Reference received and stored for agreement: " + dataReference.getContractId());
     }
 
-    private String initializeContractNegotiation(String assetId) throws InterruptedException {
+    private String initializeContractNegotiation(String providerConnectorIDSUrl, String assetId) throws InterruptedException {
 
         var contractOffer = contractOfferService.findContractOffer4AssetId(
                 assetId,
                 consumerControlPlaneBaseUrl,
-                providerControlPlaneIDSUrl,
+                providerConnectorIDSUrl,
                 header
         );
 
@@ -161,7 +165,7 @@ public class ApiWrapperController {
         var contractOfferRequest = ContractOfferRequest.Builder.newInstance()
                 .contractOffer(contractOffer)
                 .connectorId("provider")
-                .connectorAddress(providerControlPlaneIDSUrl)
+                .connectorAddress(providerConnectorIDSUrl)
                 .protocol("ids-multipart")
                 .build();
         var negotiationId = contractNegotiationService.initiateNegotiation(

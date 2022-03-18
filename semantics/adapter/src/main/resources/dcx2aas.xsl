@@ -15,7 +15,8 @@
 	<xsl:output method="text" encoding="UTF-8"  omit-xml-declaration="yes" indent="no" media-type="application/json" />
 	<xsl:strip-space elements="*" />
     
-	<xsl:param name="CONNECTOR_URL"/>
+	<xsl:param name="EDC_PROTOCOL"/>
+    <xsl:param name="CONNECTOR_HOST"/>
 
 	<xsl:template match="/">
       <xsl:text>{
@@ -59,11 +60,11 @@
       },
       "endpoints": [
         {
-          "interface": "</xsl:text><xsl:value-of select="$CONNECTOR_URL"/><xsl:text>",
+          "interface": "SUBMODEL-1.0RC02",
           "protocolInformation": {
-            "endpointAddress": "edc://offer-windchill/shells/3c7556f7-6956-4360-8036-d03e5a79c3c8/aas/brake-traceability",
-            "endpointProtocol": "AAS/SUBMODEL",
-            "endpointProtocolVersion": "1.0RC02"
+            "endpointAddress": "</xsl:text><xsl:value-of select="$EDC_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text disable-output-escaping="yes">/offer-windchill/shells/3c7556f7-6956-4360-8036-d03e5a79c3c8/aas/brake-traceability/submodel?level=deep&amp;content=value&amp;extent=withBlobValue",
+            "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
+            "endpointProtocolVersion": "0.0.1-SNAPSHOT"
           }
         }
       ]
@@ -84,11 +85,11 @@
       },
       "endpoints": [
         {
-          "interface": "</xsl:text><xsl:value-of select="$CONNECTOR_URL"/><xsl:text>",
+          "interface": "SUBMODEL-1.0RC02",
           "protocolInformation": {
-            "endpointAddress": "edc://offer-windchill/shells/3c7556f7-6956-4360-8036-d03e5a79c3c8/aas/brake-material",
-            "endpointProtocol": "AAS/SUBMODEL",
-            "endpointProtocolVersion": "1.0RC02"
+            "endpointAddress": "</xsl:text><xsl:value-of select="$EDC_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text disable-output-escaping="yes">/offer-windchill/shells/3c7556f7-6956-4360-8036-d03e5a79c3c8/aas/brake-material/submodel?level=deep&amp;content=value&amp;extent=withBlobValue",
+            "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
+            "endpointProtocolVersion": "0.0.1-SNAPSHOT"
           }
         }
       ]

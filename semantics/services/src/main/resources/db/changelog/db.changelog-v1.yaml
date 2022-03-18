@@ -320,4 +320,8 @@ databaseChangeLog:
              tableName: SUBMODEL_ENDPOINT
              columnName:  INTERFACE_NAME
              newDataType:  NVARCHAR(512)
+        -  modifyDataType:
+             tableName: SUBMODEL_ENDPOINT
+             columnName:  ENDPOINT_PROTOCOL_VERSION
+             newDataType:  nvarchar(24)
 

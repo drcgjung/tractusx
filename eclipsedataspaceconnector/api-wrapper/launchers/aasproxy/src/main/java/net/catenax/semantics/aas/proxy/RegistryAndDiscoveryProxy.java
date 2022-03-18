@@ -39,6 +39,12 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      */
     protected final RewriteStorage storage;
 
+    /**
+     * config data
+     */
+    protected final ConfigurationData config;
+
+
     @Override
     public Optional<ObjectMapper> getObjectMapper() {
         return LookupApiDelegate.super.getObjectMapper();
@@ -105,9 +111,23 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      * @return
      */
     protected Endpoint rewrite(String assetId, String submodelId, Endpoint endpoint) {
-        storage.setEndpoint(assetId,submodelId,endpoint.getProtocolInformation().getEndpointAddress());
+        ProtocolInformation pi=endpoint.getProtocolInformation();
+        String endpointAddress=pi.getEndpointAddress();
+        String query="";
+        int params=endpointAddress.indexOf(submodelId);
+        if(params>=0) {
+            query=endpointAddress.substring(params+submodelId.length());
+            endpointAddress=endpointAddress.substring(0,params+submodelId.length());
+        }
+        storage.setEndpoint(assetId,submodelId,endpointAddress);
         // TODO get from configuration
-        endpoint.getProtocolInformation().setEndpointAddress("http://localhost:4244/shells/"+assetId+"/aas/"+submodelId);
+        pi.setEndpointAddress(config.getProxyUrl()+"/shells/"+assetId+"/aas/"+submodelId+query);
+        if(config.getProxyUrl().startsWith("https")) {
+            pi.setEndpointProtocol("HTTP/S");
+        } else {
+            pi.setEndpointProtocol("HTTP");
+        }
+        pi.setEndpointProtocolVersion("1.1");
         return endpoint;
     }
 

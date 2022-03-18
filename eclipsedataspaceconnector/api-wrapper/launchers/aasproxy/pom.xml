@@ -42,6 +42,8 @@
         <swagger-core-version>2.0.0</swagger-core-version>
         <swagger-annotations.version>1.5.20</swagger-annotations.version>
         <google.findbugs.version>3.0.2</google.findbugs.version>
+        <!-- logging -->
+        <slf4j.version>2.0.0-alpha1</slf4j.version>
     </properties>
 
     <dependencies>
@@ -49,17 +51,6 @@
         <dependency>
             <groupId>net.catenax.semantics</groupId>
             <artifactId>framework</artifactId>
-            <version>${semantics-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.catenax.semantics.framework</groupId>
-            <artifactId>dsc</artifactId>
-            <version>${semantics-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.catenax.semantics.framework</groupId>
-            <artifactId>edc</artifactId>
             <version>${semantics-version}</version>
         </dependency>
 
@@ -189,6 +180,13 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation-version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Test -->

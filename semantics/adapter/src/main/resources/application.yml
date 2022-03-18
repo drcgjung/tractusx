@@ -111,7 +111,10 @@ idsadapter:
   #
   connectorType: DSC
   connectorId: https://w3id.org/idsa/autogen/connectorEndpoint/a73d2202-cb77-41db-a3a6-05ed251c0b
-  connectorUrl: http://localhost:8080
+  connectorHost: localhost:8080
+  connectorProtocol: http
+  connectorScheme: edc
+  connectorUrl: ${connectorProtocol}://${connectorHost}
   connectorUser: admin
   connectorPassword: password
   publisher: http://t-systems.com
@@ -276,7 +279,9 @@ idsadapter:
     "[ADAPTER_URL]": ${idsadapter.adapterUrl}
     "[CONNECTOR_ID]": ${idsadapter.connectorId}
     "[CONNECTOR_URL]": ${idsadapter.connectorUrl}
-    "[PORTAL_URL]": ${idsadapter.portalUrl}
+    "[CONNECTOR_HOST]": ${idsadapter.connectorHost}
+    "[CONNECTOR_PORT]": ${idsadapter.connectorPort}
+    "[EDC_PROTOCOL]": ${idsadapter.connectorScheme}
   #
   # Part 4 - Configure Backend Protocol/Commands
   #

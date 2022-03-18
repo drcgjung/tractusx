@@ -15,8 +15,7 @@ import net.catenax.semantics.framework.aas.api.RegistryAndDiscoveryInterfaceApi;
 import net.catenax.semantics.framework.auth.BearerTokenIncomingInterceptor;
 import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
 import net.catenax.semantics.framework.auth.BearerTokenWrapper;
-import net.catenax.semantics.framework.dsc.client.invoker.ApiClient;
-import net.catenax.semantics.framework.edc.EdcService;
+import net.catenax.semantics.framework.aas.ApiClient;
 import net.catenax.semantics.framework.helpers.NaiveSSLSocketFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -124,8 +123,6 @@ public class Application {
      * @param args command line
      */
     public static void main(String[] args) {
-        // bootstrap EDC
-        EdcService.bootstrap();
         new SpringApplication(Application.class).run(args);
     }
 

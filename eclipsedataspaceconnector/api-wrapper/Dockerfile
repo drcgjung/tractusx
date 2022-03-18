@@ -5,6 +5,9 @@ ARG HTTP_PROXY
 ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090
 ENV SPRING_PROFILES_ACTIVE local
 ENV IDSADAPTER_SERVICEURL http://registry-service:4242
+ENV IDSADAPTER_CONNECTORPROTOCOL http
+ENV IDSADAPTER_CONNECTORSCHEME edc
+ENV IDSADAPTER_CONNECTORHOST provider-control-plane:9191
 ENV IDSADAPTER_CONNECTORURL http://provider-control-plane:9191
 ENV AASPROXY_REGISTRYURL http://registry-service:4242
 ENV AASPROXY_WRAPPERURL http://api-wrapper:9191/api/service

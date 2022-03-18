@@ -14,12 +14,15 @@
 
 # Exposed Web Server (Incoming)
 server:
+  protocol: http
+  host: localhost
   port: 4244
 openapi:
   dotAASPart2HTTPRESTRegistryAndDiscovery:
     base-path:
 # Delegated Web Server (Outgoing)
 aasproxy:
+  proxyUrl: ${server.protocol}://${server.host}:${server.port}
   registryUrl: http://localhost:4242/
   wrapperUrl: http://localhost:8193/api/service
 spring:
