@@ -6,7 +6,7 @@
     "asset:prop:policy-id": "use-eu"
   },
   "dataAddress": {
-    "endpoint": "http://provider-backend-service:9191/api/service/data/",
+    "endpoint": "http://provider-backend-service:9191/api/service/data/asset-2",
     "type": "HttpData"
   }
 }

@@ -30,7 +30,7 @@ You can build and run Catena-X@Home using this [Walkthrough](eclipsedataspacecon
 ## Run It
 
 You can interact with the Catena-X API(s) using this [Postman Collection](catenax.postman_collection.json).
-Please do also import the [Localhost Postman Environment](catenax.postman_environment.json) in case you want to
+Please do also import the [Localhost Postman Environment](catenax.localhost.postman_environment.json) in case you want to
 interact with Catena-X@Home (or adapt according to the target Catena-X environment).
 
 ## Scope

@@ -25,7 +25,7 @@ public class BackendServiceController {
     }
 
     @GET
-    @Path("/data/{assetId}")
+    @Path("/data/{assetId}/submodel")
     public Map<String, String> getData(@PathParam("assetId") String assetId) {
         if (Objects.equals(assetId, "asset-1")) {
             monitor.debug("Returning data for asset-1!");
@@ -42,8 +42,8 @@ public class BackendServiceController {
     }
 
     @POST
-    @Path("/data/")
-    public String getPostData(String body) {
+    @Path("/data/{assetId}/submodel")
+    public String getPostData(@PathParam("assetId") String assetId,String body) {
         monitor.debug("Got POST call with body: " + body);
         return body;
     }
