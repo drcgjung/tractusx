@@ -10,6 +10,21 @@
 - Docker and Docker compose
 - Azure CLI
 
+## Generate certificate
+
+Currently, there is one certificate already provided. In order to generate the required pfx file to be put in to the vault properties,
+you have to do the following:
+
+```bash
+mkdir certs
+cd certs
+# You have to enter an email (everything else can be empty)
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
+# Give 123456 as password
+openssl pkcs12 -inkey key.pem -in cert.pem -export -out cert.pfx
+cd ..
+```
+
 ## Pull (and Start)
 
 First you need to decide whether you just want to use the prebuilt images or whether you want to
@@ -114,18 +129,3 @@ Helm Chart deployment & Postman Environment for Hotel Budapest upcoming ...
   - Doof, wenn mehrere Backend-Data-Services den Proxy-Flow verwenden wollen.
 - Token zum Abrufen der Daten läuft nach einer gewissen Zeit ab
 
-### Generate certificate
-
-Currently, there is one certificate already provided. If you want to create an own you have to do the following:
-
-```bash
-mkdir certs
-cd certs
-# You have to enter an email (everything else can be empty)
-openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
-# Give 123456 as password
-openssl pkcs12 -inkey key.pem -in cert.pem -export -out cert.pfx
-cd ..
-```
-
-Then put the cert.pem content into the vault property files.
