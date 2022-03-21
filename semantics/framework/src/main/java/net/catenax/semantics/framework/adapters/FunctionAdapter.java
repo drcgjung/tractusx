@@ -47,16 +47,17 @@ public class FunctionAdapter<Cmd extends Command, O extends Offer, Ct extends Ca
             Class function=getClass().getClassLoader().loadClass(className);
             for(Method method: function.getDeclaredMethods()) {
                 if (methodName.equals(method.getName()) && method.getParameters().length == 1) {
-                    Object instance = function.getDeclaredConstructor().newInstance();
-                    Object argument = mapper.readValue(request.getPayload(), method.getParameters()[0].getType());
-                    Object result = method.invoke(instance,argument);
-                    response.setPayload(mapper.writeValueAsString(result));
-                    response.setModel(model);
-                    return response;
+                    try {
+                        Object instance = function.getDeclaredConstructor().newInstance();
+                        Object argument = mapper.readValue(request.getPayload(), method.getParameters()[0].getType());
+                        Object result = method.invoke(instance, argument);
+                        response.setPayload(mapper.writeValueAsString(result));
+                        response.setModel(model);
+                        return response;
+                    } catch(JsonProcessingException e) {
+                    }
                 }
             }
-        } catch(JsonProcessingException e) {
-            throw new StatusException("Could not parse input or output as json",400);
         } catch(ClassNotFoundException e) {
             throw new StatusException("Invalid function class",501);
         } catch(NoSuchMethodException e) {

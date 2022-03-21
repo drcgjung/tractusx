@@ -114,7 +114,7 @@ idsadapter:
   connectorHost: localhost:8080
   connectorProtocol: http
   connectorScheme: edc
-  connectorUrl: ${connectorProtocol}://${connectorHost}
+  connectorUrl: ${idsadapter.connectorProtocol}://${idsadapter.connectorHost}
   connectorUser: admin
   connectorPassword: password
   publisher: http://t-systems.com
@@ -231,7 +231,7 @@ idsadapter:
           model: urn:bamm:com.catenaX:1.0.0#IdConversion
           language: EN
           artifacts:
-            anonymize:
+            convert:
               description: Anonymize Identifiers.
               protocol: FUNCTION
               command: net.catenax.semantics.framework.idconversion.Pseudonymizer#convert
