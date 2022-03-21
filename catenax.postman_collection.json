@@ -10000,7 +10000,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"targetDomain\":\"urn:kappes#\",\r\n    \"identifiers\":[\r\n        {\r\n            \"key\":\"bla\",\"value\":\"blip\"\r\n        },\r\n        {\r\n            \"key\":\"bli\",\"value\":\"blap\"\r\n        },\r\n        {\r\n            \"key\":\"blu\",\"value\":\"blup\"\r\n        }\r\n    ]\r\n}",
+									"raw": "{\r\n    \"targetDomain\":\"urn:VAN:com.bmw:1.0.0#\",\r\n    \"identifiers\":[\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"5UXFE43588L890072\"\r\n        },\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"WMWZB3C56EWM31941\"\r\n        },\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"2C3CCAAG4DH723149\"\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10058,7 +10058,85 @@
 										},
 										{
 											"key": "operationId",
-											"value": "anonymize"
+											"value": "convert"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invoke Submodel (EDC) Polymorphic",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"targetDomain\":\"urn:VAN:com.bmw:1.0.0#\",\r\n    \"identifiers\": {\r\n        \"key\":\"urn:standard:org.iso:9721#\",\r\n        \"values\": [\"5UXFE43588L890072\",\"WMWZB3C56EWM31941\",\"2C3CCAAG4DH723149\"]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/:idsResourceId/shells/:assetId/aas/:submodelId/submodel/submodel-elements/:operationId/invoke?content=value&async=false",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										":idsResourceId",
+										"shells",
+										":assetId",
+										"aas",
+										":submodelId",
+										"submodel",
+										"submodel-elements",
+										":operationId",
+										"invoke"
+									],
+									"query": [
+										{
+											"key": "manufacturer",
+											"value": "BMW",
+											"disabled": true
+										},
+										{
+											"key": "number",
+											"value": "31BK",
+											"disabled": true
+										},
+										{
+											"key": "content",
+											"value": "value"
+										},
+										{
+											"key": "async",
+											"value": "false"
+										}
+									],
+									"variable": [
+										{
+											"key": "idsResourceId",
+											"value": "offer-orga"
+										},
+										{
+											"key": "assetId",
+											"value": "398c047f-c14c-47b9-9c27-d9511afc90d3"
+										},
+										{
+											"key": "submodelId",
+											"value": "idconversion-aspect"
+										},
+										{
+											"key": "operationId",
+											"value": "convert"
 										}
 									]
 								}
@@ -10239,7 +10317,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"targetDomain\":\"urn:kappes#\",\r\n    \"identifiers\":[\r\n        {\r\n            \"key\":\"bla\",\"value\":\"blip\"\r\n        },\r\n        {\r\n            \"key\":\"bli\",\"value\":\"blap\"\r\n        },\r\n        {\r\n            \"key\":\"blu\",\"value\":\"blup\"\r\n        }\r\n    ]\r\n}",
+									"raw": "{\r\n    \"targetDomain\":\"urn:VAN:com.bmw:1.0.0#\",\r\n    \"identifiers\": {\r\n        \"key\":\"urn:standard:org.iso:9721#\",\r\n        \"values\": [\"5UXFE43588L890072\",\"WMWZB3C56EWM31941\",\"2C3CCAAG4DH723149\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10292,7 +10370,80 @@
 										},
 										{
 											"key": "operationId",
-											"value": "anonymize"
+											"value": "convert"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invoke Submodel Over Proxy Polymorphic",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"targetDomain\":\"urn:VAN:com.bmw:1.0.0#\",\r\n    \"identifiers\":[\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"5UXFE43588L890072\"\r\n        },\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"WMWZB3C56EWM31941\"\r\n        },\r\n        {\r\n            \"key\":\"urn:standard:org.iso:9721#\",\"value\":\"2C3CCAAG4DH723149\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{aasProxyUrl}}/shells/:assetId/aas/:submodelId/submodel/submodel-elements/:operationId/invoke?content=value&async=false",
+									"host": [
+										"{{aasProxyUrl}}"
+									],
+									"path": [
+										"shells",
+										":assetId",
+										"aas",
+										":submodelId",
+										"submodel",
+										"submodel-elements",
+										":operationId",
+										"invoke"
+									],
+									"query": [
+										{
+											"key": "manufacturer",
+											"value": "BMW",
+											"disabled": true
+										},
+										{
+											"key": "number",
+											"value": "31BK",
+											"disabled": true
+										},
+										{
+											"key": "content",
+											"value": "value"
+										},
+										{
+											"key": "async",
+											"value": "false"
+										}
+									],
+									"variable": [
+										{
+											"key": "assetId",
+											"value": "398c047f-c14c-47b9-9c27-d9511afc90d3"
+										},
+										{
+											"key": "submodelId",
+											"value": "idconversion-aspect"
+										},
+										{
+											"key": "operationId",
+											"value": "convert"
 										}
 									]
 								}
