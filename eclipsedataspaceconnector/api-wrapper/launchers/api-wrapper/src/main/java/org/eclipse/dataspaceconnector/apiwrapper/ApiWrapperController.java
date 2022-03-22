@@ -44,6 +44,7 @@ public class ApiWrapperController {
     private final Map<String, EndpointDataReference> endpointDataReferences = new HashMap<>();
     private Map<String, String> header;
 
+    private final Map<String, String> agreementIds = new HashMap<>();
     public ApiWrapperController(Monitor monitor,
                                 ContractOfferService contractOfferService,
                                 ContractNegotiationService contractNegotiationService,
@@ -156,8 +157,14 @@ public class ApiWrapperController {
     }
 
     private String initializeContractNegotiation(String providerConnectorUrl, String assetId) throws InterruptedException {
+        String agreementId = agreementIds.get(assetId);
 
+        if (agreementId != null) {
+            monitor.debug("Found already existing contract agreement in cache");
+            return agreementId;
+        }
 
+        monitor.info("Initialize contract negotiation");
         var contractOffer = contractOfferService.findContractOffer4AssetId(
                 assetId,
                 consumerConnectorUrl,
@@ -190,6 +197,9 @@ public class ApiWrapperController {
             );
         }
 
-        return negotiationResponse.getContractAgreementId();
+        agreementId = negotiationResponse.getContractAgreementId();
+        agreementIds.put(assetId, agreementId);
+
+        return agreementId;
     }
 }
