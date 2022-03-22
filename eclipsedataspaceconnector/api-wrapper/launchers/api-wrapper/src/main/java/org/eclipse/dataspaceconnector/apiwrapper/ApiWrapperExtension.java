@@ -6,10 +6,10 @@ import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractN
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.HttpProxyService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.TransferProcessService;
 import org.eclipse.dataspaceconnector.spi.WebService;
-import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.system.Inject;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
+import org.eclipse.dataspaceconnector.spi.system.configuration.Config;
 
 public class ApiWrapperExtension implements ServiceExtension {
 
@@ -26,7 +26,8 @@ public class ApiWrapperExtension implements ServiceExtension {
 
     @Override
     public void initialize(ServiceExtensionContext context) {
-        Monitor monitor = context.getMonitor();
+        var config = createApiWrapperConfig(context.getConfig());
+        var monitor = context.getMonitor();
         var typeManager = context.getTypeManager();
 
         var contractOfferService = new ContractOfferService(monitor, typeManager, httpClient);
@@ -39,7 +40,31 @@ public class ApiWrapperExtension implements ServiceExtension {
                 contractOfferService,
                 contractOfferRequestService,
                 transferProcessService,
-                httpProxyService
+                httpProxyService,
+                config
         ));
+    }
+
+    private ApiWrapperConfig createApiWrapperConfig(Config config) {
+        ApiWrapperConfig.Builder builder = ApiWrapperConfig.Builder.newInstance();
+
+        builder.consumerEdcUrl(config.getString(ApiWrapperConfigKeys.CONSUMER_EDC_URL));
+
+        var consumerEdcApiKeyName = config.getString(ApiWrapperConfigKeys.CONSUMER_EDC_APIKEY_NAME, null);
+        if (consumerEdcApiKeyName != null) {
+            builder.consumerEdcApiKeyName(consumerEdcApiKeyName);
+        }
+
+        var consumerEdcApiKeyValue = config.getString(ApiWrapperConfigKeys.CONSUMER_EDC_APIKEY_VALUE, null);
+        if (consumerEdcApiKeyValue != null) {
+            builder.consumerEdcApiKeyValue(consumerEdcApiKeyValue);
+        }
+
+        var basicAuthUsers = config.getConfig(ApiWrapperConfigKeys.BASIC_AUTH).getRelativeEntries();
+        if (!basicAuthUsers.isEmpty()) {
+            builder.basicAuthUsers(basicAuthUsers);
+        }
+
+        return builder.build();
     }
 }

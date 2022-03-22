@@ -5,20 +5,20 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.model.NegotiationStatusResponse;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractNegotiationService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractOfferService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.HttpProxyService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.TransferProcessService;
-import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.model.NegotiationStatusResponse;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.negotiation.ContractOfferRequest;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,30 +27,40 @@ import java.util.regex.Pattern;
 @Path("/service")
 public class ApiWrapperController {
 
+
+    // Connection configurations
+    private static final String IDS_PATH = "/api/v1/ids/data";
+    private static final Pattern RESPONSE_PATTERN = Pattern.compile("\\{\"data\":\"(?<embeddedData>.*)\"\\}");
+    private final String consumerConnectorUrl;
+
     private final Monitor monitor;
     private final ContractOfferService contractOfferService;
     private final ContractNegotiationService contractNegotiationService;
     private final TransferProcessService transferProcessService;
     private final HttpProxyService httpProxyService;
 
-    private final Map<String, String> header = Map.of("X-Api-Key", "123456");
 
-    private final String consumerControlPlaneBaseUrl = "http://consumer-control-plane:9191/api";
-    private final String providerControlPlaneFormat = "%s/api/v1/ids/data";
-
-    private final static Pattern RESPONSE_PATTERN = Pattern.compile("\\{\"data\":\"(?<embeddedData>.*)\"\\}");
-
+    // In-memory state
     private final Map<String, EndpointDataReference> endpointDataReferences = new HashMap<>();
+    private Map<String, String> header;
 
     public ApiWrapperController(Monitor monitor,
                                 ContractOfferService contractOfferService,
                                 ContractNegotiationService contractNegotiationService,
-                                TransferProcessService transferProcessService, HttpProxyService httpProxyService) {
+                                TransferProcessService transferProcessService,
+                                HttpProxyService httpProxyService,
+                                ApiWrapperConfig config) {
         this.monitor = monitor;
         this.contractOfferService = contractOfferService;
         this.contractNegotiationService = contractNegotiationService;
         this.transferProcessService = transferProcessService;
         this.httpProxyService = httpProxyService;
+
+        this.consumerConnectorUrl = config.getConsumerEDCUrl();
+
+        if (config.getConsumerEdcApiKeyValue() != null) {
+            this.header = Collections.singletonMap(config.getConsumerEdcApiKeyName(), config.getConsumerEdcApiKeyValue());
+        }
     }
 
     @GET
@@ -58,18 +68,15 @@ public class ApiWrapperController {
     public String getWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, @Context UriInfo uriInfo) throws InterruptedException {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
-        String providerControlPlaneIDSUrl = String.format(providerControlPlaneFormat,providerConnectorUrl);
-
         // Initialize and negotiate everything
-        // TODO do this only if no agreement is already existing
-        var agreementId = initializeContractNegotiation(providerControlPlaneIDSUrl,assetId);
+        var agreementId = initializeContractNegotiation(providerConnectorUrl, assetId);
 
         // Initiate transfer process
         transferProcessService.initiateHttpProxyTransferProcess(
                 agreementId,
                 assetId,
-                consumerControlPlaneBaseUrl,
-                providerControlPlaneIDSUrl,
+                consumerConnectorUrl,
+                providerConnectorUrl + IDS_PATH,
                 header
         );
 
@@ -100,20 +107,17 @@ public class ApiWrapperController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String postWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
-
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-        String providerControlPlaneIDSUrl = String.format(providerControlPlaneFormat,providerConnectorUrl);
 
         // Initialize and negotiate everything
-        // TODO do this only if no agreement is already existing
-        var agreementId = initializeContractNegotiation(providerControlPlaneIDSUrl, assetId);
+        var agreementId = initializeContractNegotiation(providerConnectorUrl, assetId);
 
         // Initiate transfer process
         transferProcessService.initiateHttpProxyTransferProcess(
                 agreementId,
                 assetId,
-                consumerControlPlaneBaseUrl,
-                providerControlPlaneIDSUrl,
+                consumerConnectorUrl,
+                providerConnectorUrl + IDS_PATH,
                 header
         );
 
@@ -152,12 +156,13 @@ public class ApiWrapperController {
         monitor.debug("Endpoint Data Reference received and stored for agreement: " + dataReference.getContractId());
     }
 
-    private String initializeContractNegotiation(String providerConnectorIDSUrl, String assetId) throws InterruptedException {
+    private String initializeContractNegotiation(String providerConnectorUrl, String assetId) throws InterruptedException {
+
 
         var contractOffer = contractOfferService.findContractOffer4AssetId(
                 assetId,
-                consumerControlPlaneBaseUrl,
-                providerConnectorIDSUrl,
+                consumerConnectorUrl,
+                providerConnectorUrl + IDS_PATH,
                 header
         );
 
@@ -165,12 +170,12 @@ public class ApiWrapperController {
         var contractOfferRequest = ContractOfferRequest.Builder.newInstance()
                 .contractOffer(contractOffer)
                 .connectorId("provider")
-                .connectorAddress(providerConnectorIDSUrl)
+                .connectorAddress(providerConnectorUrl + IDS_PATH)
                 .protocol("ids-multipart")
                 .build();
         var negotiationId = contractNegotiationService.initiateNegotiation(
                 contractOfferRequest,
-                consumerControlPlaneBaseUrl,
+                consumerConnectorUrl,
                 header
         );
 
@@ -181,7 +186,7 @@ public class ApiWrapperController {
             Thread.sleep(1000);
             negotiationResponse = contractNegotiationService.getNegotiationState(
                     negotiationId,
-                    consumerControlPlaneBaseUrl,
+                    consumerConnectorUrl,
                     header
             );
         }
