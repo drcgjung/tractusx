@@ -89,12 +89,12 @@ public class ApiWrapperController {
         // Get data through data plane
         String data = "";
         try {
-            data = this.httpProxyService.sendGETRequest(dataReference,subUrl,queryParams);
-            Matcher dataMatcher=RESPONSE_PATTERN.matcher(data);
-            while(dataMatcher.matches()) {
-                data=dataMatcher.group("embeddedData");
-                data=data.replace("\\\"","\"").replace("\\\\","\\");
-                dataMatcher=RESPONSE_PATTERN.matcher(data);
+            data = httpProxyService.sendGETRequest(dataReference, subUrl, queryParams);
+            Matcher dataMatcher = RESPONSE_PATTERN.matcher(data);
+            while (dataMatcher.matches()) {
+                data = dataMatcher.group("embeddedData");
+                data = data.replace("\\\"", "\"").replace("\\\\", "\\");
+                dataMatcher = RESPONSE_PATTERN.matcher(data);
             }
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);
@@ -105,7 +105,6 @@ public class ApiWrapperController {
     @POST
     @Path("/{assetId}/{subUrl:.+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public String postWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
@@ -130,18 +129,18 @@ public class ApiWrapperController {
         // Get data through data plane
         String data = "";
         try {
-            data = this.httpProxyService.sendPOSTRequest(
+            data = httpProxyService.sendPOSTRequest(
                     dataReference,
                     subUrl,
                     queryParams,
                     body,
                     Objects.requireNonNull(okhttp3.MediaType.parse("application/json"))
             );
-            Matcher dataMatcher=RESPONSE_PATTERN.matcher(data);
-            while(dataMatcher.matches()) {
-                data=dataMatcher.group("embeddedData");
-                data=data.replace("\\\"","\"").replace("\\\\","\\");
-                dataMatcher=RESPONSE_PATTERN.matcher(data);
+            Matcher dataMatcher = RESPONSE_PATTERN.matcher(data);
+            while (dataMatcher.matches()) {
+                data = dataMatcher.group("embeddedData");
+                data = data.replace("\\\"", "\"").replace("\\\\", "\\");
+                dataMatcher = RESPONSE_PATTERN.matcher(data);
             }
         } catch (IOException e) {
             monitor.severe("Call against consumer control plane failed!", e);
