@@ -5,18 +5,20 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.dataspaceconnector.apiwrapper.config.ApiWrapperConfig;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.model.NegotiationStatusResponse;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractNegotiationService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.ContractOfferService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.HttpProxyService;
 import org.eclipse.dataspaceconnector.apiwrapper.connector.sdk.service.TransferProcessService;
+import org.eclipse.dataspaceconnector.apiwrapper.store.InMemoryContractAgreementStore;
+import org.eclipse.dataspaceconnector.apiwrapper.store.InMemoryEndpointDataReferenceStore;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.negotiation.ContractOfferRequest;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -26,7 +28,6 @@ import java.util.regex.Pattern;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/service")
 public class ApiWrapperController {
-
 
     // Connection configurations
     private static final String IDS_PATH = "/api/v1/ids/data";
@@ -39,23 +40,27 @@ public class ApiWrapperController {
     private final TransferProcessService transferProcessService;
     private final HttpProxyService httpProxyService;
 
+    // In-memory stores
+    private final InMemoryEndpointDataReferenceStore endpointDataReferenceStore;
+    private final InMemoryContractAgreementStore contractAgreementStore;
 
-    // In-memory state
-    private final Map<String, EndpointDataReference> endpointDataReferences = new HashMap<>();
     private Map<String, String> header;
 
-    private final Map<String, String> agreementIds = new HashMap<>();
     public ApiWrapperController(Monitor monitor,
                                 ContractOfferService contractOfferService,
                                 ContractNegotiationService contractNegotiationService,
                                 TransferProcessService transferProcessService,
                                 HttpProxyService httpProxyService,
+                                InMemoryEndpointDataReferenceStore endpointDataReferenceStore,
+                                InMemoryContractAgreementStore contractAgreementStore,
                                 ApiWrapperConfig config) {
         this.monitor = monitor;
         this.contractOfferService = contractOfferService;
         this.contractNegotiationService = contractNegotiationService;
         this.transferProcessService = transferProcessService;
         this.httpProxyService = httpProxyService;
+        this.endpointDataReferenceStore = endpointDataReferenceStore;
+        this.contractAgreementStore = contractAgreementStore;
 
         this.consumerConnectorUrl = config.getConsumerEDCUrl();
 
@@ -84,7 +89,7 @@ public class ApiWrapperController {
         EndpointDataReference dataReference = null;
         while (dataReference == null) {
             Thread.sleep(1000);
-            dataReference = endpointDataReferences.get(agreementId);
+            dataReference = endpointDataReferenceStore.get(agreementId);
         }
 
         // Get data through data plane
@@ -124,7 +129,7 @@ public class ApiWrapperController {
         EndpointDataReference dataReference = null;
         while (dataReference == null) {
             Thread.sleep(1000);
-            dataReference = endpointDataReferences.get(agreementId);
+            dataReference = endpointDataReferenceStore.get(agreementId);
         }
 
         // Get data through data plane
@@ -149,15 +154,8 @@ public class ApiWrapperController {
         return data;
     }
 
-    @POST
-    @Path("/proxy-callback")
-    public void pullData(EndpointDataReference dataReference) {
-        endpointDataReferences.put(dataReference.getContractId(), dataReference);
-        monitor.debug("Endpoint Data Reference received and stored for agreement: " + dataReference.getContractId());
-    }
-
     private String initializeContractNegotiation(String providerConnectorUrl, String assetId) throws InterruptedException {
-        String agreementId = agreementIds.get(assetId);
+        String agreementId = contractAgreementStore.get(assetId);
 
         if (agreementId != null) {
             monitor.debug("Found already existing contract agreement in cache");
@@ -198,7 +196,7 @@ public class ApiWrapperController {
         }
 
         agreementId = negotiationResponse.getContractAgreementId();
-        agreementIds.put(assetId, agreementId);
+        contractAgreementStore.put(assetId, agreementId);
 
         return agreementId;
     }

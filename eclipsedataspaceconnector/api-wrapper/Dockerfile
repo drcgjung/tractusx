@@ -12,23 +12,18 @@ ENV IDSADAPTER_CONNECTORURL http://provider-control-plane:9191
 ENV AASPROXY_REGISTRYURL http://registry-service:4242
 ENV AASPROXY_WRAPPERURL http://api-wrapper:9191/api/service
 
-RUN if [[ -n "${HTTP_PROXY}"  ]]; then echo "Acquire::http::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi
-RUN if [[ -n "${HTTP_PROXY}" ]]; then echo "Acquire::https::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi
-
-RUN apt-get -y upgrade
-RUN apt-get -y update
-RUN apt-get -y install curl
-
-RUN if [[ -n "${HTTP_PROXY}"  ]]; then rm -f /etc/apt/apt.conf.d/proxy.conf; fi
+RUN if [[ -n "${HTTP_PROXY}"  ]]; then echo "Acquire::http::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
+    if [[ -n "${HTTP_PROXY}" ]]; then echo "Acquire::https::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
+    apt-get -y upgrade && \
+    apt-get -y update && \
+    apt-get -y install curl && \
+    if [[ -n "${HTTP_PROXY}"  ]]; then rm -f /etc/apt/apt.conf.d/proxy.conf; fi
 
 WORKDIR /app
 COPY $JAR app.jar
 
 EXPOSE 9191
 EXPOSE 8090
-
-# health status is determined by the availability of the /health endpoint
-HEALTHCHECK --interval=5s --timeout=5s --retries=10 CMD curl --fail -X GET http://localhost:8181/api/check/health || exit 1
 
 ENTRYPOINT java \
     -Didsadapter.serviceUrl=${IDSADAPTER_SERVICEURL}\

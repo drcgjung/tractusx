@@ -42,6 +42,7 @@ services:
     image: cxtsiacr.azurecr.io/edc/consumer-api-wrapper:feature-ART3-305-rohrputzer-support-latest
     ports:
       - "8193:9191" # default
+#      - "9192" # callback
       - "5007:8090"
     volumes:
       - ${PWD}/config/api-wrapper.properties:/app/configuration.properties

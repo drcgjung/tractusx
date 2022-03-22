@@ -112,20 +112,10 @@ docker push cxtsiacr.azurecr.io/edc/consumer-aas-proxy:feature-ART3-305-rohrputz
 
 Helm Chart deployment & Postman Environment for Hotel Budapest upcoming ...
 
-## Open Questions
+## Potential complications
 
-- Call vom AAS-Client zum API-Wrapper zum Daten holen (`current.png` Call 23), oder Callback Mechanismus?
-- Wie kommen wir an den "richtigen" Contract? (`planned.png` Call 13, `current.png` Call 10)
-  - Wonach sollen wir suchen? Welches Attribut/Property?
-
-## Mögliche Komplikationen
-
-- Initialer Call von AAS-Client zum API-Wrapper kann unter Umständen in ein Timeout laufen.
-  - Beispiel:
-    - Wenn EDCs zu lange brauchen
-    - Contract manuell genehmigt werden muss
-  - Lösung: Asynchronität & State-Machine
-- Nur eine `/proxy-callback` URL pro Connector!
-  - Doof, wenn mehrere Backend-Data-Services den Proxy-Flow verwenden wollen.
-- Token zum Abrufen der Daten läuft nach einer gewissen Zeit ab
-
+- Initial call from aas-client against the api-wrapper could be terminated by a timeout. E.g:
+  - If the EDCs are taking to long for the communication
+  - If the contract negotiation have to be signed manually by a real person
+  - **Possible solutions**: Asynchronicity & State Machine between the aas-client and the api-wrapper
+- Token to retrieve the data from the provider's data plane may expire

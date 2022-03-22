@@ -17,6 +17,7 @@ dependencies {
     api("$edcGroup:catalog-spi:$edcVersion")
     api("$edcGroup:contract-spi:$edcVersion")
     api("$edcGroup:transfer-spi:$edcVersion")
+    api("$edcGroup:auth-spi:$edcVersion")
 
     api("jakarta.ws.rs:jakarta.ws.rs-api:3.0.0")
 }

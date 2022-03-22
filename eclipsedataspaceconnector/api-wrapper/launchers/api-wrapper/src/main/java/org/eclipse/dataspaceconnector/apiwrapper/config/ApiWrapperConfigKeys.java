@@ -1,4 +1,4 @@
-package org.eclipse.dataspaceconnector.apiwrapper;
+package org.eclipse.dataspaceconnector.apiwrapper.config;
 
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 

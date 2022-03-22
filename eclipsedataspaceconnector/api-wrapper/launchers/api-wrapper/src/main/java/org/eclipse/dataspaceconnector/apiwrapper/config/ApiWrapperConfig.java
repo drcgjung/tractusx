@@ -1,4 +1,4 @@
-package org.eclipse.dataspaceconnector.apiwrapper;
+package org.eclipse.dataspaceconnector.apiwrapper.config;
 
 import java.util.Collections;
 import java.util.Map;
