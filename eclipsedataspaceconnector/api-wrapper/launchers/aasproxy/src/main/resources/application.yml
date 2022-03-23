@@ -25,6 +25,15 @@ aasproxy:
   proxyUrl: ${server.protocol}://${server.host}:${server.port}
   registryUrl: http://localhost:4242/
   wrapperUrl: http://localhost:8193/api/service
+  idConversions:
+    "[urn:standard:org\\.iso:9721#(WMA|WBS|WBW|WBY|WB1|X4X|4US|5UX).+]":
+      conversionSubmodel: idconversion-aspect
+      conversionSubmodelEntry: convert
+      targetDomain: 'urn:VAN:com.bmw:1.0.0#'
+      orgaIdentifiers:
+      -
+        key: 'urn:twin:com.catenax#'
+        value: '398c047f-c14c-47b9-9c27-d9511afc90d3'
 spring:
   # How to deal with REST representation problems
   jackson:

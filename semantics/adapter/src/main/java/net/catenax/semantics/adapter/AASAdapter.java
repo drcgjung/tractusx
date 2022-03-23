@@ -8,24 +8,18 @@ additional information regarding license terms.
 */
 package net.catenax.semantics.adapter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import net.catenax.semantics.framework.config.*;
 import net.catenax.semantics.framework.*;
-import net.catenax.semantics.framework.aas.api.proxy.AssetIdentifierApiDelegate;
 import net.catenax.semantics.framework.aas.model.*;
-import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.catenax.semantics.framework.aas.api.proxy.AssetIdentifierApiDelegate;
+import net.catenax.semantics.framework.auth.TokenWrapper;
 import net.catenax.semantics.framework.config.Config;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -38,7 +32,7 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
     /**
      * we need the token from the request
      */
-    private final BearerTokenWrapper tokenWrapper;
+    private final TokenWrapper tokenWrapper;
     private final ObjectMapper objectMapper;
 
     /**
@@ -48,7 +42,7 @@ public class AASAdapter extends BaseAdapter implements AssetIdentifierApiDelegat
      * @param tokenWrapper session token access
      * @param objectMapper json conversion utility
      */
-    public AASAdapter(Config configurationData, IdsConnector connector, BearerTokenWrapper tokenWrapper, ObjectMapper objectMapper) {
+    public AASAdapter(Config configurationData, IdsConnector connector, TokenWrapper tokenWrapper, ObjectMapper objectMapper) {
         super(configurationData);
         setIdsConnector(connector);
         this.tokenWrapper=tokenWrapper;

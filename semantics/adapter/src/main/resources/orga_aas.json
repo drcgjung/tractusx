@@ -13,6 +13,10 @@
     "idShort": "Catena-X",
     "identification": "398c047f-c14c-47b9-9c27-d9511afc90d3",
     "specificAssetIds": [
+      {
+        "key": "urn:orga:com.catenax#",
+        "value": "Catena-X"
+      }
     ],
     "submodelDescriptors": [
       {
@@ -31,9 +35,9 @@
         },
         "endpoints": [
           {
-            "interface": "SUBMODEL-ENTRY-INVOKE-1.0RC02",
+            "interface": "SUBMODEL-1.0RC02",
             "protocolInformation": {
-              "endpointAddress": "${EDC_PROTOCOL}://${CONNECTOR_HOST}/offer-orga/shells/398c047f-c14c-47b9-9c27-d9511afc90d3/aas/idconversion-aspect/submodel/submodel-elements/convert/invoke?async=false&content=value",
+              "endpointAddress": "${EDC_PROTOCOL}://${CONNECTOR_HOST}/offer-orga/shells/398c047f-c14c-47b9-9c27-d9511afc90d3/aas/idconversion-aspect/submodel?async=false&content=value",
               "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
               "endpointProtocolVersion": "0.0.1-SNAPSHOT"
             }

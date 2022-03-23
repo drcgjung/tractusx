@@ -9,9 +9,9 @@ additional information regarding license terms.
 
 package net.catenax.semantics.adapter;
 
-import net.catenax.semantics.framework.auth.BearerTokenIncomingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenWrapper;
+import net.catenax.semantics.framework.auth.TokenIncomingInterceptor;
+import net.catenax.semantics.framework.auth.TokenOutgoingInterceptor;
+import net.catenax.semantics.framework.auth.TokenWrapper;
 import net.catenax.semantics.framework.edc.EdcService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,8 +25,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Main Adapter Application
@@ -46,7 +44,7 @@ public class Application {
 	 */
 	@Bean
 	public WebMvcConfigurer configurer(ApplicationContext context) {
-		BearerTokenIncomingInterceptor interceptor=context.getBean(BearerTokenIncomingInterceptor.class);
+		TokenIncomingInterceptor interceptor=context.getBean(TokenIncomingInterceptor.class);
 		OAuth2ResourceServerProperties securityProperties=context.getBean(OAuth2ResourceServerProperties.class);
 
 		return new WebMvcConfigurer(){
@@ -72,13 +70,13 @@ public class Application {
 	 }
 
 	@Bean
-	public BearerTokenIncomingInterceptor bearerTokenIncomingInterceptor(ApplicationContext context) {
-		return new BearerTokenIncomingInterceptor(context.getBean(BearerTokenWrapper.class));
+	public TokenIncomingInterceptor bearerTokenIncomingInterceptor(ApplicationContext context) {
+		return new TokenIncomingInterceptor(context.getBean(TokenWrapper.class));
 	}
 
 	@Bean
-	public BearerTokenOutgoingInterceptor bearerTokenOutgoingInterceptor(ApplicationContext context) {
-		return new BearerTokenOutgoingInterceptor(context.getBean(BearerTokenWrapper.class));
+	public TokenOutgoingInterceptor bearerTokenOutgoingInterceptor(ApplicationContext context) {
+		return new TokenOutgoingInterceptor(context.getBean(TokenWrapper.class));
 	}
 
 	/**

@@ -18,17 +18,16 @@ import javax.servlet.http.HttpServletResponse;
  * A Spring Web Interceptor to save the bearer token for routing to delegation
  */
 @RequiredArgsConstructor
-public class BearerTokenIncomingInterceptor implements AsyncHandlerInterceptor {
+public class TokenIncomingInterceptor implements AsyncHandlerInterceptor {
 
-    private final BearerTokenWrapper tokenWrapper;
+    private final TokenWrapper tokenWrapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
-        final String authorizationHeaderValue = request.getHeader("Authorization");
-        if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer")) {
-            String token = authorizationHeaderValue.substring(7, authorizationHeaderValue.length());
-            tokenWrapper.setToken(token);
+        final String authorizationHeaderValue = request.getHeader(TokenWrapper.AUTHORIZATION_HEADER);
+        if (authorizationHeaderValue != null) {
+            tokenWrapper.setToken(authorizationHeaderValue);
         }
 
         return true;

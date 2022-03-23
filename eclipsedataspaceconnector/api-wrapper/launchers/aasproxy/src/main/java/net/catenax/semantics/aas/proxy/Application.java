@@ -12,9 +12,9 @@ import feign.Client;
 import feign.Feign;
 import lombok.Data;
 import net.catenax.semantics.framework.aas.api.RegistryAndDiscoveryInterfaceApi;
-import net.catenax.semantics.framework.auth.BearerTokenIncomingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenWrapper;
+import net.catenax.semantics.framework.auth.TokenIncomingInterceptor;
+import net.catenax.semantics.framework.auth.TokenOutgoingInterceptor;
+import net.catenax.semantics.framework.auth.TokenWrapper;
 import net.catenax.semantics.framework.aas.ApiClient;
 import net.catenax.semantics.framework.helpers.NaiveSSLSocketFactory;
 import org.springframework.boot.SpringApplication;
@@ -48,7 +48,7 @@ public class Application {
      */
     @Bean
     public WebMvcConfigurer configurer(ApplicationContext context) {
-        BearerTokenIncomingInterceptor interceptor=context.getBean(BearerTokenIncomingInterceptor.class);
+        TokenIncomingInterceptor interceptor=context.getBean(TokenIncomingInterceptor.class);
 
         return new WebMvcConfigurer(){
             @Override
@@ -64,13 +64,13 @@ public class Application {
     }
 
     @Bean
-    public BearerTokenIncomingInterceptor bearerTokenIncomingInterceptor(ApplicationContext context) {
-        return new BearerTokenIncomingInterceptor(context.getBean(BearerTokenWrapper.class));
+    public TokenIncomingInterceptor bearerTokenIncomingInterceptor(ApplicationContext context) {
+        return new TokenIncomingInterceptor(context.getBean(TokenWrapper.class));
     }
 
     @Bean
-    public BearerTokenOutgoingInterceptor bearerTokenOutgoingInterceptor(ApplicationContext context) {
-        return new BearerTokenOutgoingInterceptor(context.getBean(BearerTokenWrapper.class));
+    public TokenOutgoingInterceptor bearerTokenOutgoingInterceptor(ApplicationContext context) {
+        return new TokenOutgoingInterceptor(context.getBean(TokenWrapper.class));
     }
 
     @Bean
@@ -112,7 +112,7 @@ public class Application {
             client = new Client.Default(naiveSSLSocketFactory,null);
         }
         Feign.Builder feignBuilder = apiClient.getFeignBuilder();
-        BearerTokenOutgoingInterceptor interceptor=context.getBean(BearerTokenOutgoingInterceptor.class);
+        TokenOutgoingInterceptor interceptor=context.getBean(TokenOutgoingInterceptor.class);
         feignBuilder.client(client)
                 .requestInterceptor(interceptor);
         return feignBuilder;

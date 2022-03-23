@@ -14,14 +14,18 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Simple POJO to carry a token into a session
+ * Simple POJO to carry a an authentication token into a session
  * make sure to annotate the @bean factory with a correct scope
  * @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
  */
 @Data
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
-public class BearerTokenWrapper {
+public class TokenWrapper {
+    public static String AUTHORIZATION_HEADER = "Authorization";
     private String token;
 }

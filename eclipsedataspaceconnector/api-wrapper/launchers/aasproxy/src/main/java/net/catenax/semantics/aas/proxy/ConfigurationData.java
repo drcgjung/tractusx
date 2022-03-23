@@ -10,6 +10,8 @@ package net.catenax.semantics.aas.proxy;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * configuration properties of the aas proxy
  */
@@ -18,4 +20,5 @@ public class ConfigurationData {
     protected String proxyUrl;
     protected String registryUrl;
     protected String wrapperUrl;
+    protected Map<String, ConversionSubmodel> idConversions;
 }

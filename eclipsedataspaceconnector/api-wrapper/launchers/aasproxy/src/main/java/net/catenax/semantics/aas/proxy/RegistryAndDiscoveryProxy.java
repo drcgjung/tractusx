@@ -24,15 +24,15 @@ import net.catenax.semantics.framework.idconversion.QualifiedConversionInput;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The AAS Proxy implements the service layer behind the web protocol layer.
@@ -60,6 +60,22 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      */
     protected final SubmodelProxy proxy;
 
+
+    /**
+     * regex to conversion spec
+     */
+    private Map<Pattern,ConversionSubmodel> idConversions=new HashMap<>();
+
+    /**
+     * is created after construction
+     */
+    @PostConstruct
+    public void init() {
+        config.idConversions.entrySet().forEach( idSpec -> {
+          Pattern matchPattern=Pattern.compile(idSpec.getKey());
+          idConversions.put(matchPattern,idSpec.getValue());
+        });
+    }
 
     @Override
     public Optional<ObjectMapper> getObjectMapper() {
@@ -236,38 +252,42 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
         return ResponseEntity.ok().build();
     }
 
-    List<IdentifierKeyValuePair> orgaTwinAddress=List.of(new IdentifierKeyValuePair().key("urn:twin:com.catenax#").value("cd ")) ;
+    List<IdentifierKeyValuePair> orgaTwinAddress=List.of(new IdentifierKeyValuePair().key("urn:twin:com.catenax#").value("")) ;
     String conversionAspect="idconversion-aspect";
 
     protected List<IdentifierKeyValuePair> convertIds(List<IdentifierKeyValuePair> assetIds) {
         if(assetIds==null) return null;
         return assetIds.stream().flatMap(assetId -> {
-            if("urn:standard:org.iso:9721#".equals(assetId.getKey())) {
-                Optional<String> orgaTwin=delegate.getAllAssetAdministrationShellIdsByAssetLink(orgaTwinAddress).stream().findFirst();
-                Optional<SubmodelDescriptor> submodel=orgaTwin.map( orgaAssetId -> delegate.getSubmodelDescriptorById(orgaAssetId, conversionAspect));
-                Optional<Endpoint> endpoint=submodel.flatMap( conversion -> conversion.getEndpoints().stream().findFirst());
-                Optional<String> address = endpoint.map( myEndpoint -> myEndpoint.getProtocolInformation().getEndpointAddress());
+            String fullName=assetId.getKey()+assetId.getValue();
+            Optional<Map.Entry<Pattern,ConversionSubmodel>> foundConversion=idConversions.entrySet().stream().filter( idConversion -> {
+                return idConversion.getKey().matcher(fullName).matches();
+            }).findFirst();
+            if(foundConversion.isPresent()) {
+                ConversionSubmodel submodelSpec=foundConversion.get().getValue();
+                Optional<String> orgaTwin=delegate.getAllAssetAdministrationShellIdsByAssetLink(submodelSpec.getOrgaIdentifiers()).stream().findFirst();
+                Optional<SubmodelDescriptor> submodel=orgaTwin.map( orgaAssetId -> delegate.getSubmodelDescriptorById(orgaAssetId, submodelSpec.getConversionSubmodel()));
+                List<Endpoint> endpoints=submodel.map(conversion -> conversion.getEndpoints()).orElse(List.of());
+                Optional<String> address = endpoints.stream().flatMap( myEndpoint -> {
+                    String fullAddress=myEndpoint.getProtocolInformation().getEndpointAddress();
+                    int params=fullAddress.indexOf(submodelSpec.getConversionSubmodel());
+                    if(params>=0) {
+                        fullAddress=fullAddress.substring(0,params+submodelSpec.getConversionSubmodel().length());
+                        return List.of(fullAddress).stream();
+                    } else {
+                        return List.<String>of().stream();
+                    }
+                }).findFirst();
                 return address.flatMap( myAddress -> {
                     try {
                         Map.Entry<SubmodelInterfaceApi,Map<String,Object>> api = proxy.getSubmodelInterfaceApi(myAddress);
                         api.getValue().put("content","value");
                         api.getValue().put("async","false");
                         OperationRequest request=new OperationRequest();
-                        request.setData("targetDomain","urn:VAN:com.bmw:1.0.0#");
+                        request.setData("targetDomain",submodelSpec.getTargetDomain());
                         request.setData("identifiers",List.of(assetId));
-                        OperationResult response=api.getKey().invokeOperation(request,"convert", api.getValue());
-                        String ids=(String) response.data().get("identifiers");
-                        return getObjectMapper().flatMap(mapper -> {
-                            TypeFactory typeFactory = mapper.getTypeFactory();
-                            try {
-                                List<IdentifierKeyValuePair> identifiers = mapper.readValue(ids, typeFactory.constructCollectionType(List.class, IdentifierKeyValuePair.class));
-                                if(identifiers.size()>0) {
-                                    return Optional.of(identifiers.get(0));
-                                }
-                            } catch(JsonProcessingException e) {
-                            }
-                                return Optional.<IdentifierKeyValuePair>empty();
-                        });
+                        OperationResult response=api.getKey().invokeOperation(request,submodelSpec.getConversionSubmodelEntry(), api.getValue());
+                        List<Map<String,String>> ids=(List<Map<String,String>>) response.data().get("identifiers");
+                        return ids.stream().map( id -> new IdentifierKeyValuePair().key(id.get("key")).value(id.get("value"))).findFirst();
                     } catch(StatusException e) {
                         return Optional.<IdentifierKeyValuePair>empty();
                     }

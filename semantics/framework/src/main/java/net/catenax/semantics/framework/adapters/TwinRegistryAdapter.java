@@ -8,28 +8,20 @@ additional information regarding license terms.
 */
 package net.catenax.semantics.framework.adapters;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import net.catenax.semantics.framework.*;
+import net.catenax.semantics.framework.config.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import net.catenax.semantics.framework.*;
-import net.catenax.semantics.framework.auth.BearerTokenOutgoingInterceptor;
-import net.catenax.semantics.framework.auth.BearerTokenWrapper;
-import net.catenax.semantics.framework.config.*;
+import net.catenax.semantics.framework.auth.TokenOutgoingInterceptor;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -38,7 +30,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -57,7 +48,7 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
     /**
      * we need an interceptor that pushes tokens into the request
      */
-    private final BearerTokenOutgoingInterceptor interceptor;
+    private final TokenOutgoingInterceptor interceptor;
 
     /**
      * creates a new adapter
@@ -65,7 +56,7 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
      * @param connector attached connector
      * @param interceptor token interceptor that pushes tokens to the requests
      */
-    public TwinRegistryAdapter(Config<Cmd, O, Ct, Co, T> configurationData, IdsConnector connector, BearerTokenOutgoingInterceptor interceptor) {
+    public TwinRegistryAdapter(Config<Cmd, O, Ct, Co, T> configurationData, IdsConnector connector, TokenOutgoingInterceptor interceptor) {
         super(configurationData);
         setIdsConnector(connector);
         this.interceptor = interceptor;

@@ -23,17 +23,17 @@ import java.io.IOException;
  * A feign request to insert a saved bearer token into the outgoing communication
  */
 @RequiredArgsConstructor
-public class BearerTokenOutgoingInterceptor implements RequestInterceptor, HttpRequestInterceptor {
+public class TokenOutgoingInterceptor implements RequestInterceptor, HttpRequestInterceptor {
 
-    private final BearerTokenWrapper tokenWrapper;
+    private final TokenWrapper tokenWrapper;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        requestTemplate.header("Authorization", "Bearer "+tokenWrapper.getToken());
+        requestTemplate.header(TokenWrapper.AUTHORIZATION_HEADER, tokenWrapper.getToken());
     }
 
     @Override
     public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
-        httpRequest.addHeader("Authorization", "Bearer "+tokenWrapper.getToken());
+        httpRequest.addHeader(TokenWrapper.AUTHORIZATION_HEADER, tokenWrapper.getToken());
     }
 }
