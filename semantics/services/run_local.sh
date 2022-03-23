@@ -15,7 +15,7 @@
 #   Windows, (git)-bash shell, java 11 (java) and maven (mvn) in the $PATH.
 #
 # Synposis: 
-#   ./run_local.sh (-build)? (clean)? (-suspend)? (-debug)? (-proxy)?
+#   ./build_run_local.sh (-build)? (clean)? (-suspend)? (-debug)? (-proxy)?
 #
 # Comments: 
 #

@@ -111,12 +111,11 @@ public class IdentifierKeyValuePair extends HasSemantics {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class IdentifierKeyValuePair {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
-    sb.append("    key: ").append(toIndentedString(key)).append("\n");
-    sb.append("    subjectId: ").append(toIndentedString(subjectId)).append("\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
-    sb.append("}");
+    sb.append("{\"key\":\"");
+    sb.append(getKey());
+    sb.append("\",\"value\":\"");
+    sb.append(getValue());
+    sb.append("\"}");
     return sb.toString();
   }
 

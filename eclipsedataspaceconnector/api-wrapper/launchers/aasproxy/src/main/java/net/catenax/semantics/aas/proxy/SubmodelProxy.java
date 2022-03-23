@@ -1,3 +1,11 @@
+/*
+Copyright (c) 2021-2022 T-Systems International GmbH (Catena-X Consortium)
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+*/
 package net.catenax.semantics.aas.proxy;
 
 import feign.Feign;
@@ -45,11 +53,21 @@ public class SubmodelProxy implements AssetIdentifierApiDelegate {
      * @param submodelIdentifier identifier of the representation/aspect
      * @return client pointing to the correct original url
      */
-    private Map.Entry<SubmodelInterfaceApi,Map<String,Object>> getSubmodelInterfaceApi(String assetIdentifier, String submodelIdentifier) throws StatusException {
-        String endpoint=storage.getEndpoint(assetIdentifier, submodelIdentifier);
-        if(endpoint==null) {
-            throw new StatusException("No endpoint found",501);
+    public Map.Entry<SubmodelInterfaceApi,Map<String,Object>> getSubmodelInterfaceApi(String assetIdentifier, String submodelIdentifier) throws StatusException {
+        String endpoint = storage.getEndpoint(assetIdentifier, submodelIdentifier);
+        if (endpoint == null) {
+            throw new StatusException("No endpoint found", 501);
         }
+        return getSubmodelInterfaceApi(endpoint);
+    }
+
+    /**
+     * create a client based on the
+     * actual endpoint
+     * @param endpoint ready made endpoint
+     * @return client pointing to the correct original url
+     */
+    public Map.Entry<SubmodelInterfaceApi,Map<String,Object>> getSubmodelInterfaceApi(String endpoint) throws StatusException {
         Matcher urlMatcher=URL_WITH_PARAMS.matcher(endpoint);
         if(!urlMatcher.matches()) {
             throw new StatusException("Endpoint url is not well-formed",501);

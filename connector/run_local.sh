@@ -15,7 +15,7 @@
 #   Windows, (git)-bash shell, java 11 (java) and maven (mvn) in the $PATH.
 #
 # Synposis: 
-#   ./run_local.sh (-build)? (consumer|provider)? (-suspend)? (-debug)? (-clean)?
+#   ./build_run_local.sh (-build)? (consumer|provider)? (-suspend)? (-debug)? (-clean)?
 #
 # Comments: 
 #   The IDS connector needs the configuration being given in an absolute path

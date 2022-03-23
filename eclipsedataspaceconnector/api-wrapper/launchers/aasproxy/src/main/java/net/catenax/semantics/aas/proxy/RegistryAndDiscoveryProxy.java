@@ -9,17 +9,28 @@ additional information regarding license terms.
 
 package net.catenax.semantics.aas.proxy;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import lombok.RequiredArgsConstructor;
 import net.catenax.semantics.aas.api.registry.LookupApiDelegate;
 import net.catenax.semantics.aas.api.registry.RegistryApiDelegate;
+import net.catenax.semantics.aas.api.shell.SubmodelInterfaceApi;
+import net.catenax.semantics.framework.StatusException;
 import net.catenax.semantics.framework.aas.api.RegistryAndDiscoveryInterfaceApi;
 import net.catenax.semantics.framework.aas.model.*;
+import net.catenax.semantics.framework.idconversion.QualifiedConversionInput;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,6 +54,11 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      * config data
      */
     protected final ConfigurationData config;
+
+    /**
+     * link to the submodel proxy for id conversion
+     */
+    protected final SubmodelProxy proxy;
 
 
     @Override
@@ -220,9 +236,51 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
         return ResponseEntity.ok().build();
     }
 
+    List<IdentifierKeyValuePair> orgaTwinAddress=List.of(new IdentifierKeyValuePair().key("urn:twin:com.catenax#").value("cd ")) ;
+    String conversionAspect="idconversion-aspect";
+
+    protected List<IdentifierKeyValuePair> convertIds(List<IdentifierKeyValuePair> assetIds) {
+        if(assetIds==null) return null;
+        return assetIds.stream().flatMap(assetId -> {
+            if("urn:standard:org.iso:9721#".equals(assetId.getKey())) {
+                Optional<String> orgaTwin=delegate.getAllAssetAdministrationShellIdsByAssetLink(orgaTwinAddress).stream().findFirst();
+                Optional<SubmodelDescriptor> submodel=orgaTwin.map( orgaAssetId -> delegate.getSubmodelDescriptorById(orgaAssetId, conversionAspect));
+                Optional<Endpoint> endpoint=submodel.flatMap( conversion -> conversion.getEndpoints().stream().findFirst());
+                Optional<String> address = endpoint.map( myEndpoint -> myEndpoint.getProtocolInformation().getEndpointAddress());
+                return address.flatMap( myAddress -> {
+                    try {
+                        Map.Entry<SubmodelInterfaceApi,Map<String,Object>> api = proxy.getSubmodelInterfaceApi(myAddress);
+                        api.getValue().put("content","value");
+                        api.getValue().put("async","false");
+                        OperationRequest request=new OperationRequest();
+                        request.setData("targetDomain","urn:VAN:com.bmw:1.0.0#");
+                        request.setData("identifiers",List.of(assetId));
+                        OperationResult response=api.getKey().invokeOperation(request,"convert", api.getValue());
+                        String ids=(String) response.data().get("identifiers");
+                        return getObjectMapper().flatMap(mapper -> {
+                            TypeFactory typeFactory = mapper.getTypeFactory();
+                            try {
+                                List<IdentifierKeyValuePair> identifiers = mapper.readValue(ids, typeFactory.constructCollectionType(List.class, IdentifierKeyValuePair.class));
+                                if(identifiers.size()>0) {
+                                    return Optional.of(identifiers.get(0));
+                                }
+                            } catch(JsonProcessingException e) {
+                            }
+                                return Optional.<IdentifierKeyValuePair>empty();
+                        });
+                    } catch(StatusException e) {
+                        return Optional.<IdentifierKeyValuePair>empty();
+                    }
+                }).stream();
+            } else {
+                return Optional.of(assetId).stream();
+            }
+        }).collect(Collectors.toList());
+    }
+
     @Override
     public ResponseEntity<List<String>> getAllAssetAdministrationShellIdsByAssetLink(List<IdentifierKeyValuePair> assetIds) {
-        return ResponseEntity.ok(delegate.getAllAssetAdministrationShellIdsByAssetLink(assetIds));
+        return ResponseEntity.ok(delegate.getAllAssetAdministrationShellIdsByAssetLink(convertIds(assetIds)));
     }
 
     @Override
@@ -232,6 +290,6 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
 
     @Override
     public ResponseEntity<List<IdentifierKeyValuePair>> postAllAssetLinksById(String aasIdentifier, List<IdentifierKeyValuePair> identifierKeyValuePair) {
-        return ResponseEntity.ok(delegate.postAllAssetLinksById(identifierKeyValuePair,aasIdentifier));
+        return ResponseEntity.ok(delegate.postAllAssetLinksById(convertIds(identifierKeyValuePair),aasIdentifier));
     }
 }

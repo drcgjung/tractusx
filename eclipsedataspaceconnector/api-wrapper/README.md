@@ -1,14 +1,28 @@
+<!---
+Copyright (c) 2021-2022 ZF Friedrichshafen AG & T-Systems International GmbH (Catena-X Consortium)
+
+See the AUTHORS file(s) distributed with this work for additional
+information regarding authorship.
+
+See the LICENSE file(s) distributed with this work for
+additional information regarding license terms.
+-->
+
 # EDC data plane & API-Wrapper
 
 ## Prerequisites
 
+### For Running
 - If you are sitting behind a corporate proxy please set the environment variables ${HTTP_PROXY_HOST}, ${HTTP_PROXY_HOST} and ${HTTP_PROXY_PORT}
+- Openssl
+- Docker and Docker compose
+- Azure CLI
+
+### For Building
 - EDC artifacts published on [EDC patch branch](https://github.com/drcgjung/DataSpaceConnector/tree/release/catena-x)
   - Build & publish to maven local: `./gradlew -Dhttp.proxyHost=${HTTP_PROXY_HOST} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_HOST} -Dhttps.proxyPort=${HTTP_PROXY_PORT} clean build publishToMavenLocal -x test`
 - Jdk 11
 - Apache Maven
-- Docker and Docker compose
-- Azure CLI
 
 ## Generate certificate
 
@@ -33,41 +47,17 @@ build by yourself. In the latter case, please go to Section 'Build (and Start)'.
 Otherwise, you may utter the following commands (and then skip the next Section 'Build (and Start)' by advancing to section 'Play')
 
 ```bash
-az login --tenant 495463c3-0991-4659-9cc5-94b4a3f7b1d6
-az acr login --name cxtsiacr.azurecr.io
-docker pull cxtsiacr.azurecr.io/edc/consumer-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/consumer-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/consumer-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/provider-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/provider-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/provider-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/backend/simple-aas-adapter:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/semantics/services:feature-ART3-305-rohrputzer-support-latest
-docker pull cxtsiacr.azurecr.io/edc/consumer-aas-proxy:feature-ART3-305-rohrputzer-support-latest
-docker-compose up
+./run_local.sh
 ```
 
 ## Build (snd Start)
 
-The following commands will build (and start) Catena-X@Home
+The following command will build (and start) Catena-X@Home
 
 Please be sure that you setup the right certficates (see section 'Generate certificate').
 
 ```bash
-export MAVEN_OPTS="-Dhttp.proxyHost=${HTTP_PROXY_HOST} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_HOST} -Dhttps.proxyPort=${HTTP_PROXY_PORT}"
-cd ../../semantics
-mvn clean install -DskipTests
-cd ../eclipsedataspaceconnector/api-wrapper
-./gradlew -Dhttp.proxyHost=${HTTP_PROXY_HOST} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_HOST} -Dhttps.proxyPort=${HTTP_PROXY_PORT} clean build
-cd launchers
-rm -rf adapter
-rm -rf services
-ln -s ../../../semantics/adapter .
-ln -s ../../../semantics/services .
-cd aasproxy
-mvn clean install -DskipTests
-cd ../..
-docker-compose up --build
+./build_run_local.sh
 ```
 
 ## Play
@@ -96,18 +86,8 @@ The most important sections therein would be Catenax>Semantic Layer>AAS Proxy (D
 
 After successful build & run, the artifacts may be pushed to the 'Hotel Budapest' environment.
 
-```
-az login --tenant 495463c3-0991-4659-9cc5-94b4a3f7b1d6
-az acr login --name cxtsiacr.azurecr.io
-docker push cxtsiacr.azurecr.io/edc/consumer-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/backend/simple-aas-adapter:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/semantics/services:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-aas-proxy:feature-ART3-305-rohrputzer-support-latest
+```bash
+./deploy_catenax.sh
 ```
 
 Helm Chart deployment & Postman Environment for Hotel Budapest upcoming ...

@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.catenax.semantics.registry.controller;
+package net.catenax.semantics.framework.aas;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.catenax.semantics.aas.registry.model.IdentifierKeyValuePair;
+import net.catenax.semantics.framework.aas.model.IdentifierKeyValuePair;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.core.convert.converter.Converter;
+import net.catenax.semantics.framework.aas.model.IdentifierKeyValuePair;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * This converter is required so that Spring is able to convert single query parameters to custom objects.
+ * This converter is required so that Spring is able to convert single-style query parameters to custom objects.
  */
 @Component
 public class IdentifierKeyValuePairConverter implements Converter<String, List<IdentifierKeyValuePair>> {
@@ -62,4 +64,5 @@ public class IdentifierKeyValuePairConverter implements Converter<String, List<I
                 .replace("\"{", "{")
                 .replace("}\"", "}");
     }
+
 }

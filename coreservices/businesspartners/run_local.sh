@@ -15,7 +15,7 @@
 #   Windows, (git)-bash shell, java 11 (java) and maven (mvn) in the $PATH.
 #
 # Synposis: 
-#   ./run_local.sh
+#   ./build_run_local.sh
 #
 # Comments: 
 #   Uncomment the proxy lines to run against a corporate proxy

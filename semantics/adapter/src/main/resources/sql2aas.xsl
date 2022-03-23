@@ -38,7 +38,7 @@
   	"identification": "urn:twin:com.</xsl:text><xsl:value-of select="./MANUFACTURER"/><xsl:text>#</xsl:text><xsl:value-of select="./UUID"/><xsl:text>",
   	"specificAssetIds": [
         </xsl:text><xsl:if test="./CUSTOMER = 'VIN'"><xsl:text>{
-          		"key": "urn:iso:std:iso:4030:ed-3:v1:en",
+          		"key": "urn:VAN:com.bmw:1.0.0#",
            		"value": "</xsl:text><xsl:value-of select="./CUSTOMERNUMBER"/><xsl:text>"
         },</xsl:text></xsl:if><xsl:text>
         {
