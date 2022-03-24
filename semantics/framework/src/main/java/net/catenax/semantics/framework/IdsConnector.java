@@ -23,7 +23,7 @@ public interface IdsConnector {
      * @param title of the contract
      * @return contract as created/found
      */
-    Contract getOrCreateContract(String title);
+    Contract getOrCreateContract(String title) throws StatusException;
 
     /**
      * Gets or creates a particular offer
@@ -31,14 +31,14 @@ public interface IdsConnector {
      * @param title name of the offer
      * @return offer as created/found
      */
-    Offer getOrCreateOffer(String title);
+    Offer getOrCreateOffer(String title) throws StatusException;
 
     /**
      * presents a self-description of the associated ids
      * connector
      * @return an object describing the associated connector
      */
-    Object getSelfDescription();
+    Object getSelfDescription() throws StatusException;
 
     /**
      * performs an internalized request

@@ -41,13 +41,15 @@ import java.util.stream.Stream;
 @Conditional(EdcConfigurationCondition.class)
 public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog, Co extends Contract, T extends Transformation> extends BaseConnector<Cmd,O,Ct,Co,T> {
 
-    private HttpClient edcClient;
 
     public EdcService(Config<Cmd,O,Ct,Co, T> configurationData,
                       List<BackendAdapter> adapters,
                       List<Transformer> transformers) {
         super(configurationData,adapters,transformers);
+    }
 
+    public HttpClient getEdcClient() {
+        HttpClient edcClient=null;
         String proxyHost=System.getProperty("http.proxyHost");
 
         boolean useApiKey = "X-Api-Key".equals(configurationData.getConnectorUser());
@@ -89,9 +91,10 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
             clientBuilder.addInterceptorFirst(interceptor);
             edcClient = clientBuilder.build();
         }
+        return edcClient;
     }
 
-    public Offer getOrCreateOffer(String title) {
+    public Offer getOrCreateOffer(String title) throws StatusException {
         O result=configurationData.getOffers().get(title);
         HttpPost httppost = new HttpPost(configurationData.getConnectorUrl() + "/api/assets");
         httppost.addHeader("accept", "*/*");
@@ -110,18 +113,23 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                 "}";
         try {
             httppost.setEntity(new StringEntity(thatPayLoad));
-            HttpResponse twinResponse = edcClient.execute(httppost);
+            HttpClient client=getEdcClient();
+            HttpResponse offerResponse = client.execute(httppost);
+            if(offerResponse.getStatusLine().getStatusCode()<200 || offerResponse.getStatusLine().getStatusCode()>299) {
+                throw new StatusException("Could not create offer",offerResponse.getStatusLine().getStatusCode());
+            }
+            result.setPayload(thatPayLoad);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new StatusException("Could not create offer",e,501);
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            throw new StatusException("Could not create offer",e,501);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StatusException("Could not create offer",e,501);
         }
         return result;
     }
 
-    public Contract getOrCreateContract(String title) {
+    public Contract getOrCreateContract(String title) throws StatusException {
         Co result=configurationData.getContracts().get(title);
         HttpPost httppost = new HttpPost(configurationData.getConnectorUrl() + "/api/contractdefinitions");
         httppost.addHeader("accept", "*/*");
@@ -173,7 +181,12 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                 "}\n";
         try {
             httppost.setEntity(new StringEntity(thatPayLoad));
-            HttpResponse twinResponse = edcClient.execute(httppost);
+            HttpClient client=getEdcClient();
+            HttpResponse contractResponse = client.execute(httppost);
+            if(contractResponse.getStatusLine().getStatusCode()<200 || contractResponse.getStatusLine().getStatusCode()>299) {
+                throw new StatusException("Could not create contract",contractResponse.getStatusLine().getStatusCode());
+            }
+            result.setPayload(thatPayLoad);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ClientProtocolException e) {

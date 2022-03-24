@@ -80,6 +80,35 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
     }
 
     /**
+     * create a new http client for interfacing the registry
+     * @return
+     */
+    public HttpClient getHttpClient() {
+        String proxyHost=System.getProperty("http.proxyHost");
+        HttpClient httpclient = null;
+        if (proxyHost != null && !proxyHost.isEmpty()) {
+            boolean noProxy = false;
+            for (String noProxyHost : System.getProperty("http.nonProxyHosts","localhost").split("\\|")) {
+                noProxy = noProxy || configurationData.getServiceUrl().contains(noProxyHost.replace("*",""));
+            }
+            if (!noProxy) {
+                HttpHost httpProxyHost = new HttpHost(proxyHost, Integer.parseInt(System.getProperty("http.proxyPort","80")));
+                DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(httpProxyHost);
+                HttpClientBuilder clientBuilder = HttpClients.custom();
+                clientBuilder = clientBuilder.setRoutePlanner(routePlanner);
+                clientBuilder = clientBuilder.addInterceptorFirst(interceptor);
+                httpclient = clientBuilder.build();
+            }
+        }
+        if (httpclient == null) {
+            HttpClientBuilder clientBuilder = HttpClients.custom();
+            clientBuilder.addInterceptorFirst(interceptor);
+            httpclient = clientBuilder.build();
+        }
+        return httpclient;
+    }
+
+    /**
      * registers new twins. This is a two-step process.
      * First, the given command is issues for the given protocol in the associated connector.
      * Secondly, the result is interpreted as a set of asset descriptors which
@@ -106,29 +135,6 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
             // TODO check for error status codes
             // Step 2 make outgoing calls to the registry
 
-            String proxyHost=System.getProperty("http.proxyHost");
-
-            HttpClient httpclient = null;
-            if (proxyHost != null && !proxyHost.isEmpty()) {
-                boolean noProxy = false;
-                for (String noProxyHost : System.getProperty("http.nonProxyHosts","localhost").split("\\|")) {
-                    noProxy = noProxy || configurationData.getServiceUrl().contains(noProxyHost.replace("*",""));
-                }
-                if (!noProxy) {
-                    HttpHost httpProxyHost = new HttpHost(proxyHost, Integer.parseInt(System.getProperty("http.proxyPort","80")));
-                    DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(httpProxyHost);
-                    HttpClientBuilder clientBuilder = HttpClients.custom();
-                    clientBuilder = clientBuilder.setRoutePlanner(routePlanner);
-                    clientBuilder = clientBuilder.addInterceptorFirst(interceptor);
-                    httpclient = clientBuilder.build();
-                }
-            }
-            if (httpclient == null) {
-                HttpClientBuilder clientBuilder = HttpClients.custom();
-                clientBuilder.addInterceptorFirst(interceptor);
-                httpclient = clientBuilder.build();
-            }
-
             // parse the twin recipe as asset descriptors
             ObjectMapper om = new ObjectMapper();
             JsonNode[] nodes = new JsonNode[]{om.readTree(responseMessage.getPayload())};
@@ -149,15 +155,12 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
                 String thatPayLoad=om.writeValueAsString(nodes[count]);
                 httppost.setEntity(new StringEntity(thatPayLoad));
                 log.info("Accessing Twin Registry via " + httppost.getRequestLine());
-                HttpResponse twinResponse = httpclient.execute(httppost);
+                HttpResponse twinResponse = getHttpClient().execute(httppost);
                 log.info("Received Twin Registry response " + twinResponse.getStatusLine());
                 int statusCode = twinResponse.getStatusLine().getStatusCode();
                 if (statusCode < 200 || statusCode >= 300) {
-                    if (nodes.length == 1) {
-                        finalResult.append("\"");
-                        finalResult.append(twinResponse.getStatusLine().getReasonPhrase());
-                        finalResult.append("\"]");
-                        throw new StatusException(finalResult.toString(), twinResponse.getStatusLine().getStatusCode());
+                    if (statusCode!=400) {
+                        throw new StatusException(finalResult.toString(), statusCode);
                     } else {
                         log.warn("Got a status of " + statusCode + " for intermediate twin " + count + " Ignoring.");
                     }

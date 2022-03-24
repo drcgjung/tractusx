@@ -12,6 +12,7 @@ ENV IDSADAPTER_CONNECTORURL http://provider-control-plane:9191
 ENV IDSADAPTER_CONNECTORUSER X-Api-Key
 ENV IDSADAPTER_CONNECTORPASSWORD 123456
 ENV AASPROXY_REGISTRYURL http://registry-service:4242
+ENV IDSADAPTER_ADAPTERURL http://provider-aas-service:4243
 ENV AASPROXY_WRAPPERURL http://api-wrapper:9191/api/service
 
 RUN if [[ -n "${HTTP_PROXY}"  ]]; then echo "Acquire::http::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi
@@ -40,6 +41,7 @@ ENTRYPOINT java \
     -Didsadapter.connectorUrl=${IDSADAPTER_CONNECTORURL}\
     -Didsadapter.connectorUser=${IDSADAPTER_CONNECTORUSER}\
     -Didsadapter.connectorPassword=${IDSADAPTER_CONNECTORPASSWORD}\
+    -Didsadapter.adapterUrl=${IDSADAPTER_ADAPTERURL}\
     -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}\
     -Daasproxy.registryUrl=${AASPROXY_REGISTRYURL}\
     -Daasproxy.wrapperUrl=${AASPROXY_WRAPPERURL}\

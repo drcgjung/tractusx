@@ -45,7 +45,7 @@ public abstract class BaseConnector<Cmd extends Command, O extends Offer, Ct ext
      * and automatically publish stuff
      */
     @PostConstruct
-    public void setup() {
+    public void setup() throws StatusException {
         if (configurationData.isRegisterOnStart()) {
             for(Map.Entry<String,O> offer : configurationData.getOffers().entrySet()) {
                 getOrCreateContract(offer.getKey());
