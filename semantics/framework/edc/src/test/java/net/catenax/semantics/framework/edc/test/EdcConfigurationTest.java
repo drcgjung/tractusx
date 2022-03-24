@@ -9,6 +9,7 @@ additional information regarding license terms.
 package net.catenax.semantics.framework.edc.test;
 
 import net.catenax.semantics.framework.IdsConnector;
+import net.catenax.semantics.framework.StatusException;
 import net.catenax.semantics.framework.edc.EdcService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,7 +36,7 @@ class EdcConfigurationTest {
 	 * @param context created spring context
 	 */
 	@Test
-	public void contextLoads(ApplicationContext context) {
+	public void contextLoads(ApplicationContext context) throws StatusException {
 		assertThat(context).isNotNull();
 		IdsConnector connector=context.getBean(IdsConnector.class);
 		assertThat(connector).isNotNull();

@@ -102,7 +102,11 @@ public class AdapterController {
      */
     @GetMapping(value = "/idsinfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> idsInfo() {
-        return ResponseEntity.ok(idsConnector.getSelfDescription());
+        try {
+            return ResponseEntity.ok(idsConnector.getSelfDescription());
+        } catch(StatusException e) {
+            return ResponseEntity.status(e.getStatus()).build();
+        }
     }
 
     /**
@@ -112,7 +116,11 @@ public class AdapterController {
      */
     @PostMapping(value = "/offer/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Offer> offerResource(@PathVariable("name") String name) {
-        return ResponseEntity.ok(idsConnector.getOrCreateOffer(name));
+        try {
+            return ResponseEntity.ok(idsConnector.getOrCreateOffer(name));
+        } catch(StatusException e) {
+            return ResponseEntity.status(e.getStatus()).build();
+        }
     }
 
     /**
@@ -122,7 +130,11 @@ public class AdapterController {
      */
     @PostMapping(value = "/contract/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Contract> offerContract(@PathVariable("name") String name) {
-        return ResponseEntity.ok(idsConnector.getOrCreateContract(name));
+        try {
+            return ResponseEntity.ok(idsConnector.getOrCreateContract(name));
+        } catch(StatusException e) {
+            return ResponseEntity.status(e.getStatus()).build();
+        }
     }
 
 }

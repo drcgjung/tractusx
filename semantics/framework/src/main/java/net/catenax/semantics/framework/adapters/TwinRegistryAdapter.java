@@ -159,11 +159,10 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
                 log.info("Received Twin Registry response " + twinResponse.getStatusLine());
                 int statusCode = twinResponse.getStatusLine().getStatusCode();
                 if (statusCode < 200 || statusCode >= 300) {
-                    if (statusCode!=400) {
-                        throw new StatusException(finalResult.toString(), statusCode);
-                    } else {
-                        log.warn("Got a status of " + statusCode + " for intermediate twin " + count + " Ignoring.");
+                    if (count > 0) {
+                        finalResult.append(",");
                     }
+                    finalResult.append("{ \"error\":\"Most likely the twin did already exist.\",\"status\":"+statusCode+"}");
                 } else {
                     if (count > 0) {
                         finalResult.append(",");
