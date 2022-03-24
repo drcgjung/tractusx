@@ -8824,9 +8824,9 @@
 													}
 												],
 												"url": {
-													"raw": "{{baseUrl}}/registry/shell-descriptors/:aasIdentifier",
+													"raw": "{{semanticServicesUrl}}/registry/shell-descriptors/:aasIdentifier",
 													"host": [
-														"{{baseUrl}}"
+														"{{semanticServicesUrl}}"
 													],
 													"path": [
 														"registry",
@@ -8836,7 +8836,7 @@
 													"variable": [
 														{
 															"key": "aasIdentifier",
-															"value": "sunt do exercitation",
+															"value": "urn%3Atwin%3Acom.BMW%2369ab0d77-c981-41fe-8c0f-bd0c8256228d",
 															"description": "(Required) The Asset Administration Shell’s unique id (BASE64-URL-encoded)"
 														}
 													]
@@ -9672,7 +9672,119 @@
 							"response": []
 						},
 						{
-							"name": "Publish Resource",
+							"name": "Publish Resource (Organisation Level)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Extract Created Agreement\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var offerFull=jsonData.offerUri\r",
+											"    console.info(\"Setting environment variable 'offer-full' to \" + offerFull)\r",
+											"    pm.environment.set(\"offer-full\", offerFull);\r",
+											"    var artifactFull=jsonData.representations[0].artifacts[0]\r",
+											"    console.info(\"Setting environment variable 'local-artifact-full' to \" + artifactFull)\r",
+											"    pm.environment.set(\"local-artifact-full\", artifactFull);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/adapter/offer/:offer",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										"adapter",
+										"offer",
+										":offer"
+									],
+									"variable": [
+										{
+											"key": "offer",
+											"value": "offer-orga",
+											"description": "Preconfigured or newly registered offer name (offer-tdm/offer-windchill/offer-orga)"
+										}
+									]
+								},
+								"description": "Interactively publishes a given offer (with all configured representations and sources) to the attached IDS connector.\nEither uses the given \"offer\" parameter to take the configuration out of the system properties (and leave the body to an empty object)\nAlternatively, you can give it a complete configuration object for the offer in the body.\nthe Adapter may also be configured as to do an \"auto-publish\" of all preconfigured offers on startup"
+							},
+							"response": []
+						},
+						{
+							"name": "Publish Resource (Single and Simple PDM Sample)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Extract Created Agreement\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var offerFull=jsonData.offerUri\r",
+											"    console.info(\"Setting environment variable 'offer-full' to \" + offerFull)\r",
+											"    pm.environment.set(\"offer-full\", offerFull);\r",
+											"    var artifactFull=jsonData.representations[0].artifacts[0]\r",
+											"    console.info(\"Setting environment variable 'local-artifact-full' to \" + artifactFull)\r",
+											"    pm.environment.set(\"local-artifact-full\", artifactFull);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/adapter/offer/:offer",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										"adapter",
+										"offer",
+										":offer"
+									],
+									"variable": [
+										{
+											"key": "offer",
+											"value": "offer-windchill",
+											"description": "Preconfigured or newly registered offer name (offer-tdm/offer-windchill/offer-orga)"
+										}
+									]
+								},
+								"description": "Interactively publishes a given offer (with all configured representations and sources) to the attached IDS connector.\nEither uses the given \"offer\" parameter to take the configuration out of the system properties (and leave the body to an empty object)\nAlternatively, you can give it a complete configuration object for the offer in the body.\nthe Adapter may also be configured as to do an \"auto-publish\" of all preconfigured offers on startup"
+							},
+							"response": []
+						},
+						{
+							"name": "Publish Resource (Mass Test Data)",
 							"event": [
 								{
 									"listen": "test",
@@ -9719,7 +9831,7 @@
 										{
 											"key": "offer",
 											"value": "offer-tdm",
-											"description": "Preconfigured or newly registered offer name (offer-tdm/offer-windchill)"
+											"description": "Preconfigured or newly registered offer name (offer-tdm/offer-windchill/offer-orga)"
 										}
 									]
 								},
@@ -9728,7 +9840,186 @@
 							"response": []
 						},
 						{
-							"name": "Register Twins",
+							"name": "Publish Contract",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Extract Created Agreement\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var offerFull=jsonData.offerUri\r",
+											"    console.info(\"Setting environment variable 'offer-full' to \" + offerFull)\r",
+											"    pm.environment.set(\"offer-full\", offerFull);\r",
+											"    var artifactFull=jsonData.representations[0].artifacts[0]\r",
+											"    console.info(\"Setting environment variable 'local-artifact-full' to \" + artifactFull)\r",
+											"    pm.environment.set(\"local-artifact-full\", artifactFull);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/adapter/contract/:contract",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										"adapter",
+										"contract",
+										":contract"
+									],
+									"variable": [
+										{
+											"key": "contract",
+											"value": "contract-readall"
+										}
+									]
+								},
+								"description": "Interactively publishes a given offer (with all configured representations and sources) to the attached IDS connector.\nEither uses the given \"offer\" parameter to take the configuration out of the system properties (and leave the body to an empty object)\nAlternatively, you can give it a complete configuration object for the offer in the body.\nthe Adapter may also be configured as to do an \"auto-publish\" of all preconfigured offers on startup"
+							},
+							"response": []
+						},
+						{
+							"name": "Register Twins (Orga Functions)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Extract Created Agreement\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var offerFull=jsonData.offerUri\r",
+											"    console.info(\"Setting environment variable 'offer-full' to \" + offerFull)\r",
+											"    pm.environment.set(\"offer-full\", offerFull);\r",
+											"    var artifactFull=jsonData.representations[0].artifacts[0]\r",
+											"    console.info(\"Setting environment variable 'local-artifact-full' to \" + artifactFull)\r",
+											"    pm.environment.set(\"local-artifact-full\", artifactFull);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/adapter/register/:twin-protocol/:twin-command",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										"adapter",
+										"register",
+										":twin-protocol",
+										":twin-command"
+									],
+									"variable": [
+										{
+											"key": "twin-protocol",
+											"value": "FILE",
+											"description": "Choose a backend protocol FILE|SQL"
+										},
+										{
+											"key": "twin-command",
+											"value": "orga-file",
+											"description": "Choose a backend command brake-file|twin-sql|orga-file"
+										}
+									]
+								},
+								"description": "Interactively publishes a given twin source to the attached twin registry.\nEither uses the given \"twin-source\" parameter to take the configuration out of the system properties (and leave the body to an empty object)\nAlternatively, you can give it a complete configuration object for the source in the body.\nthe Adapter may also be configured as to do an \"auto-registration\" of all preconfigured twin sources on startup"
+							},
+							"response": []
+						},
+						{
+							"name": "Register Twins (Single PDM Sample Twin)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Extract Created Agreement\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var offerFull=jsonData.offerUri\r",
+											"    console.info(\"Setting environment variable 'offer-full' to \" + offerFull)\r",
+											"    pm.environment.set(\"offer-full\", offerFull);\r",
+											"    var artifactFull=jsonData.representations[0].artifacts[0]\r",
+											"    console.info(\"Setting environment variable 'local-artifact-full' to \" + artifactFull)\r",
+											"    pm.environment.set(\"local-artifact-full\", artifactFull);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{semanticAdapterUrl}}/adapter/register/:twin-protocol/:twin-command",
+									"host": [
+										"{{semanticAdapterUrl}}"
+									],
+									"path": [
+										"adapter",
+										"register",
+										":twin-protocol",
+										":twin-command"
+									],
+									"variable": [
+										{
+											"key": "twin-protocol",
+											"value": "FILE",
+											"description": "Choose a backend protocol FILE|SQL"
+										},
+										{
+											"key": "twin-command",
+											"value": "brake-file",
+											"description": "Choose a backend command brake-file|twin-sql|orga-file"
+										}
+									]
+								},
+								"description": "Interactively publishes a given twin source to the attached twin registry.\nEither uses the given \"twin-source\" parameter to take the configuration out of the system properties (and leave the body to an empty object)\nAlternatively, you can give it a complete configuration object for the source in the body.\nthe Adapter may also be configured as to do an \"auto-registration\" of all preconfigured twin sources on startup"
+							},
+							"response": []
+						},
+						{
+							"name": "Register Twins (Mass Test Twins)",
 							"event": [
 								{
 									"listen": "test",
@@ -9790,7 +10081,7 @@
 							"response": []
 						},
 						{
-							"name": "Pull Aspect Artifact (DSC)",
+							"name": "Pull Aspect Artifact (DSC Style)",
 							"protocolProfileBehavior": {
 								"disabledSystemHeaders": {}
 							},
@@ -9927,7 +10218,7 @@
 							"response": []
 						},
 						{
-							"name": "Get Submodel (EDC)",
+							"name": "Get Submodel (AAS+EDC Style)",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -9992,7 +10283,7 @@
 							"response": []
 						},
 						{
-							"name": "Invoke Submodel (EDC)",
+							"name": "Invoke Submodel (AAS+EDC Style)",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -10070,7 +10361,7 @@
 							"response": []
 						},
 						{
-							"name": "Invoke Submodel (EDC) Polymorphic",
+							"name": "Invoke Submodel (AAS+EDC Style) Polymorphic",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -10177,7 +10468,7 @@
 					"name": "AAS Proxy (Data Consumer Side)",
 					"item": [
 						{
-							"name": "Returns all Asset Administration Shell Descriptors Rewritten By Proxy",
+							"name": "Returns all AAS Descriptors Rewritten By Proxy",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -10249,7 +10540,7 @@
 							]
 						},
 						{
-							"name": "Returns a list of Asset Administration Shell ids based on Asset identifier key-value-pairs Over Proxy",
+							"name": "Returns AAS ids based on Specific Key-Values Over Proxy",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -10328,7 +10619,7 @@
 							]
 						},
 						{
-							"name": "Returns a list of Asset Administration Shell ids based on Converted Asset identifier key-value-pairs Over Proxy",
+							"name": "Returns AAS ids based on Auto-Converted Specific Key-Values Over Proxy",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -10393,6 +10684,74 @@
 									],
 									"cookie": [],
 									"body": "[\n  \"882fc530-b69b-4707-95f6-5dbc5e9baaa8\",\n  \"fj102930-b69b-4707-95f6-5dbc5e9gdfj1\"\n]"
+								}
+							]
+						},
+						{
+							"name": "Returns a specific AAS Descriptor By Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{aasProxyUrl}}/registry/shell-descriptors/:aasIdentifier",
+									"host": [
+										"{{aasProxyUrl}}"
+									],
+									"path": [
+										"registry",
+										"shell-descriptors",
+										":aasIdentifier"
+									],
+									"variable": [
+										{
+											"key": "aasIdentifier",
+											"value": "urn%3Atwin%3Acom.BMW%2369ab0d77-c981-41fe-8c0f-bd0c8256228d",
+											"description": "(Required) The Asset Administration Shell’s unique id (BASE64-URL-encoded)"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Requested Asset Administration Shell Descriptor",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/registry/shell-descriptors/:aasIdentifier",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"registry",
+												"shell-descriptors",
+												":aasIdentifier"
+											],
+											"variable": [
+												{
+													"key": "aasIdentifier",
+													"value": "sunt do exercitation",
+													"description": "(Required) The Asset Administration Shell’s unique id (BASE64-URL-encoded)"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"description\": [\n    {\n      \"language\": \"en\",\n      \"text\": \"Provides base vehicle information\"\n    }\n  ],\n  \"idShort\": \"vehicle base details\",\n  \"identification\": \"4a738a24-b7d8-4989-9cd6-387772f40565\",\n  \"semanticId\": {\n    \"value\": [\n      \"urn:bamm:com.catenax.vehicle:0.1.1\"\n    ]\n  },\n  \"endpoints\": [\n    {\n      \"interface\": \"HTTP\",\n      \"protocolInformation\": {\n        \"endpointAddress\": \"https://catena-x.net/vehicle/basedetails/\",\n        \"endpointProtocol\": \"HTTPS\",\n        \"endpointProtocolVersion\": \"1.0\"\n      }\n    }\n  ]\n}"
 								}
 							]
 						},
