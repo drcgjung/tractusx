@@ -37,7 +37,7 @@
           {
             "interface": "SUBMODEL-1.0RC02",
             "protocolInformation": {
-              "endpointAddress": "${EDC_PROTOCOL}://${CONNECTOR_HOST}/offer-orga/shells/398c047f-c14c-47b9-9c27-d9511afc90d3/aas/idconversion-aspect/submodel?async=false&content=value",
+              "endpointAddress": "${CONNECTOR_PROTOCOL}://${CONNECTOR_HOST}/offer-orga/shells/398c047f-c14c-47b9-9c27-d9511afc90d3/aas/idconversion-aspect/submodel?async=false&content=value",
               "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
               "endpointProtocolVersion": "0.0.1-SNAPSHOT"
             }

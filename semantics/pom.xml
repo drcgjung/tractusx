@@ -320,49 +320,6 @@
 				<version>${httpcomponents.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>core</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>ids-core</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>transfer-process-store-memory</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>contractdefinition-store-memory</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>assetindex-memory</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>iam-mock</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.dataspaceconnector</groupId>
-				<artifactId>contractnegotiation-store-memory</artifactId>
-				<version>${edc.version}</version>
-			</dependency>
-
-			<!-- International Dataspaces interop
-			<dependency>
-				<groupId>de.fraunhofer.isst.ids.framework</groupId>
-				<artifactId>messaging</artifactId>
-				<version>${ids-framework.version}</version>
-			</dependency>-->
-
 			<!-- Persistence -->
 			<dependency>
 				<groupId>org.postgresql</groupId>
@@ -515,14 +472,6 @@
 			<name>maven-central</name>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
-		<!--<repository>
-			<id>edc-github</id>
-			<name>Catena-X Maven Repository on Github</name>
-			<url>https://maven.pkg.github.com/eclipse-dataspaceconnector/DataSpaceConnector</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>-->
 		<repository>
 			<id>ids-fraunhofer</id>
 			<name>ids fraunhofer repository</name>

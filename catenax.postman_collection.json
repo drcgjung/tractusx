@@ -9568,9 +9568,9 @@
 											}
 										],
 										"url": {
-											"raw": "{{baseUrl}}/lookup/shells?assetIds=",
+											"raw": "{{semanticServicesUrl}}/lookup/shells?assetIds=%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D&assetIds=%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
 											"host": [
-												"{{baseUrl}}"
+												"{{semanticServicesUrl}}"
 											],
 											"path": [
 												"lookup",
@@ -9579,8 +9579,12 @@
 											"query": [
 												{
 													"key": "assetIds",
-													"value": "",
+													"value": "%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
 													"description": "The key-value-pair of an Asset identifier"
+												},
+												{
+													"key": "assetIds",
+													"value": "%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D"
 												}
 											]
 										}
@@ -9771,12 +9775,12 @@
 									"variable": [
 										{
 											"key": "twin-protocol",
-											"value": "FILE",
+											"value": "SQL",
 											"description": "Choose a backend protocol FILE|SQL"
 										},
 										{
 											"key": "twin-command",
-											"value": "brake-file",
+											"value": "twin-sql",
 											"description": "Choose a backend command brake-file|twin-sql|orga-file"
 										}
 									]
@@ -10245,8 +10249,171 @@
 							]
 						},
 						{
+							"name": "Returns a list of Asset Administration Shell ids based on Asset identifier key-value-pairs Over Proxy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{aasProxyUrl}}/lookup/shells?assetIds=%7B%22key%22%3A%22urn%3AVAN%3Acom.bmw%3A1.0.0%23%22%2C%22value%22%3A%227e97f714-0785-3f9d-ac37-b319890%0A97be3%22%7D",
+									"host": [
+										"{{aasProxyUrl}}"
+									],
+									"path": [
+										"lookup",
+										"shells"
+									],
+									"query": [
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
+											"disabled": true
+										},
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
+											"disabled": true
+										},
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3Atwin%3Acom.catenax%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
+											"disabled": true
+										},
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3AVAN%3Acom.bmw%3A1.0.0%23%22%2C%22value%22%3A%227e97f714-0785-3f9d-ac37-b319890%0A97be3%22%7D"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Requested Asset Administration Shell ids",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/lookup/shells?assetIds=",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"lookup",
+												"shells"
+											],
+											"query": [
+												{
+													"key": "assetIds",
+													"value": ""
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  \"882fc530-b69b-4707-95f6-5dbc5e9baaa8\",\n  \"fj102930-b69b-4707-95f6-5dbc5e9gdfj1\"\n]"
+								}
+							]
+						},
+						{
+							"name": "Returns a list of Asset Administration Shell ids based on Converted Asset identifier key-value-pairs Over Proxy",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{aasProxyUrl}}/lookup/shells?assetIds=%7B%22key%22%3A%22urn%3Astandard%3Aorg.iso%3A9721%23%22%2C%22value%22%3A%225UXFE43588L890072%22%7D",
+									"host": [
+										"{{aasProxyUrl}}"
+									],
+									"path": [
+										"lookup",
+										"shells"
+									],
+									"query": [
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3AVAN%3Acom.bmw%3A1.0.0%23%22%2C%22value%22%3A%22398c047f-c14c-47b9-9c27-d9511afc90d3%22%7D",
+											"disabled": true
+										},
+										{
+											"key": "assetIds",
+											"value": "%7B%22key%22%3A%22urn%3Astandard%3Aorg.iso%3A9721%23%22%2C%22value%22%3A%225UXFE43588L890072%22%7D"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Requested Asset Administration Shell ids",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/lookup/shells?assetIds=",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"lookup",
+												"shells"
+											],
+											"query": [
+												{
+													"key": "assetIds",
+													"value": ""
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  \"882fc530-b69b-4707-95f6-5dbc5e9baaa8\",\n  \"fj102930-b69b-4707-95f6-5dbc5e9gdfj1\"\n]"
+								}
+							]
+						},
+						{
 							"name": "Get Submodel Over Proxy",
 							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "rolePass",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "role",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {

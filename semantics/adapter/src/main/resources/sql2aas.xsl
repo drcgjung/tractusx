@@ -15,7 +15,7 @@
 	<xsl:output method="text" encoding="UTF-8"  omit-xml-declaration="yes" indent="no" media-type="application/json" />
 	<xsl:strip-space elements="*" />
 
-	<xsl:param name="EDC_PROTOCOL"/>
+	<xsl:param name="CONNECTOR_PROTOCOL"/>
 	<xsl:param name="CONNECTOR_HOST"/>
 
 	<xsl:template match="/">
@@ -69,7 +69,7 @@
 		    	{
                     "interface": "SUBMODEL-1.0RC02",
           			"protocolInformation": {
-		                 "endpointAddress": "</xsl:text><xsl:value-of select="$EDC_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text>/offer-tdm/shells/</xsl:text><xsl:value-of select="./UUID"/><xsl:text>/aas/traceability-aspect/submodel?manufacturer=</xsl:text><xsl:value-of select="./MANUFACTURER"/><xsl:text disable-output-escaping="yes">&amp;serial=</xsl:text><xsl:value-of select="./PARTSERIAL"/><xsl:text disable-output-escaping="yes">&amp;artifact=bom-vehicle&amp;level=deep&amp;content=value&amp;extent=withBlobValue",
+		                 "endpointAddress": "</xsl:text><xsl:value-of select="$CONNECTOR_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text>/offer-tdm/shells/</xsl:text><xsl:value-of select="./UUID"/><xsl:text>/aas/traceability-aspect/submodel?manufacturer=</xsl:text><xsl:value-of select="./MANUFACTURER"/><xsl:text disable-output-escaping="yes">&amp;serial=</xsl:text><xsl:value-of select="./PARTSERIAL"/><xsl:text disable-output-escaping="yes">&amp;artifact=bom-vehicle&amp;level=deep&amp;content=value&amp;extent=withBlobValue",
                          "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
                          "endpointProtocolVersion": "0.0.1-SNAPSHOT"
           			}
@@ -94,7 +94,7 @@
         		{
                     "interface": "SUBMODEL-1.0RC02",
          			"protocolInformation": {
-		  				"endpointAddress": "</xsl:text><xsl:value-of select="$EDC_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text>/offer-tdm/shells/</xsl:text><xsl:value-of select="./UUID"/><xsl:text>/aas/material-aspect/submodel?manufacturer=</xsl:text><xsl:value-of select="./MANUFACTURER"/><xsl:text disable-output-escaping="yes">&amp;amp;number=</xsl:text><xsl:value-of select="./PARTNUMBER"/><xsl:text disable-output-escaping="yes">&amp;artifact=material-vehicle&amp;level=deep&amp;content=value&amp;extent=withBlobValue",
+		  				"endpointAddress": "</xsl:text><xsl:value-of select="$CONNECTOR_PROTOCOL"/><xsl:text>://</xsl:text><xsl:value-of select="$CONNECTOR_HOST"/><xsl:text>/offer-tdm/shells/</xsl:text><xsl:value-of select="./UUID"/><xsl:text>/aas/material-aspect/submodel?manufacturer=</xsl:text><xsl:value-of select="./MANUFACTURER"/><xsl:text disable-output-escaping="yes">&amp;amp;number=</xsl:text><xsl:value-of select="./PARTNUMBER"/><xsl:text disable-output-escaping="yes">&amp;artifact=material-vehicle&amp;level=deep&amp;content=value&amp;extent=withBlobValue",
                         "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
                         "endpointProtocolVersion": "0.0.1-SNAPSHOT"
           			}

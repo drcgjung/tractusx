@@ -109,24 +109,36 @@ idsadapter:
   # Part 1 - Connection to IDS/Catena-X
   # with catalogs and contracts
   #
-  connectorType: DSC
+
+  # type could be DSC or EDC
+  connectorType: dsc
+  # deprecated
   connectorId: https://w3id.org/idsa/autogen/connectorEndpoint/a73d2202-cb77-41db-a3a6-05ed251c0b
+  # how to access connector
   connectorHost: localhost:8080
   connectorProtocol: http
-  connectorScheme: edc
   connectorUrl: ${idsadapter.connectorProtocol}://${idsadapter.connectorHost}
+  # use X-Api-Key as username if authorizing via api-key, else its basic auth
   connectorUser: admin
+  # put in api key for api-key authorization
   connectorPassword: password
   publisher: http://t-systems.com
-  # our callback address exposed
+  # the digitial twin registry to interface for twin registrations
   serviceUrl: http://localhost:4242
+  # our callback address exposed
   adapterUrl: http://localhost:4243
+  # for DSC purposes, the callback pattern needs to be registered
   callbackPattern: "%1$s/%2$s/download?offer=%3$s&representation=%4$s&artifact=%5$s"
+  # deprecated no callback needed anymore
   portalUrl: http://localhost:3000
+  # determines whether offers, contracts and twins will be registered at startup
+  registerOnStart: false
+
   # Under which catalogs do we publish our data offerings?
   catalogs:
     "[urn:catalog:catenax]":
       description: Catena-X Data Offering Catalog
+
   # Under which conditions and to whom do we publish our data offerings
   contracts:
     contract-readall:
@@ -142,6 +154,7 @@ idsadapter:
              Sample read all permission.
              Due to a connector ?bug?, action field must stay empty.
           value: "{ \"@type\":\"ids:Permission\", \"ids:action\":[] }"
+
   #
   # Part 2 - IDS Offer/Representation/Artifact Provisioning + Aspect Implementation
   #
@@ -281,7 +294,7 @@ idsadapter:
     "[CONNECTOR_URL]": ${idsadapter.connectorUrl}
     "[CONNECTOR_HOST]": ${idsadapter.connectorHost}
     "[CONNECTOR_PORT]": ${idsadapter.connectorPort}
-    "[EDC_PROTOCOL]": ${idsadapter.connectorScheme}
+    "[CONNECTOR_PROTOCOL]": ${idsadapter.connectorType}
   #
   # Part 4 - Configure Backend Protocol/Commands
   #

@@ -15,6 +15,7 @@ import net.catenax.semantics.framework.IdsConnector;
 import net.catenax.semantics.framework.StatusException;
 import net.catenax.semantics.framework.adapters.DownloadAdapter;
 import net.catenax.semantics.framework.adapters.TwinRegistryAdapter;
+import net.catenax.semantics.framework.config.Contract;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,6 +113,16 @@ public class AdapterController {
     @PostMapping(value = "/offer/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Offer> offerResource(@PathVariable("name") String name) {
         return ResponseEntity.ok(idsConnector.getOrCreateOffer(name));
+    }
+
+    /**
+     * publish a preconfigured contract for debugging purposes
+     * @param name  source specification
+     * @return register response
+     */
+    @PostMapping(value = "/contract/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Contract> offerContract(@PathVariable("name") String name) {
+        return ResponseEntity.ok(idsConnector.getOrCreateContract(name));
     }
 
 }

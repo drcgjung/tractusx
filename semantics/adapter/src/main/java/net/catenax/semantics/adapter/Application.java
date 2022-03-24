@@ -84,8 +84,6 @@ public class Application {
 	 * @param args command line
 	 */
 	public static void main(String[] args) {
-		// bootstrap EDC
-		EdcService.bootstrap();
 		new SpringApplication(Application.class).run(args);
 	}
 

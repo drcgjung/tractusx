@@ -29,13 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource("classpath:application.properties")
 class EdcConfigurationTest {
 
-	/**
-	 * make sure the bootstrapping has been done
-	 */
-	@BeforeAll
-	public static void bootstrap() {
-		EdcService.bootstrap();
-	}
 
 	/**
 	 * the actual test code is rather small ;-)
@@ -51,11 +44,4 @@ class EdcConfigurationTest {
 
 	}
 
-	/**
-	 * teardown edc after tests
-	 */
-	@AfterAll
-	public static void tearDown() {
-		EdcService.tearDown();
-	}
 }
