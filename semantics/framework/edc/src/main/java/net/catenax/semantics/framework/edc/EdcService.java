@@ -20,7 +20,9 @@ import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
@@ -136,7 +138,22 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
         httppost.setHeader("Content-type", "application/json");
 
         var relevantOffers= configurationData.getOffers().entrySet().stream().filter(offerEntry -> {
-           return title.equals(offerEntry.getValue().getContract()) ;
+           if(title.equals(offerEntry.getValue().getContract())) {
+                try {
+                    HttpGet httpget = new HttpGet(configurationData.getConnectorUrl() + "/api/assets/" + offerEntry.getKey());
+                    httpget.addHeader("accept", "*/*");
+                    HttpResponse offerResponse = getEdcClient().execute(httpget);
+                    if (offerResponse.getStatusLine().getStatusCode() == 200) {
+                        String responseString = EntityUtils.toString(offerResponse.getEntity(), "UTF-8");
+                        if (responseString.equals(offerEntry.getKey())) {
+                            return true;
+                        }
+                    }
+                } catch(IOException e) {
+                    // ignore the asset
+                }
+           }
+           return false;
         });
 
         String permissions = relevantOffers.map( offerEntry -> {

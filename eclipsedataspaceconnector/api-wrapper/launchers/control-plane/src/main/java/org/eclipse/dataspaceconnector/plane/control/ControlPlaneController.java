@@ -15,6 +15,7 @@ import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.eclipse.dataspaceconnector.spi.types.domain.asset.Asset;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractDefinition;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
+import org.eclipse.dataspaceconnector.spi.asset.AssetIndex;
 
 import java.util.Map;
 
@@ -26,12 +27,14 @@ public class ControlPlaneController {
     private final AssetLoader assetLoader;
     private final ContractDefinitionStore contractDefinitionStore;
     private final TransferProcessStore transferProcessStore;
+    private final AssetIndex assetIndex;
 
-    public ControlPlaneController(Monitor monitor, AssetLoader assetLoader, ContractDefinitionStore contractDefinitionStore, TransferProcessStore transferProcessStore) {
+    public ControlPlaneController(Monitor monitor, AssetLoader assetLoader, ContractDefinitionStore contractDefinitionStore, TransferProcessStore transferProcessStore, AssetIndex assetIndex) {
         this.monitor = monitor;
         this.assetLoader = assetLoader;
         this.contractDefinitionStore = contractDefinitionStore;
         this.transferProcessStore = transferProcessStore;
+        this.assetIndex=assetIndex;
     }
 
     // TODO: most of these api will be replaced by data management api
@@ -47,6 +50,17 @@ public class ControlPlaneController {
         monitor.debug("Create asset: " + asset.getId());
         assetLoader.accept(asset, dataAddress);
         return asset.getId();
+    }
+
+    @Path("/assets/{name}")
+    @GET
+    public String findAsset(@PathParam("name") String name) {
+        Asset asset=assetIndex.findById(name);
+        if(asset!=null) {
+            return asset.getId();
+        } else {
+            return "";
+        }
     }
 
     @Path("/contractdefinitions")

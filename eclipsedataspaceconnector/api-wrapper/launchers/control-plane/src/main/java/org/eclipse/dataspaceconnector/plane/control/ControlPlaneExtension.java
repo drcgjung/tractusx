@@ -7,6 +7,7 @@ import org.eclipse.dataspaceconnector.spi.system.Inject;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.spi.transfer.store.TransferProcessStore;
+import org.eclipse.dataspaceconnector.spi.asset.AssetIndex;
 
 public class ControlPlaneExtension implements ServiceExtension {
     @Inject
@@ -21,6 +22,9 @@ public class ControlPlaneExtension implements ServiceExtension {
     @Inject
     private TransferProcessStore transferProcessStore;
 
+    @Inject
+    private AssetIndex assetIndex;
+
     @Override
     public String name() {
         return "Control Plane";
@@ -28,6 +32,6 @@ public class ControlPlaneExtension implements ServiceExtension {
 
     @Override
     public void initialize(ServiceExtensionContext context) {
-        webService.registerResource(new ControlPlaneController(context.getMonitor(), assetLoader, contractDefinitionStore, transferProcessStore));
+        webService.registerResource(new ControlPlaneController(context.getMonitor(), assetLoader, contractDefinitionStore, transferProcessStore, assetIndex));
     }
 }
