@@ -54,10 +54,7 @@ public class ContractOfferService {
                 return null;
             }
 
-            var catalog = objectMapper.readValue(body.string(), Catalog.class);
-            monitor.info("Got catalog");
-
-            return catalog;
+            return objectMapper.readValue(body.string(), Catalog.class);
         } catch (Exception e) {
             monitor.severe(format("Error in calling the Control plane at %s", url), e);
         }

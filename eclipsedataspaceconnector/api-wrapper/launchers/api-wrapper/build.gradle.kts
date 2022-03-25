@@ -4,11 +4,10 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
+val edcGroup = "org.eclipse.dataspaceconnector"
+val edcVersion = "0.0.1-SNAPSHOT"
 
 dependencies {
-    val edcGroup = "org.eclipse.dataspaceconnector"
-    val edcVersion = "0.0.1-SNAPSHOT"
-
     api("$edcGroup:core-boot:$edcVersion")
     api("$edcGroup:core-base:$edcVersion")
     api("$edcGroup:http:$edcVersion")
@@ -18,12 +17,13 @@ dependencies {
     api("$edcGroup:catalog-spi:$edcVersion")
     api("$edcGroup:contract-spi:$edcVersion")
     api("$edcGroup:transfer-spi:$edcVersion")
+    api("$edcGroup:auth-spi:$edcVersion")
 
     api("jakarta.ws.rs:jakarta.ws.rs-api:3.0.0")
 }
 
 application {
-    mainClass.set("org.eclipse.dataspaceconnector.boot.system.runtime.BaseRuntime")
+    mainClass.set("$edcGroup.boot.system.runtime.BaseRuntime")
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
