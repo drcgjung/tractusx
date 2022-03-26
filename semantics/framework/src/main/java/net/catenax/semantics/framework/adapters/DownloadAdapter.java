@@ -10,6 +10,7 @@ package net.catenax.semantics.framework.adapters;
 
 import java.io.*;
 import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import net.catenax.semantics.framework.*;
@@ -61,7 +62,7 @@ public class DownloadAdapter<Cmd extends Command, O extends Offer, Ct extends Ca
         request.setOffer(params.get("offer"));
         request.setRepresentation(params.get("representation"));
         request.setArtifact(params.get("artifact"));
-        request.setSecurityToken(params.get("catenax-agreement-token"));
+        request.setSecurityToken(List.of(params.get("catenax-agreement-token")));
         request.setCallingConnectors(params.get("catenax-calling-connectors"));
         IdsResponse idsResponse= idsConnector.perform(request);
 

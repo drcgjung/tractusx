@@ -16,9 +16,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collection;
 
 /**
- * Simple POJO to carry a an authentication token into a session
+ * Simple POJO to carry authentication tokens into a session
  * make sure to annotate the @bean factory with a correct scope
  * @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
  */
@@ -27,5 +28,5 @@ import java.util.Map;
 @Component
 public class TokenWrapper {
     public static String AUTHORIZATION_HEADER = "Authorization";
-    private String token;
+    private Collection<String> token;
 }

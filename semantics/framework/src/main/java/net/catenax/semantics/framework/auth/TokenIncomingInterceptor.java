@@ -14,8 +14,11 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+
 /**
- * A Spring Web Interceptor to save the bearer token for routing to delegation
+ * A Spring Web Interceptor to save all authorization tokens for routing to delegation
  */
 @RequiredArgsConstructor
 public class TokenIncomingInterceptor implements AsyncHandlerInterceptor {
@@ -25,11 +28,11 @@ public class TokenIncomingInterceptor implements AsyncHandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
-        final String authorizationHeaderValue = request.getHeader(TokenWrapper.AUTHORIZATION_HEADER);
-        if (authorizationHeaderValue != null) {
-            tokenWrapper.setToken(authorizationHeaderValue);
+        ArrayList<String> tokenList=new ArrayList();
+        for(Enumeration<String> tokens=request.getHeaders(TokenWrapper.AUTHORIZATION_HEADER);tokens.hasMoreElements();) {
+            tokenList.add(tokens.nextElement());
         }
-
+        tokenWrapper.setToken(tokenList);
         return true;
     }
 }
