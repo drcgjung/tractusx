@@ -10621,6 +10621,9 @@
 						{
 							"name": "Returns AAS ids based on Auto-Converted Specific Key-Values Over Proxy",
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "GET",
 								"header": [
 									{
