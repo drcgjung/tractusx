@@ -22,12 +22,12 @@
 
 az login --tenant 495463c3-0991-4659-9cc5-94b4a3f7b1d6
 az acr login --name cxtsiacr.azurecr.io
-docker push cxtsiacr.azurecr.io/edc/consumer-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-control-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-data-plane:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/provider-api-wrapper:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/backend/simple-aas-adapter:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/semantics/services:feature-ART3-305-rohrputzer-support-latest
-docker push cxtsiacr.azurecr.io/edc/consumer-aas-proxy:feature-ART3-305-rohrputzer-support-latest
+docker push cxtsiacr.azurecr.io/edc/consumer-control-plane:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/consumer-data-plane:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/consumer-api-wrapper:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/provider-control-plane:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/provider-data-plane:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/provider-api-wrapper:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/backend/simple-aas-adapter:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/semantics/services:catenax-at-home-latest
+docker push cxtsiacr.azurecr.io/edc/consumer-aas-proxy:catenax-at-home-latest
