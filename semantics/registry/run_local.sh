@@ -9,22 +9,23 @@
 #
 
 #
-# Shell script to build and run a local semantics adapter for testing purposes.
+# Shell script to build and run a local registry for testing purposes.
 #
 # Prerequisites: 
 #   Windows, (git)-bash shell, java 11 (java) and maven (mvn) in the $PATH.
 #
 # Synposis: 
-#   ./build_run_local.sh (-build)? (-clean)? (-suspend)? (-debug)? (-proxy)?
+#   ./build_run_local.sh (-build)? (clean)? (-suspend)? (-debug)? (-proxy)?
 #
 # Comments: 
 #
 
-DEBUG_PORT=8889
+DEBUG_PORT=8887
 DEBUG_SUSPEND=n
 DEBUG_OPTIONS=
-DB_FILE=./target/db_semantics
+DB_FILE="./target/db_semantics;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
 CLEAN_DB=n
+PROXY=
 
 for var in "$@"
 do
@@ -59,17 +60,12 @@ if [ "$CLEAN_DB" == "y" ]; then
   rm -f ${DB_FILE}*
 fi
 
-PATH_SEPARATOR=":"
-if [ "${OSTYPE}" == "msys" ]; then
-  PATH_SEPARATOR=";"
-fi
-
-CALL_ARGS="-classpath ./src/main/resources${PATH_SEPARATOR}target/adapter-1.3.0-SNAPSHOT.jar \
+CALL_ARGS="-classpath target/registry-1.3.0-SNAPSHOT.jar \
+           -Dspring.profiles.active=local \
            -Dspring.datasource.url=$H2_URL\
            -Dserver.ssl.enabled=false $PROXY $DEBUG_OPTIONS\
-           org.springframework.boot.loader.JarLauncher" 
+           org.springframework.boot.loader.JarLauncher"
 
-echo ${CALL_ARGS}
 java ${CALL_ARGS}
 
     
