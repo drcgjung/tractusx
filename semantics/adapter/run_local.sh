@@ -65,7 +65,8 @@ if [ "${OSTYPE}" == "msys" ]; then
 fi
 
 CALL_ARGS="-classpath ./src/main/resources${PATH_SEPARATOR}target/adapter-1.3.0-SNAPSHOT.jar \
-           -Dspring.datasource.url=$H2_URL\
+           -Dspring.profiles.active=$PROFILE \
+           -Dspring.datasource.url=$H2_URL \
            -Dserver.ssl.enabled=false $PROXY $DEBUG_OPTIONS\
            org.springframework.boot.loader.JarLauncher" 
 

@@ -61,7 +61,7 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
 
         if(!useApiKey) {
             header=TokenWrapper.AUTHORIZATION_HEADER;
-            token = "Basic " + Base64.encodeBase64((configurationData.getConnectorUser() + ":" + configurationData.getConnectorPassword()).getBytes());
+            token = "Basic " + new String(Base64.encodeBase64((configurationData.getConnectorUser() + ":" + configurationData.getConnectorPassword()).getBytes()));
         } else {
             header=configurationData.getConnectorUser();
             token= configurationData.getConnectorPassword();
@@ -69,7 +69,7 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
 
         var interceptor=new HttpRequestInterceptor() {
             @Override
-            public void process(HttpRequest httpRequest, HttpContext httpContext) throws HttpException, IOException {
+            public void process(HttpRequest httpRequest, HttpContext httpContext) {
                 httpRequest.addHeader(header, token);
             }
         };
@@ -101,6 +101,10 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
         HttpPost httppost = new HttpPost(configurationData.getConnectorUrl() + "/api/assets");
         httppost.addHeader("accept", "*/*");
         httppost.setHeader("Content-type", "application/json");
+        String userName=result.getUser();
+        User user=configurationData.getSecurity().getUsers().get(userName);
+        String token=userName+":"+user.getPassword();
+        String authCode="Basic "+new String(java.util.Base64.getEncoder().encode(token.getBytes()));
         String thatPayLoad="{\n" +
                 "  \"asset\": {\n" +
                 "    \"asset:prop:id\": \""+title+"\",\n" +
@@ -110,6 +114,8 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                 "  },\n" +
                 "  \"dataAddress\": {\n" +
                 "    \"endpoint\": \""+configurationData.getAdapterUrl()+"/"+title+"\",\n" +
+                "    \"authKey\": \"Authorization\",\n" +
+                "    \"authCode\": \""+authCode+"\",\n" +
                 "    \"type\": \"HttpData\"\n" +
                 "  }\n" +
                 "}";
@@ -121,10 +127,6 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                 throw new StatusException("Could not create offer",offerResponse.getStatusLine().getStatusCode());
             }
             result.setPayload(thatPayLoad);
-        } catch (UnsupportedEncodingException e) {
-            throw new StatusException("Could not create offer",e,501);
-        } catch (ClientProtocolException e) {
-            throw new StatusException("Could not create offer",e,501);
         } catch (IOException e) {
             throw new StatusException("Could not create offer",e,501);
         }
@@ -156,8 +158,8 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
            return false;
         });
 
-        String permissions = relevantOffers.map( offerEntry -> {
-            return "      {\n" +
+        String permissions = relevantOffers.map( offerEntry ->
+                   "      {\n" +
                    "        \"edctype\": \"dataspaceconnector:permission\",\n" +
                    "        \"uid\": null,\n" +
                    "        \"target\": \""+offerEntry.getKey()+"\",\n" +
@@ -166,8 +168,8 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                    "        },\n"+
                    "        \"constraints\": [],\n" +
                    "        \"duties\": []\n" +
-                   "      }\n";
-        }).collect(Collectors.joining(","));
+                   "      }\n"
+        ).collect(Collectors.joining(","));
         String thatPayLoad="{\n" +
                 "  \"id\": \""+title+"\",\n" +
                 "  \"accessPolicy\": {\n" +
@@ -204,10 +206,6 @@ public class EdcService<Cmd extends Command, O extends Offer, Ct extends Catalog
                 throw new StatusException("Could not create contract",contractResponse.getStatusLine().getStatusCode());
             }
             result.setPayload(thatPayLoad);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

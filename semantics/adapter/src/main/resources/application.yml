@@ -42,10 +42,8 @@ spring:
     name: semantics-adapter
   banner:
     location: "classpath:banner.txt"
-  # configuring the semantic services as a resource server and defining the corresponding IdP
   security:
     debug: true
-    ignored: /**
   # Builtin persistence for hosting models, twins & data
   sql:
     init:
@@ -107,7 +105,8 @@ management:
 idsadapter:
   #
   # Part 1 - Connection to IDS/Catena-X
-  # with catalogs and contracts
+  # with catalogs and contracts as well
+  # as security
   #
 
   # type could be DSC or EDC
@@ -133,6 +132,39 @@ idsadapter:
   portalUrl: http://localhost:3000
   # determines whether offers, contracts and twins will be registered at startup
   registerOnStart: false
+
+  # Define users, roles and access paths
+  security:
+    debug: true
+    users:
+      user-windchill:
+        password: secret
+        roles:
+          - role-windchill
+      user-tdm:
+        password: secret
+        roles:
+          - role-tdm
+      user-orga:
+        password: secret
+        roles:
+          - role-orga
+      admin:
+        password: secret
+        roles:
+          - ADMIN
+    filters:
+      "[.*/adapter/.*]":
+        - ADMIN
+      "[.*/offer-windchill/shells/.*]":
+        - ADMIN
+        - role-windchill
+      "[.*/offer-tdm/shells/.*]":
+        - ADMIN
+        - role-tdm
+      "[.*/offer-orga/shells/.*]":
+        - ADMIN
+        - role-orga
 
   # Under which catalogs do we publish our data offerings?
   catalogs:
@@ -168,6 +200,8 @@ idsadapter:
       contract: contract-readall
       # reference to the catalogue
       catalog: "urn:catalog:catenax"
+      # the user with which the IDS callback should be done
+      user: user-windchill
       paymentMethod: free
       # The representations correspond to aspects/semantic models supported
       representations:
@@ -202,6 +236,8 @@ idsadapter:
       contract: contract-readall
       # reference to the catalog
       catalog: "urn:catalog:catenax"
+      # the user with which the IDS callback should be done
+      user: user-tdm
       paymentMethod: free
       # The representations correspond to all Speedboat aspects/semantic models
       representations:
@@ -235,6 +271,8 @@ idsadapter:
       contract: contract-readall
       # reference to the catalog
       catalog: "urn:catalog:catenax"
+      # the user with which the IDS callback should be done
+      user: user-orga
       paymentMethod: free
       # The representations correspond to all Speedboat aspects/semantic models
       representations:
