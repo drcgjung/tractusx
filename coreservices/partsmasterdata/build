@@ -1,3 +1,0 @@
-mvn package
-
-docker run -i -e CONTAINERNAME=poc -e STORAGE_CONNECTIONSTRING=key -p 8080:8080  partsmasterdata

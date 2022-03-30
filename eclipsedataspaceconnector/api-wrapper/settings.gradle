@@ -1,6 +1,0 @@
-rootProject.name = 'edc-data-plane-and-api-wrapper'
-
-include 'launchers:control-plane'
-include 'launchers:data-plane'
-include 'launchers:api-wrapper'
-include 'launchers:provider-backend-service'
