@@ -57,15 +57,14 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                             authorize
                                     .antMatchers(HttpMethod.OPTIONS).permitAll();
                             for (Map.Entry<String, List<String>> filter : config.getSecurity().getFilters().entrySet()) {
-                                for(String role : filter.getValue()) {
-                                    var matcher = authorize.regexMatchers(filter.getKey());
-                                    if("ANONYMOUS".equals(role)) {
-                                        matcher.permitAll();
-                                    } else if("AUTHENTICATED".equals(role)) {
-                                        matcher.authenticated();
-                                    } else {
-                                        matcher.hasRole(role);
-                                    }
+                                var matcher = authorize.regexMatchers(filter.getKey());
+                                List<String> roles=filter.getValue();
+                                if(roles.contains("ANONYMOUS")) {
+                                    matcher.permitAll();
+                                } else if(roles.contains("AUTHENTICATED")) {
+                                    matcher.authenticated();
+                                } else {
+                                    matcher.hasAnyRole(roles.toArray(new String[]{}));
                                 }
                             }
                         });
