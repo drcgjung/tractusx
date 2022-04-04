@@ -48,7 +48,7 @@ export GRADLE_PROPS=(--no-parallel -Porg.gradle.java.installations.fromEnv=JDK11
 
 There is currently on Apple Systems with M>=1 processors.
 The solution is to  [Microsoft JDK 11](https://docs.microsoft.com/de-de/java/openjdk/download) manually and
-set an environment variable, such as `ZULU_JDK' to its location. 
+set an environment variable, such as `ZULU_JDK` to its location. 
 
 
 #### Gradle behind a corporate proxy
