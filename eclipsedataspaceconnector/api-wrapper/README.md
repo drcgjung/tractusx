@@ -72,8 +72,7 @@ git checkout release/catena-x
 
 ### (Re-)Generate certificate
 
-Currently, there is one default certificate already provided. 
-In order to generate your own you have to do the following:
+Currently, there is one default certificate already provided. In order to generate your own you have to do the following:
 
 ```bash
 cd certs
