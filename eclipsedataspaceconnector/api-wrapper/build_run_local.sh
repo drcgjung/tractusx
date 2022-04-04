@@ -20,10 +20,10 @@
 # Comments:
 #
 
-export MAVEN_OPTS=(${^GRADLE_PROPS})
+export MAVEN_OPTS=(${GRADLE_PROPS[*]})
 
 if [ "${HTTP_PROXY_HOST}" != "" ]; then
-  export MAVEN_OPTS=(${^GRADLE_PROPS} -Dhttp.proxyHost=${HTTP_PROXY_HOST} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_HOST} -Dhttps.proxyPort=${HTTP_PROXY_PORT})
+  export MAVEN_OPTS=(${GRADLE_PROPS[*]} -Dhttp.proxyHost=${HTTP_PROXY_HOST} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_HOST} -Dhttps.proxyPort=${HTTP_PROXY_PORT})
 fi
 
 cd ../../semantics

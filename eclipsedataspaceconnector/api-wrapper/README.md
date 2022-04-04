@@ -104,7 +104,7 @@ For using the github container registry:
 For using the Azure container registry:
 
 ```bash
-./run_local_azure.sh
+./run_local_from_azure.sh
 ```
 
 ## Build (snd Start)

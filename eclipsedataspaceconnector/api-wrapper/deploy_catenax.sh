@@ -36,22 +36,22 @@ docker push cxtsiacr.azurecr.io/edc/consumer-aas-proxy:catenax-at-home-latest
 echo "Please enter your credentials (username/personal access token) for github. See https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry"
 docker login ghcr.io
 docker tag cxtsiacr.azurecr.io/edc/consumer-control-plane:catenax-at-home-latest ghcr.io/catenax/edc/consumer-control-plane:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/consumer-data-plane:catenax-at-home-latest ghcr.io/edc/consumer-data-plane:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/consumer-api-wrapper:catenax-at-home-latest ghcr.io/edc/consumer-api-wrapper:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/provider-control-plane:catenax-at-home-latest ghcr.io/edc/provider-control-plane:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/provider-data-plane:catenax-at-home-latest ghcr.io/edc/provider-data-plane:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/provider-api-wrapper:catenax-at-home-latest ghcr.io/edc/provider-api-wrapper:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/backend/simple-aas-adapter:catenax-at-home-latest ghcr.io/backend/simple-aas-adapter:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/semantics/hub:catenax-at-home-latest ghcr.io/semantics/hub:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/semantics/registry:catenax-at-home-latest ghcr.io/semantics/registry:catenax-at-home-latest
-docker tag cxtsiacr.azurecr.io/edc/consumer-aas-proxy:catenax-at-home-latest ghcr.io/edc/consumer-aas-proxy:catenax-at-home-latest
-docker push ghcr.io/edc/consumer-control-plane:catenax-at-home-latest
-docker push ghcr.io/edc/consumer-data-plane:catenax-at-home-latest
-docker push ghcr.io/edc/consumer-api-wrapper:catenax-at-home-latest
-docker push ghcr.io/edc/provider-control-plane:catenax-at-home-latest
-docker push ghcr.io/edc/provider-data-plane:catenax-at-home-latest
-docker push ghcr.io/edc/provider-api-wrapper:catenax-at-home-latest
-docker push ghcr.io/backend/simple-aas-adapter:catenax-at-home-latest
-docker push ghcr.io/semantics/hub:catenax-at-home-latest
-docker push ghcr.io/semantics/registry:catenax-at-home-latest
-docker push ghcr.io/edc/consumer-aas-proxy:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/consumer-data-plane:catenax-at-home-latest ghcr.io/catenax/edc/consumer-data-plane:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/consumer-api-wrapper:catenax-at-home-latest ghcr.io/catenax/edc/consumer-api-wrapper:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/provider-control-plane:catenax-at-home-latest ghcr.io/catenax/edc/provider-control-plane:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/provider-data-plane:catenax-at-home-latest ghcr.io/catenax/edc/provider-data-plane:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/provider-api-wrapper:catenax-at-home-latest ghcr.io/catenax/edc/provider-api-wrapper:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/backend/simple-aas-adapter:catenax-at-home-latest ghcr.io/catenax/backend/simple-aas-adapter:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/semantics/hub:catenax-at-home-latest ghcr.io/catenax/semantics/hub:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/semantics/registry:catenax-at-home-latest ghcr.io/catenax/semantics/registry:catenax-at-home-latest
+docker tag cxtsiacr.azurecr.io/edc/consumer-aas-proxy:catenax-at-home-latest ghcr.io/catenax/edc/consumer-aas-proxy:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/consumer-control-plane:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/consumer-data-plane:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/consumer-api-wrapper:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/provider-control-plane:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/provider-data-plane:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/provider-api-wrapper:catenax-at-home-latest
+docker push ghcr.io/catenax/backend/simple-aas-adapter:catenax-at-home-latest
+docker push ghcr.io/catenax/semantics/hub:catenax-at-home-latest
+docker push ghcr.io/catenax/semantics/registry:catenax-at-home-latest
+docker push ghcr.io/catenax/edc/consumer-aas-proxy:catenax-at-home-latest
