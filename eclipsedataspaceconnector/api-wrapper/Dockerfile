@@ -1,6 +1,5 @@
 FROM openjdk:11-jre-slim-buster
 ARG JAR
-ARG HTTP_PROXY
 
 ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090
 ENV SPRING_PROFILES_ACTIVE local,basic
@@ -14,13 +13,6 @@ ENV IDSADAPTER_CONNECTORPASSWORD 123456
 ENV AASPROXY_REGISTRYURL http://registry-service:4243
 ENV IDSADAPTER_ADAPTERURL http://provider-aas-service:4244
 ENV AASPROXY_WRAPPERURL http://api-wrapper:9191/api/service
-
-RUN if [ -n "${HTTP_PROXY}" ]; then echo "Acquire::http::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
-    if [ -n "${HTTP_PROXY}" ]; then echo "Acquire::https::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
-    apt-get -y upgrade && \
-    apt-get -y update && \
-    apt-get -y install curl && \
-    if [ -n "${HTTP_PROXY}" ]; then rm -f /etc/apt/apt.conf.d/proxy.conf; fi
 
 WORKDIR /app
 COPY $JAR app.jar
