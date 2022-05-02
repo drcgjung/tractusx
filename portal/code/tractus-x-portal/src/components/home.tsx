@@ -36,6 +36,7 @@ import SemanticHub from './semantics/SemanticHub';
 import SemanticModelDetail from './semantics/SemanticModelDetail';
 import DigitalTwinOverview from './digitaltwins/DigitalTwinOverview';
 import { DigitalTwinDetail } from './digitaltwins/DigitalTwinDetail';
+import KnowledgeAgent from './knowledgeagent/KnowledgeAgent';
 import Admin from './admin';
 import Help from './help';
 
@@ -179,7 +180,7 @@ const navLinkGroupsSemantics: INavLinkGroup[] = [
   }
 ];
 
-const noNav = ['digitaltwin', 'developerhub', 'appstore', 'notification', 'organization', 'partners', 'usermanagement'];
+const noNav = ['knowledgeagent', 'digitaltwin', 'developerhub', 'appstore', 'notification', 'organization', 'partners', 'usermanagement'];
 
 @observer
 class Home extends React.Component<RouteComponentProps> {
@@ -234,6 +235,7 @@ class Home extends React.Component<RouteComponentProps> {
               <Route path='/home/semantichub' component={(props) => <SemanticHub {...props} />} />
               <Route path='/home/newsemanticmodel' component={(props) => <NewSemanticModel {...props} />} />
               <Route path='/home/semanticmodel/:id' component={(props) => <SemanticModelDetail {...props} />} />
+              <Route path='/home/knowledgeagent' component={(props) => <KnowledgeAgent {...props} />} />
               <Route path='/home/digitaltwins' component={(props) => <DigitalTwinOverview {...props} />} />
               <Route path='/home/digitaltwin/:id' component={(props) => <DigitalTwinDetail {...props} />} />
               <Route path='/home/developerhub' component={(props) => <DeveloperHub {...props} />} />

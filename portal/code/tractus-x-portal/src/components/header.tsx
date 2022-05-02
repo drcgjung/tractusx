@@ -26,7 +26,7 @@ interface IProp extends RouteComponentProps {
   appTitle?: string;
 }
 
-const pivots = ['Dashboard', 'App Store', 'Data Catalog', 'Digital Twins', 'Semantic Hub', 'Developer Hub', 'Connector'];
+const pivots = ['Dashboard', 'App Store', 'Data Catalog', 'Knowledge Agent', 'Developer Hub', 'Connector'];
 const keys = pivots.map((p) => p.toLowerCase().replace(' ', ''));
 
 function changeLanguage(lang: string)
