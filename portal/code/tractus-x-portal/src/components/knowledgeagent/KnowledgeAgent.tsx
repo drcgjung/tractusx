@@ -22,8 +22,10 @@ import Loading from '../loading';
 import HelpContextMenu from '../navigation/HelpContextMenu/HelpContextMenu';
 import ListCountSelector from '../navigation/ListCountSelector';
 import Pagination from '../navigation/Pagination';
-import { getQuery } from './data';
-import { SparqlResult} from './interfaces';
+import { getQuery, skills, unknownSkill } from './data';
+import { SparqlResult, Skill, Utterance } from './interfaces';
+
+//const birgitAudio = require('./birgit.wav');
 
 const helpMenuItems: IContextualMenuItem[] = [
       {
@@ -55,45 +57,72 @@ const helpMenuItems: IContextualMenuItem[] = [
 interface Agent {
   nick:string,
   name:string,
-  voice:string
+  voice:string,
+  audio:HTMLAudioElement
 }
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 200, marginRight: 20 },
+      label: { marginLeft: 20 },
+      dropdown: { width: 200, marginLeft:20 },
 };
+
+const blip: HTMLAudioElement = new Audio('../semantics/recording.mp3');
+
+const birgitLaugh: HTMLAudioElement = new Audio('../semantics/birgit.wav');
+
+const tinaHmm : HTMLAudioElement = new Audio('../semantics/tina.wav');
+
+const restHmm : HTMLAudioElement = new Audio('../semantics/hmm.wav');
 
 const tina:Agent = {
    nick:"tina",
-   name:"Hey Tina (T-Systems)",
-   voice:"Google UK English Female"
+   name:"Hi Tina (T-Systems)",
+   voice:"Google UK English Female",
+   audio:tinaHmm
  };
+
 
 const birgit:Agent = {
     nick:"birgit",
-    name:"Hey Birgit (Bosch)",
-    voice:"Anna"
+    name:"Hi Birgit (Bosch)",
+    voice:"Anna",
+    audio:birgitLaugh
 };
 
 const stefan:Agent = {
     nick:"stefan",
-    name:"Hey Stefan (SAP)",
-    voice:"Google UK English Male"
+    name:"Hi Stefan (SAP)",
+    voice:"Google UK English Male",
+    audio:restHmm
+};
+
+const cortana:Agent = {
+    nick:"cortana",
+    name:"Hi Cortana (Microsoft)",
+    voice:"Google UK English Male",
+    audio:restHmm
 };
 
 const agents = {
  "tina": tina,
  "birgit": birgit,
- "stefan": stefan
+ "stefan": stefan,
+ "cortana": cortana
 };
 
 const agentOptions: IDropdownOption[] = [
   { key:tina.nick , text: tina.name},
   { key:birgit.nick , text: birgit.name},
-  { key:stefan.nick , text: stefan.name}
+  { key:stefan.nick , text: stefan.name},
+  { key:cortana.nick , text: cortana.name}
 ];
+
+const skillOptions: IDropdownOption[] = skills.map(aSkill =>  { return { key:aSkill.nick , text: aSkill.name}; });
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 0;
+
+const filterStyles = {minHeight: '60px'};
 
 function KnowledgeAgent(){
   const [data, setData] = useState<SparqlResult>({head:{vars:[]},results:{bindings:[]},currentPage:0,totalPages:0});
@@ -101,16 +130,12 @@ function KnowledgeAgent(){
   const [error, setError] = useState<[]>();
   const [selectedPageSize, setSelectedPageSize] = useState<number>(DEFAULT_PAGE_SIZE);
   const [text, setText] = useState<string>("Ask me!");
-  const [agent, setAgent] = useState<Agent>(agents.birgit);
-  //Hey Catena, how much glue is in vehicle model a?");
-
-  React.useEffect(()=>{
-    updateQuery();
-  }, [filterParams]);
+  const [agent, setAgent] = useState<Agent>(agents.cortana);
+  const [skill, setSkill] = useState<Skill>(unknownSkill);
 
   const voices = window.speechSynthesis.getVoices();
 
-  const speakData = function(texts:string[], pauses:number[]) {
+  const speakData = function(utterance:Utterance) {
       var index=0;
 
       const catenaVoice = voices.filter(function (voice) {
@@ -118,20 +143,20 @@ function KnowledgeAgent(){
       })[0];
 
       const waitFunction = function() {
-        if(index<pauses.length) {
-          setTimeout(speakFunction,pauses[index]);
+        if(index<utterance.pauses.length) {
+          setTimeout(speakFunction,utterance.pauses[index]);
         }
       };
 
       const speakFunction = function() {
-         if(index<texts.length) {
+         if(index<utterance.phrases.length) {
            var msg = new SpeechSynthesisUtterance();
            msg.voice = catenaVoice;
            msg.lang = 'en-US';
            msg.volume = 1;
            msg.pitch = 0.9;
            msg.rate = 0.9;
-           msg.text = texts[index];
+           msg.text = utterance.phrases[index];
            index=index+1;
            msg.onend = waitFunction;
            window.speechSynthesis.speak(msg);
@@ -142,29 +167,21 @@ function KnowledgeAgent(){
   };
 
   const tellData = (res:SparqlResult) => {
-    if(res.head.vars.find(element => element=="vehicleType")) {
-        var material = res.results.bindings[0]["material"]["value"];
-        var model = res.results.bindings[0]["vehicleType"]["value"];
-        var weight=0.0;
-        res.results.bindings.forEach( binding => { weight=weight+Number(binding["total_weight"]["value"].replace("e0","")); });
-        weight=weight/res.results.bindings.length;
-
-        var texts=[`Hey Schorsch`, `There are`, `on average`,`${weight} kg`, `of`, `${material}`, `in`,`${model}`];
-        var pauses=[0,0,0,0,0,0,0,0];
-
-        speakData(texts,pauses);
+    if(res!=undefined && res.results.bindings.length>0) {
+        let summary=skill.summarize(res);
+        if(summary!=undefined) {
+            speakData(summary);
+        }
+        setData(res);
     } else {
-        var material = res.results.bindings[0]["material"]["value"];
-        var texts=[`Hey Schorsch`, `${material}`, `is contained in`,res.results.bindings.length.toString(),"vehicles"];
-        var pauses=[0,0,0,0,0];
-        speakData(texts,pauses);
+      speakData({phrases:["What the fuck?"],pauses:[0]});
     }
-    setData(res);
   }
 
   const heyPhrase : RegExp = /^h(ey|i) ([A-Za-z]+).*$/i;
 
   const recognize = (event:any) => {
+      blip.play();
       event.defaultPrevented=true;
       const {webkitSpeechRecognition} = window as any;
       const recognition = new webkitSpeechRecognition();
@@ -173,28 +190,39 @@ function KnowledgeAgent(){
       recognition.lang = 'en-US';
 
       const recognized = function( event:any ) {
-        if(event.results.length>0) {
-            if(event.results[0].length>0) {
-                var confidence=event.results[0][0].confidence
-                var transcript=event.results[0][0].transcript;
-                if(heyPhrase.test(transcript)) {
-                  let match=transcript.match(heyPhrase)
-                  console.log(match);
-                  if(agents.hasOwnProperty(match[2].toLowerCase())) {
-                    console.log("Found agent "+agent);
-                    setAgent(agents[match[2].toLowerCase()]);
-                  }
-                }
-                setText(transcript);
-                return;
+        for(var count=0;count<event.results.length;count++) {
+          let result = event.results[count];
+          for(var count2=0;count2<result.length;count2++) {
+           let utterance=result[count];
+           var confidence=utterance.confidence;
+           var transcript=utterance.transcript;
+           if(heyPhrase.test(transcript)) {
+            let match=transcript.match(heyPhrase)
+            let agentName=match[2].toLowerCase();
+            if(agents.hasOwnProperty(agentName)) {
+                let agent=agents[agentName];
+                setAgent(agent);
+                agent.audio.play();
             }
+           }
+           if(confidence>0.9) {
+            let newSkill=skills.find( aSkill => aSkill.match(transcript) != undefined);
+            setSkill(newSkill);
+            setText(transcript);
+            if(newSkill.nick != unknownSkill.nick) {
+                console.log("Auto Execute");
+                updateQuery(newSkill,transcript);
+            }
+            return;
+          }
         }
-
-        var texts=[`Hey Schorsch`, `I did not understand`, `please rephrase`];
-        var pauses=[0,100,0];
-
-        speakData(texts,pauses);
-        setText("I did not understand, please rephrase!");
+      }
+      setSkill(unknownSkill);
+      setText("I did not understand, please rephrase!");
+      speakData( {
+          phrases:[`Hey Schorsch`, `I did not understand`, `please rephrase`],
+          pauses:[0,100,0]
+       });
       };
 
       recognition.onresult = recognized;
@@ -203,48 +231,19 @@ function KnowledgeAgent(){
       recognition.start();
   };
 
-  const questionExp : RegExp = /^.*much ([A-Za-z ]+) is .* (vehicle model [A-Za-z]).*$/i;
-  const question2Exp : RegExp = /^.*which contain ([A-Za-z ]+).*$/i;
-
-  const camelize = (str:String) => {
-    return str.split(" ").map( function(text:String) {
-      return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-    }).join(" ");
+  const onUpdateQuery = () => {
+    updateQuery(skill,text);
   }
 
-  const updateQuery = () => {
-    console.log("trying to match text "+text);
-    if(questionExp.test(text)) {
-        let match=text.match(questionExp)
-        console.log(match);
-        let material=camelize(match[1]);
-        let vehicleType=camelize(match[2]);
-        let params= {
-            "query":"material",
-            "material":material,
-            "vehicleType":vehicleType
-        };
-        getQuery(params)
+  const updateQuery = ( aSkill:Skill, aText:string ) => {
+    let query=aSkill.match(aText);
+    if(query!=undefined && query!="") {
+        console.log("Execute "+query);
+        getQuery(query)
             .then(
-            res => tellData(res),
-            error => setError(error.message)
-        );
-    } else if(question2Exp.test(text)) {
-         let match=text.match(question2Exp)
-         console.log(match);
-         let material=camelize(match[1]);
-         let params= {
-             "query":"trace",
-             "material":material,
-             "vehicleType":"none"
-         };
-         getQuery(params)
-             .then(
-             res => tellData(res),
-             error => setError(error.message)
-         );
-    } else {
-      console.log("text did not match");
+                res => tellData(res),
+                error => setError(error.message)
+            );
     }
   }
 
@@ -266,22 +265,30 @@ function KnowledgeAgent(){
   }
 
   return (
-    <div className='p44 df fdc'>
-      <Dropdown placeholder="Choose a Knowledge Agent"
-                label="Knowledge Agent"
-                selectedKey={agent.nick}
-                options={agentOptions}
-                styles={dropdownStyles}
-                onChange={(_,newValue) => setAgent(agents[newValue.key])}
-      />
-      <SearchBox className="w600"
+   <div className='p44 df fdc'>
+     <div className="df aife jcfs mb20" style={filterStyles}>
+      <SearchBox className="w800"
                  placeholder="Ask Me"
                  value={text}
-                 onSearch={updateQuery}
+                 onSearch={onUpdateQuery}
                  onClear={recognize}
                  onChange={(_, newValue) => setText(newValue)}
       />
-      <HelpContextMenu menuItems={helpMenuItems}></HelpContextMenu>
+      <Dropdown placeholder="Choose an Agent"
+                label="Agent"
+                selectedKey={agent.nick}
+                options={agentOptions}
+                styles={dropdownStyles}
+                onChange={(_,newValue) => { let agent = agents[newValue.key]; setAgent(agent); agent.audio.play();}}
+      />
+      <Dropdown placeholder="Choose a Skill"
+                label="Skill"
+                selectedKey={skill.nick}
+                options={skillOptions}
+                styles={dropdownStyles}
+                onChange={(_,newValue) => setSkill(skills.find(aSkill => aSkill.nick==newValue.key))}
+      />
+     </div>
       {data ?
         <div>
           <h1 className="fs24 bold mb20">Knowledge Results</h1>

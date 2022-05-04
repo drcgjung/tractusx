@@ -12,3 +12,16 @@ export interface Head {
 export interface Results {
  bindings: object[]
 }
+
+export interface Utterance {
+  phrases: string[],
+  pauses: number[]
+}
+
+export interface Skill {
+  nick:string,
+  name: string,
+  match(string): string,
+  summarize(SparqlResult): Utterance
+}
+

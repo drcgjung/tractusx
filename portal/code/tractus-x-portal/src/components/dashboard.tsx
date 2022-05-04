@@ -60,7 +60,7 @@ export default class Dashboard extends React.Component {
         <div className='df ml50 mt10 mb50 aic'>
           <Icon className='fgblack fs14 bold mr5' iconName='Forward' />
           <span className='fs14'>Find more apps in the</span>
-          <Link className='fglgreen fs14 bold mr5 tdn ml5' to='/home/appstore'>APP STORE</Link>
+          <Link className='fglgreen fs14 bold mr5 tdn ml5' to='/home/apps'>APP STORE</Link>
         </div>
       </div>
     );

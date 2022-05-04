@@ -180,7 +180,7 @@ const navLinkGroupsSemantics: INavLinkGroup[] = [
   }
 ];
 
-const noNav = ['knowledgeagent', 'digitaltwin', 'developerhub', 'appstore', 'notification', 'organization', 'partners', 'usermanagement'];
+const noNav = ['knowledge', 'digitaltwin', 'developerhub', 'appstore', 'notification', 'organization', 'partners', 'usermanagement'];
 
 @observer
 class Home extends React.Component<RouteComponentProps> {
@@ -230,17 +230,17 @@ class Home extends React.Component<RouteComponentProps> {
             <Switch>
               <Redirect path='/home' exact to='/home/dashboard' />
               <Route path='/home/dashboard' component={(props) => <Dashboard {...props} />} />
-              <Route path='/home/appstore' component={(props) => <AppStore {...props} />} />
+              <Route path='/home/apps' component={(props) => <AppStore {...props} />} />
               {/* <Route path='/home/datacatalog' component={(props) => <DataCatalog {...props} />} /> */}
               <Route path='/home/semantichub' component={(props) => <SemanticHub {...props} />} />
               <Route path='/home/newsemanticmodel' component={(props) => <NewSemanticModel {...props} />} />
               <Route path='/home/semanticmodel/:id' component={(props) => <SemanticModelDetail {...props} />} />
-              <Route path='/home/knowledgeagent' component={(props) => <KnowledgeAgent {...props} />} />
+              <Route path='/home/knowledge' component={(props) => <KnowledgeAgent {...props} />} />
               <Route path='/home/digitaltwins' component={(props) => <DigitalTwinOverview {...props} />} />
               <Route path='/home/digitaltwin/:id' component={(props) => <DigitalTwinDetail {...props} />} />
-              <Route path='/home/developerhub' component={(props) => <DeveloperHub {...props} />} />
+              <Route path='/home/skillgym' component={(props) => <DeveloperHub {...props} />} />
               <Route path='/home/appdetail/:id' component={(props) => <AppDetail {...props} />} />
-              <Route path='/home/datacatalog' component={(props) => <MyData {...props} />} />
+              <Route path='/home/assets' component={(props) => <MyData {...props} />} />
               <Route path='/home/myconnectors' component={(props) => <MyConnectors {...props} />} />
               <Route path='/home/connector' component={(props) => <MyConnectors {...props} />} />
               <Route path='/home/organization' component={(props) => <OrgDetails {...props} />} />

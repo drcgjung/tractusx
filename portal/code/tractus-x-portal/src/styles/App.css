@@ -775,6 +775,7 @@ iframe {border-style: none;}
 .jcc {justify-content: center;}
 .jcsb {justify-content: space-between;}
 .jcfe {justify-content: flex-end;}
+.jcfs {justify-content: flex-start;}
 .flex99 {flex:9999}
 .fi {flex:initial}
 .lh{line-height: 0px;}

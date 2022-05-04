@@ -69,7 +69,7 @@ class AppCard extends React.Component<IProp> {
   public render() {
     const a = this.props.app;
     let icon: string = 'Catena-X.png';
-    if (a.companyName === 'BMW' || a.companyName === 'SAP' || a.companyName === 'Siemens') {
+    if (a.companyName === 'BMW' || a.companyName === 'SAP' || a.companyName === 'Siemens' || a.companyName === 'T-Systems' || a.companyName === 'Microsoft') {
       icon = a.companyName + '.png';
     }
 
