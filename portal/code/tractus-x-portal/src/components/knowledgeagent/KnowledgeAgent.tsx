@@ -167,12 +167,16 @@ function KnowledgeAgent(){
   };
 
   const tellData = (res:SparqlResult) => {
-    if(res!=undefined && res.results.bindings.length>0) {
+    if(res!=undefined) {
+     setData(res);
+     if(res.results.bindings.length>0) {
         let summary=skill.summarize(res);
         if(summary!=undefined) {
             speakData(summary);
         }
-        setData(res);
+     } else {
+      speakData({phrases:["What the fuck?"],pauses:[0]});
+     }
     } else {
       speakData({phrases:["What the fuck?"],pauses:[0]});
     }
@@ -190,6 +194,7 @@ function KnowledgeAgent(){
       recognition.lang = 'en-US';
 
       const recognized = function( event:any ) {
+        let myAgent = agent;
         for(var count=0;count<event.results.length;count++) {
           let result = event.results[count];
           for(var count2=0;count2<result.length;count2++) {
@@ -200,29 +205,26 @@ function KnowledgeAgent(){
             let match=transcript.match(heyPhrase)
             let agentName=match[2].toLowerCase();
             if(agents.hasOwnProperty(agentName)) {
-                let agent=agents[agentName];
-                setAgent(agent);
-                agent.audio.play();
+                myAgent=agents[agentName];
+                setAgent(myAgent);
+                myAgent.audio.play();
             }
            }
-           if(confidence>0.9) {
+           if(confidence>0.8) {
             let newSkill=skills.find( aSkill => aSkill.match(transcript) != undefined);
             setSkill(newSkill);
             setText(transcript);
-            if(newSkill.nick != unknownSkill.nick) {
+            /*if(newSkill.nick != unknownSkill.nick) {
                 console.log("Auto Execute");
                 updateQuery(newSkill,transcript);
-            }
+            }*/
             return;
           }
         }
       }
       setSkill(unknownSkill);
-      setText("I did not understand, please rephrase!");
-      speakData( {
-          phrases:[`Hey Schorsch`, `I did not understand`, `please rephrase`],
-          pauses:[0,100,0]
-       });
+      setText("WTF?");
+      myAgent.audio.play();
       };
 
       recognition.onresult = recognized;
@@ -268,7 +270,7 @@ function KnowledgeAgent(){
    <div className='p44 df fdc'>
      <div className="df aife jcfs mb20" style={filterStyles}>
       <SearchBox className="w800"
-                 placeholder="Ask Me"
+                 placeholder="Go ahead. Make my day!"
                  value={text}
                  onSearch={onUpdateQuery}
                  onClear={recognize}

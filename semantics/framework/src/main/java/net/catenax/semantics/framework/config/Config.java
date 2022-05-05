@@ -30,6 +30,7 @@ public interface Config<Cmd extends Command, O extends Offer, Ct extends Catalog
      * determines the callback method to access artifacts
      */
     String getCallbackPattern();
+    String getAasSchema();
 
     String getServiceName();
     boolean isOfferOnStart();

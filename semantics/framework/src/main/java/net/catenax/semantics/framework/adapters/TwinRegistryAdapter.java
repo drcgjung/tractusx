@@ -125,7 +125,7 @@ public class TwinRegistryAdapter<Cmd extends Command, O extends Offer, Ct extend
         request.setProtocol(protocol);
         request.setCommand(command);
         request.setParameters(parameters);
-        request.setModel("https://admin-shell.io/aas/API/AssetAdministrationShellDescriptor/1/0/RC02");
+        request.setModel(configurationData.getAasSchema());
         request.setAccepts("application/json");
         // perform the connector request
         IdsResponse response = idsConnector.perform(request);

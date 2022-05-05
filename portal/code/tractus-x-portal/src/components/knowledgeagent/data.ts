@@ -110,7 +110,7 @@ SELECT DISTINCT ?vehicle ?material
 WHERE {
     BIND("${material}" as ?material).
 
-    # From the SerializedPart of tenant2 we filter a specific Material
+   # From the SerializedPart of tenant2 we filter a specific Material
     SERVICE <http://localhost:8183/api/sparql/hub> {
         GRAPH <urn:cx:graph#serializedPart> {
             ?material_type cx:hasPartTypeName ?material .
@@ -125,7 +125,7 @@ WHERE {
     # We need the BOM of the vehicles which are provided by Tenant1
     SERVICE <http://localhost:8182/api/sparql/hub> {                        # Connector Data Plane of Tenant1
         GRAPH <urn:cx:graph#assemblyPartRelation> {                         # Graph asset of Tenant2
-            ?vehicle cx:consistsOf* ?matematerial_component .
+            ?vehicle cx:consistsOf* ?material_component .
         }
     }
 }`;
