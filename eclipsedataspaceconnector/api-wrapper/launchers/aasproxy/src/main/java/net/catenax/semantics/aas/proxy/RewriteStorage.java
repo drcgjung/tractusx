@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.AbstractMap;
 
 /**
  * A little memory storage to
@@ -24,9 +25,17 @@ import java.util.Map;
 public class RewriteStorage {
 
     @RequiredArgsConstructor
-    static class ModelKey {
+    public static class ModelKey {
         final private String assetId;
         final private String submodelId;
+
+        public String getAssetId() {
+            return assetId;
+        }
+
+        public String getSubmodelId() {
+            return submodelId;
+        }
 
         @Override
         public int hashCode() {
@@ -45,16 +54,26 @@ public class RewriteStorage {
 
     Map<ModelKey,String> urnMap=new HashMap<>();
 
+    /**
+     * ensure encoding
+     * @param identifier to encode
+     * @return encoded identifier
+     */
+    protected String urlEncode(String identifier) {
+        return identifier.replace("#","%23").replace(":","%3A");
+    }
+
     public synchronized String getEndpoint(String assetId, String submodelId) {
-        assetId=assetId.replace("#","%23");
-        submodelId=submodelId.replace("#","%23");
+        assetId=urlEncode(assetId);
+        submodelId=urlEncode(submodelId);
         return urnMap.get(new ModelKey(assetId,submodelId));
     }
 
-    public synchronized void setEndpoint(String assetId, String submodelId, String endpoint) {
-        assetId=assetId.replace("#","%23");
-        submodelId=submodelId.replace("#","%23");
-        endpoint=endpoint.replace("#","%23");
-        urnMap.put(new ModelKey(assetId,submodelId),endpoint);
+    public synchronized ModelKey setEndpoint(String assetId, String submodelId, String endpoint) {
+        assetId=urlEncode(assetId);
+        submodelId=urlEncode(submodelId);
+        ModelKey key=new ModelKey(assetId,submodelId);
+        urnMap.put(key,endpoint);
+        return key;
     }
 }

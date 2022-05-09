@@ -74,6 +74,8 @@ public class ApiWrapperController {
     public String getWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, @Context UriInfo uriInfo) throws InterruptedException {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
+        monitor.debug(String.format("Get call to werapper with connector %s asset %s and url %s with params %s",providerConnectorUrl,assetId,subUrl,queryParams));
+
         // Initialize and negotiate everything
         var agreementId = initializeContractNegotiation(providerConnectorUrl, assetId);
 
@@ -113,6 +115,8 @@ public class ApiWrapperController {
     @Consumes(MediaType.APPLICATION_JSON)
     public String postWrapper(@QueryParam("provider-connector-url") String providerConnectorUrl, @PathParam("assetId") String assetId, @PathParam("subUrl") String subUrl, String body, @Context UriInfo uriInfo) throws InterruptedException {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+
+        monitor.debug(String.format("Post call to werapper with connector %s asset %s and url %s with params %s and body %s",providerConnectorUrl,assetId,subUrl,queryParams,body));
 
         // Initialize and negotiate everything
         var agreementId = initializeContractNegotiation(providerConnectorUrl, assetId);
@@ -155,6 +159,7 @@ public class ApiWrapperController {
     }
 
     private String initializeContractNegotiation(String providerConnectorUrl, String assetId) throws InterruptedException {
+
         String agreementId = contractAgreementStore.get(assetId);
 
         if (agreementId != null) {

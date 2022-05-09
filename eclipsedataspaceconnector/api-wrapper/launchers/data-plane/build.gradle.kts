@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
     val edcGroup = "org.eclipse.dataspaceconnector"
-    val edcVersion = "0.0.1-SNAPSHOT"
+    val edcVersion = "0.0.1-FUCKSHOT"
 
     api("$edcGroup:web-spi:$edcVersion")
     api("$edcGroup:core-base:$edcVersion")

@@ -14,6 +14,7 @@ ENV IDSADAPTER_CONNECTORPASSWORD 123456
 ENV AASPROXY_REGISTRYURL http://registry-service:4243
 ENV IDSADAPTER_ADAPTERURL http://provider-aas-service:4244
 ENV AASPROXY_WRAPPERURL http://api-wrapper:9191/api/service
+ENV JDK_LOGGING_PROPERTY ""
 
 RUN if [[ -n "${HTTP_PROXY}"  ]]; then echo "Acquire::http::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
     if [[ -n "${HTTP_PROXY}" ]]; then echo "Acquire::https::Proxy \"${HTTP_PROXY}\"" >> /etc/apt/apt.conf.d/proxy.conf; fi && \
@@ -41,4 +42,4 @@ ENTRYPOINT java \
     -Daasproxy.registryUrl=${AASPROXY_REGISTRYURL}\
     -Daasproxy.wrapperUrl=${AASPROXY_WRAPPERURL}\
     -Djava.security.edg=file:/dev/.urandom \
-    -jar app.jar
+    ${JDK_LOGGING_PROPERTY} -jar app.jar

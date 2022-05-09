@@ -43,7 +43,6 @@
         <swagger-annotations.version>1.5.20</swagger-annotations.version>
         <google.findbugs.version>3.0.2</google.findbugs.version>
         <!-- logging -->
-        <slf4j.version>2.0.0-alpha1</slf4j.version>
     </properties>
 
     <dependencies>
@@ -59,12 +58,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -175,13 +168,6 @@
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation-version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Test -->

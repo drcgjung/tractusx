@@ -34,6 +34,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The AAS Proxy implements the service layer behind the web protocol layer.
  */
@@ -65,6 +68,8 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
      * regex to conversion spec
      */
     private Map<Pattern,ConversionSubmodel> idConversions=new HashMap<>();
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * is created after construction
@@ -146,14 +151,57 @@ public class RegistryAndDiscoveryProxy implements LookupApiDelegate, RegistryApi
         ProtocolInformation pi=endpoint.getProtocolInformation();
         String endpointAddress=pi.getEndpointAddress();
         String query="";
-        int params=endpointAddress.indexOf(submodelId);
+        int params=endpointAddress.lastIndexOf("/");
         if(params>=0) {
-            query=endpointAddress.substring(params+submodelId.length());
-            endpointAddress=endpointAddress.substring(0,params+submodelId.length());
+            query=endpointAddress.substring(params);
+            endpointAddress=endpointAddress.substring(0,params);
         }
-        storage.setEndpoint(assetId,submodelId,endpointAddress);
+        RewriteStorage.ModelKey stored=storage.setEndpoint(assetId,submodelId,endpointAddress);
+        assetId=stored.getAssetId();
+        submodelId=stored.getSubmodelId();
+        String proxyUrl=config.getProxyUrl()+"/shells/"+assetId+"/aas/"+submodelId;
+
+        log.debug(String.format("Mapping endpoint %s to proxy url %s with query %s",endpointAddress,proxyUrl,query));
+
+        if(!query.contains("content")) {
+            if(!query.contains("?")) {
+                query=query+"?content=value";
+            } else {
+                query=query+"&content=value";
+            }
+        }
+        if(!endpointAddress.contains("e6eb8345-8ee6-4390-8481-4cdafcb0591e")) {
+            if(!query.contains("extent")) {
+                if(!query.contains("?")) {
+                    query=query+"?extent=withBlobValue";
+                } else {
+                    query=query+"&extent=withBlobValue";
+                }
+            }
+            if(!query.contains("level")) {
+                if(!query.contains("?")) {
+                    query=query+"?level=deep";
+                } else {
+                    query=query+"&level=deep";
+                }
+            }
+        } else {
+            if(!query.contains("submodel-elements")) {
+                int indexOf = query.indexOf("submodel");
+                if (indexOf > 0) {
+                    query = query.substring(0, indexOf + 8) + "/submodel-elements/:operationId/invoke" + query.substring(indexOf + 8);
+                }
+            }
+            if(!query.contains("async")) {
+                if(!query.contains("?")) {
+                    query=query+"?async=false";
+                } else {
+                    query=query+"&async=false";
+                }
+            }
+        }
         // TODO get from configuration
-        pi.setEndpointAddress(config.getProxyUrl()+"/shells/"+assetId+"/aas/"+submodelId+query);
+        pi.setEndpointAddress(proxyUrl+submodelId+query);
         if(config.getProxyUrl().startsWith("https")) {
             pi.setEndpointProtocol("HTTP/S");
         } else {

@@ -17,6 +17,7 @@ services:
       EDC_KEYSTORE: /config/cert.pfx
       EDC_KEYSTORE_PASSWORD: 123456
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
       - ${PWD}/config/consumer-control-plane.config:/config
 
@@ -33,6 +34,7 @@ services:
       - "5006:8090"
     environment:
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
      - ${PWD}/config/consumer-data-plane.config:/config
 
@@ -50,6 +52,7 @@ services:
       - "5007:8090"
     environment:
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
       - ${PWD}/config/api-wrapper.config:/config
 
@@ -70,6 +73,7 @@ services:
       EDC_KEYSTORE: /config/cert.pfx
       EDC_KEYSTORE_PASSWORD: 123456
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
       - ${PWD}/config/provider-control-plane.config:/config
 
@@ -87,6 +91,7 @@ services:
       - "5009:8090"
     environment:
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
       - ${PWD}/config/provider-data-plane.config:/config
 
@@ -103,6 +108,7 @@ services:
       - "5010:8090"
     environment:
       EDC_FS_CONFIG: /config/configuration.properties
+      JDK_LOGGING_PROPERTY: -Djava.util.logging.config.file=config/logging.properties
     volumes:
       - ${PWD}/config/provider-backend-service.config:/config
 
