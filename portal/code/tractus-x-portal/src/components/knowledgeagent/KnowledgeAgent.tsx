@@ -25,8 +25,6 @@ import Pagination from '../navigation/Pagination';
 import { getQuery, skills, unknownSkill } from './data';
 import { SparqlResult, Skill, Utterance } from './interfaces';
 
-//const birgitAudio = require('./birgit.wav');
-
 const helpMenuItems: IContextualMenuItem[] = [
       {
         key: 'howto',
@@ -68,7 +66,7 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 
 const blip: HTMLAudioElement = new Audio('../semantics/recording.mp3');
 
-const birgitLaugh: HTMLAudioElement = new Audio('../semantics/birgit.wav');
+const helgaLaugh: HTMLAudioElement = new Audio('../semantics/helga.wav');
 
 const tinaHmm : HTMLAudioElement = new Audio('../semantics/tina.wav');
 
@@ -82,11 +80,11 @@ const tina:Agent = {
  };
 
 
-const birgit:Agent = {
-    nick:"birgit",
-    name:"Hi Birgit (Bosch)",
+const helga:Agent = {
+    nick:"helga",
+    name:"Hi Helga (Hewlett Packard)",
     voice:"Anna",
-    audio:birgitLaugh
+    audio:helgaLaugh
 };
 
 const stefan:Agent = {
@@ -105,14 +103,14 @@ const cortana:Agent = {
 
 const agents = {
  "tina": tina,
- "birgit": birgit,
+ "helga": helga,
  "stefan": stefan,
  "cortana": cortana
 };
 
 const agentOptions: IDropdownOption[] = [
   { key:tina.nick , text: tina.name},
-  { key:birgit.nick , text: birgit.name},
+  { key:helga.nick , text: helga.name},
   { key:stefan.nick , text: stefan.name},
   { key:cortana.nick , text: cortana.name}
 ];
