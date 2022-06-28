@@ -1,7 +1,7 @@
 import UserService from "../../helpers/UserService";
 import { SparqlResult, Skill } from './interfaces';
 
-const SPARQL_URL = `http://localhost:8181/api/sparql/agent`;
+const SPARQL_URL = `${process.env.REACT_APP_CENTRAL_AGENT}`;
 
 const camelize = (str:String) => {
     return str.split(" ").map( function(text:String) {
@@ -37,7 +37,7 @@ WHERE {
     BIND("${material}" as ?material).
 
     # We're looking for the fitting vehicles, which are Serialized Parts of Tenant2
-    SERVICE <http://localhost:8183/api/sparql/agent> {
+    SERVICE <${process.env.REACT_APP_TENANT2}> {
         GRAPH <urn:cx:graph#serializedPart> {
             ?vehicle a cx:SerializedPart.
             ?vehicle cx:belongsTo ?specific_vehicle_type.
@@ -46,14 +46,14 @@ WHERE {
     }
 
     # We need the BOM explosion of the vehicles which are assembled by Tenant1
-    SERVICE <http://localhost:8182/api/sparql/agent> {
+    SERVICE <${process.env.REACT_APP_TENANT1}> {
         GRAPH <urn:cx:graph#assemblyPartRelation> {
             ?vehicle cx:consistsOf* ?vehicle_component .
         }
     }
 
     # Access the specific Material in Tenant2
-    SERVICE <http://localhost:8183/api/sparql/agent> {
+    SERVICE <${process.env.REACT_APP_TENANT2}> {
         GRAPH <urn:cx:graph#serializedPart> {
             ?vehicle_component cx:belongsTo ?vehicle_component_type.
             ?vehicle_component_type cx:hasPartTypeName ?material .
@@ -61,7 +61,7 @@ WHERE {
     }
 
     # Get the last weight measure from the assembly in Tenant1
-    SERVICE <http://localhost:8182/api/sparql/agent> {
+    SERVICE <${process.env.REACT_APP_TENANT1}> {
         GRAPH <urn:cx:graph#assemblyPartRelation> {
             ?vehicle_component cx:isAssembledThrough ?assemble_event .
             ?assemble_event qudt:NumericValue ?component_weight .
@@ -111,7 +111,7 @@ WHERE {
     BIND("${material}" as ?material).
 
    # From the SerializedPart of tenant2 we filter a specific Material
-    SERVICE <http://localhost:8183/api/sparql/agent> {
+    SERVICE <${process.env.REACT_APP_TENANT2}> {
         GRAPH <urn:cx:graph#serializedPart> {
             ?material_type cx:hasPartTypeName ?material .
             ?material_component a cx:SerializedPart ;
@@ -123,8 +123,8 @@ WHERE {
     }
 
     # We need the BOM of the vehicles which are provided by Tenant1
-    SERVICE <http://localhost:8182/api/sparql/agent> {                      # Connector Data Plane of Tenant1
-        GRAPH <urn:cx:graph#assemblyPartRelation> {                         # Graph asset of Tenant2
+    SERVICE <${process.env.REACT_APP_TENANT1}> {                      # Connector Data Plane of Tenant1
+        GRAPH <urn:cx:graph#assemblyPartRelation> {                   # Graph asset of Tenant2
             ?vehicle cx:consistsOf* ?material_component .
         }
     }
