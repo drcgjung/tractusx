@@ -9,9 +9,9 @@ const clientId = CX_CLIENT;
 
 //const _kc = new Keycloak('/keycloak.json');
 const _kc = new Keycloak({
-  "url": process.env.REACT_APP_KEYCLOAK_URL,
-  "realm": CX_REALM,
-  "clientId": CX_CLIENT,
+  "url":      process.env.REACT_APP_KEYCLOAK_URL,
+  "realm":    process.env.REACT_APP_KEYCLOAK_REALM,
+  "clientId": process.env.REACT_APP_KEYCLOAK_CLIENT,
   "ssl-required": "external",
   "public-client": true
 });
