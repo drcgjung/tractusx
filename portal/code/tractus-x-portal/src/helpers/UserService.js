@@ -1,17 +1,17 @@
 import Keycloak from 'keycloak-js';
 
-const CX_REALM = 'CX-Central'; 
-const CX_CLIENT = 'catenax-portal';
-const CX_ADMIN_ROLE = 'CX Admin';
+const CX_REALM = process.env.REACT_APP_KEYCLOAK_REALM;
+const CX_CLIENT = process.env.REACT_APP_KEYCLOAK_CLIENT;
+const CX_ADMIN_ROLE = process.env.REACT_APP_KEYCLOAK_ADMIN;
 
 const realm = CX_REALM;
 const clientId = CX_CLIENT;
 
 //const _kc = new Keycloak('/keycloak.json');
 const _kc = new Keycloak({
-  "url":      process.env.REACT_APP_KEYCLOAK_URL,
-  "realm":    process.env.REACT_APP_KEYCLOAK_REALM,
-  "clientId": process.env.REACT_APP_KEYCLOAK_CLIENT,
+  "url": process.env.REACT_APP_KEYCLOAK_URL,
+  "realm": CX_REALM,
+  "clientId": CX_CLIENT,
   "ssl-required": "external",
   "public-client": true
 });
