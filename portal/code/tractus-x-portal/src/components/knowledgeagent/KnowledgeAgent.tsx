@@ -64,13 +64,13 @@ const dropdownStyles: Partial<IDropdownStyles> = {
       dropdown: { width: 200, marginLeft:20 },
 };
 
-const blip: HTMLAudioElement = new Audio('../semantics/recording.mp3');
+const blip: HTMLAudioElement = new Audio(process.env.PUBLIC_URL+'/semantics/recording.mp3');
 
-const helgaLaugh: HTMLAudioElement = new Audio('../semantics/helga.wav');
+const helgaLaugh: HTMLAudioElement = new Audio(process.env.PUBLIC_URL+'/semantics/helga.wav');
 
-const tinaHmm : HTMLAudioElement = new Audio('../semantics/tina.wav');
+const tinaHmm : HTMLAudioElement = new Audio(process.env.PUBLIC_URL+'/semantics/tina.wav');
 
-const restHmm : HTMLAudioElement = new Audio('../semantics/hmm.wav');
+const restHmm : HTMLAudioElement = new Audio(process.env.PUBLIC_URL+'/semantics/hmm.wav');
 
 const tina:Agent = {
    nick:"tina",
