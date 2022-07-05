@@ -21,7 +21,7 @@ export default class Logo extends React.Component {
   public render() {
     return (
       <div className='w150 h66 df aic ml20'>
-        <img src='/Catena-X_Logo_mit_Zusatz_2021.svg' alt='logo' />
+        <img src={`${process.env.PUBLIC_URL}/Catena-X_Logo_mit_Zusatz_2021.svg`} alt='logo' />
       </div>
     );
   }

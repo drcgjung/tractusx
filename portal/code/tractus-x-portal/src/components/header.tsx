@@ -53,11 +53,11 @@ class Header extends React.Component<IProp> {
 
   private pivotClick(item: PivotItem): void {
     this.selectedKey = item.props.headerText.replace(' ', '').toLowerCase();
-    this.props.history.push(`/home/${this.selectedKey}`);
+    this.props.history.push(`${process.env.PUBLIC_URL}/home/${this.selectedKey}`);
   }
 
   private homeClick(): void {
-    this.props.history.push('/home/dashboard');
+    this.props.history.push(`${process.env.PUBLIC_URL}/home/dashboard`);
   }
 
   private userClick() {
@@ -111,7 +111,7 @@ class Header extends React.Component<IProp> {
 
 
   private onBoardingClick() {
-    this.props.history.push('/invite');
+    this.props.history.push(`${process.env.PUBLIC_URL}/invite`);
   }
 
   public render() {
@@ -139,7 +139,7 @@ class Header extends React.Component<IProp> {
         { this.isAdmin &&  <div className='cpointer' onClick={() => this.onBoardingClick()}>Invite Business Partner</div> }
         <div className='flex1' />
         <div className='df aic'>
-          <div className='df flex1 fdr jcfe mr20'><div className='cpointer fgblue' onClick={()=> this.props.history.push('/home/help')}>Help</div></div>
+          <div className='df flex1 fdr jcfe mr20'><div className='cpointer fgblue' onClick={()=> this.props.history.push(`${process.env.PUBLIC_URL}/home/help`)}>Help</div></div>
           <IconButton menuProps={this.menuProps} menuIconProps={{
             iconName: 'Contact',
             style: {

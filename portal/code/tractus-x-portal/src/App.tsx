@@ -51,18 +51,18 @@ export default class App extends React.Component {
     return (
       <Router history={history}>
         <Switch>
-          <Redirect path='/' exact to='/home/dashboard' />
-          <Route path='/home' render={(props) => <Home />} />
-          <Route path='/registration' component={(props) => <Registration {...props} />} />
-          <Route path='/register' component={(props) => <Registration {...props} />} />
-          <Route path='/verifyoneid' component={(props) => <VerifyCompany {...props} />} />
-          <Route path='/dataupload' render={() => <DataUpload />} />
-          <Route path='/dataupload2' render={() => <DataUpload2 />} />
-          <ProtectedRoute path='/invite' rolesAllowedForTheRoute={["invite_new_partner"]} component={(props) => <Registrationoneid {...props}  />} />
-          <Route path='/emailregister' component={(props) => <Emailregister {...props} />} />
-          <Route path='/login' component={(props) => <Login {...props} />} />
-          <Route path="/authinfo" component={(props) => <Authinfo />} />
-          <Route path="/403" component={()=> <UnauthorisedPage />} />
+          <Redirect path={`${process.env.PUBLIC_URL}/`} exact to={`${process.env.PUBLIC_URL}/home/dashboard`} />
+          <Route path={`${process.env.PUBLIC_URL}/home`} render={(props) => <Home />} />
+          <Route path={`${process.env.PUBLIC_URL}/registration`} component={(props) => <Registration {...props} />} />
+          <Route path={`${process.env.PUBLIC_URL}/register`} component={(props) => <Registration {...props} />} />
+          <Route path={`${process.env.PUBLIC_URL}/verifyoneid`} component={(props) => <VerifyCompany {...props} />} />
+          <Route path={`${process.env.PUBLIC_URL}/dataupload`} render={() => <DataUpload />} />
+          <Route path={`${process.env.PUBLIC_URL}/dataupload2`} render={() => <DataUpload2 />} />
+          <ProtectedRoute path={`${process.env.PUBLIC_URL}/invite`} rolesAllowedForTheRoute={["invite_new_partner"]} component={(props) => <Registrationoneid {...props}  />} />
+          <Route path={`${process.env.PUBLIC_URL}/emailregister`} component={(props) => <Emailregister {...props} />} />
+          <Route path={`${process.env.PUBLIC_URL}/login`} component={(props) => <Login {...props} />} />
+          <Route path={`${process.env.PUBLIC_URL}/authinfo`} component={(props) => <Authinfo />} />
+          <Route path={`${process.env.PUBLIC_URL}/403`} component={()=> <UnauthorisedPage />} />
         </Switch>
       </Router>
     );

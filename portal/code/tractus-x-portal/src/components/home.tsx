@@ -61,7 +61,7 @@ const navLinkGroups: INavLinkGroup[] = [
     links: [
       {
         name: 'my Apps',
-        url: '/home/dashboard',
+        url: `${process.env.PUBLIC_URL}/home/dashboard`,
         key: 'key1',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -69,7 +69,7 @@ const navLinkGroups: INavLinkGroup[] = [
       },
       {
         name: 'my Data',
-        url: '/home/mydata',
+        url: `${process.env.PUBLIC_URL}/home/mydata`,
         key: 'key2',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -77,7 +77,7 @@ const navLinkGroups: INavLinkGroup[] = [
       },
       {
         name: 'my Connectors',
-        url: '/home/myconnectors',
+        url: `${process.env.PUBLIC_URL}/home/myconnectors`,
         key: 'key3',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -92,7 +92,7 @@ const navLinkGroups2: INavLinkGroup[] = [
     links: [
       {
         name: 'Notification Center',
-        url: '/home/notification',
+        url: `${process.env.PUBLIC_URL}/home/notification`,
         key: 'key4',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -100,7 +100,7 @@ const navLinkGroups2: INavLinkGroup[] = [
       },
       {
         name: 'Organization',
-        url: '/home/organization',
+        url: `${process.env.PUBLIC_URL}/home/organization`,
         key: 'key5',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -108,7 +108,7 @@ const navLinkGroups2: INavLinkGroup[] = [
       },
       {
         name: 'Partner Network',
-        url: '/home/partners',
+        url: `${process.env.PUBLIC_URL}/home/partners`,
         key: 'key6',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -116,7 +116,7 @@ const navLinkGroups2: INavLinkGroup[] = [
       },
       {
         name: 'User Management',
-        url: '/home/usermanagement',
+        url: `${process.env.PUBLIC_URL}/home/usermanagement`,
         key: 'key7',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -131,7 +131,7 @@ const navLinkGroupsData: INavLinkGroup[] = [
     links: [
       {
         name: 'Browse & Search',
-        url: '/home/datacatalog',
+        url: `${process.env.PUBLIC_URL}/home/datacatalog`,
         key: 'key1',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -139,7 +139,7 @@ const navLinkGroupsData: INavLinkGroup[] = [
       },
       {
         name: 'Resources',
-        url: '/home/datacatalog',
+        url: `${process.env.PUBLIC_URL}/home/datacatalog`,
         key: 'key2',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -147,7 +147,7 @@ const navLinkGroupsData: INavLinkGroup[] = [
       },
       {
         name: 'Connectors',
-        url: '/home/datacatalog',
+        url: `${process.env.PUBLIC_URL}/home/datacatalog`,
         key: 'key3',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -162,7 +162,7 @@ const navLinkGroupsSemantics: INavLinkGroup[] = [
     links: [
       {
         name: 'Browse & Search',
-        url: '/home/semantichub',
+        url: `${process.env.PUBLIC_URL}/home/semantichub`,
         key: 'key1',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -170,7 +170,7 @@ const navLinkGroupsSemantics: INavLinkGroup[] = [
       },
       {
         name: 'Create or Modify Model',
-        url: '/home/newsemanticmodel',
+        url: `${process.env.PUBLIC_URL}/home/newsemanticmodel`,
         key: 'key2',
         expandAriaLabel: 'Expand section',
         collapseAriaLabel: 'Collapse section',
@@ -228,28 +228,28 @@ class Home extends React.Component<RouteComponentProps> {
           </ThemeProvider>
           <div className='flex1 h100pc ova'>
             <Switch>
-              <Redirect path='/home' exact to='/home/dashboard' />
-              <Route path='/home/dashboard' component={(props) => <Dashboard {...props} />} />
-              <Route path='/home/apps' component={(props) => <AppStore {...props} />} />
+              <Redirect path={`${process.env.PUBLIC_URL}/home`} exact to={`${process.env.PUBLIC_URL}/home/dashboard`} />
+              <Route path={`${process.env.PUBLIC_URL}/home/dashboard`} component={(props) => <Dashboard {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/apps`} component={(props) => <AppStore {...props} />} />
               {/* <Route path='/home/datacatalog' component={(props) => <DataCatalog {...props} />} /> */}
-              <Route path='/home/semantichub' component={(props) => <SemanticHub {...props} />} />
-              <Route path='/home/newsemanticmodel' component={(props) => <NewSemanticModel {...props} />} />
-              <Route path='/home/semanticmodel/:id' component={(props) => <SemanticModelDetail {...props} />} />
-              <Route path='/home/knowledge' component={(props) => <KnowledgeAgent {...props} />} />
-              <Route path='/home/digitaltwins' component={(props) => <DigitalTwinOverview {...props} />} />
-              <Route path='/home/digitaltwin/:id' component={(props) => <DigitalTwinDetail {...props} />} />
-              <Route path='/home/skillgym' component={(props) => <DeveloperHub {...props} />} />
-              <Route path='/home/appdetail/:id' component={(props) => <AppDetail {...props} />} />
-              <Route path='/home/assets' component={(props) => <MyData {...props} />} />
-              <Route path='/home/myconnectors' component={(props) => <MyConnectors {...props} />} />
-              <Route path='/home/connector' component={(props) => <MyConnectors {...props} />} />
-              <Route path='/home/organization' component={(props) => <OrgDetails {...props} />} />
-              <Route path='/home/usermanagement' component={(props) => <UserMgmt {...props} />} />
-              <Route path='/home/partners' component={(props) => <YellowPages {...props} />} />
-              <Route path='/home/notification' component={(props) => <NotificationCenter {...props} />} />
-              <Route path='/home/notimp' component={(props) => <NotImp {...props} />} />
-              <Route path='/home/admin' component={(props) => <Admin {...props} />} />
-              <Route path='/home/help' component={(props) => <Help {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/semantichub`} component={(props) => <SemanticHub {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/newsemanticmodel`} component={(props) => <NewSemanticModel {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/semanticmodel/:id`} component={(props) => <SemanticModelDetail {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/knowledge`} component={(props) => <KnowledgeAgent {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/digitaltwins`} component={(props) => <DigitalTwinOverview {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/digitaltwin/:id`} component={(props) => <DigitalTwinDetail {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/skillgym`} component={(props) => <DeveloperHub {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/appdetail/:id`} component={(props) => <AppDetail {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/assets`} component={(props) => <MyData {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/myconnectors`} component={(props) => <MyConnectors {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/connector`} component={(props) => <MyConnectors {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/organization`} component={(props) => <OrgDetails {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/usermanagement`} component={(props) => <UserMgmt {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/partners`} component={(props) => <YellowPages {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/notification`} component={(props) => <NotificationCenter {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/notimp`} component={(props) => <NotImp {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/admin`} component={(props) => <Admin {...props} />} />
+              <Route path={`${process.env.PUBLIC_URL}/home/help`} component={(props) => <Help {...props} />} />
             </Switch>
           </div>
         </div>
