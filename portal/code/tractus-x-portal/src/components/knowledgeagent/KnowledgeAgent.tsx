@@ -28,28 +28,16 @@ import { SparqlResult, Skill, Utterance } from './interfaces';
 const helpMenuItems: IContextualMenuItem[] = [
       {
         key: 'howto',
-        text: 'How to',
-        href: 'https://confluence.catena-x.net/x/A2sAAQ',
+        text: 'What can I do here?',
+        href: 'https://confluence.catena-x.net/x/DIA8Aw',
         target: '_blank',
       },
       {
-        key: 'bestpractice',
-        text: 'Best Practices',
-        href: 'https://confluence.catena-x.net/x/_GoAAQ',
+        key: 'about',
+        text: 'About Hey Catena! (Team Knowledge Agents)',
+        href: 'https://confluence.catena-x.net/x/042hAg',
         target: '_blank',
-      },
-      {
-        key: 'faq',
-        text: 'FAQ',
-        href: 'https://confluence.catena-x.net/x/_2oAAQ',
-        target: '_blank',
-      },
-      {
-        key: 'govprocess',
-        text: 'Governance Process',
-        href: 'https://confluence.catena-x.net/x/AWsAAQ',
-        target: '_blank',
-      },
+      }
 ];
 
 interface Agent {
@@ -266,6 +254,7 @@ function KnowledgeAgent(){
 
   return (
    <div className='p44 df fdc'>
+     <HelpContextMenu menuItems={helpMenuItems}></HelpContextMenu>
      <div className="df aife jcfs mb20" style={filterStyles}>
       <SearchBox className="w800"
                  placeholder="Go ahead. Make my day!"

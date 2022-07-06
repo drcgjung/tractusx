@@ -37,7 +37,7 @@ class AppStore extends React.Component<RouteComponentProps> {
           </span>
           <span className='tac pt5 fgb5 fs10 ml50'>Test our FREE applications</span>
         </div> */}
-        <div className='w100pc df fdc'>
+        <div className='ml50 mr50 mt50 bgwhite w100-100 df fdc'>
           <img src='../catenabackgroundcut.png' />
         </div>
         {AppState.state.categoriesnew.map((c, index) => (

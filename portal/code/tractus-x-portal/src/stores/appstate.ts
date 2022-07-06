@@ -323,61 +323,72 @@ const Y = {
 
 const A1 = {
   id: '4253dd4d-35af-43f1-a84c-7cc280840345',
-  title: 'T-Systems Inference Agent (TINA)', rating: null, downloads: 0, tags: ['Knowledge','Agent'],
+  title: 'T-Systems Inference Agent (TINA)', rating: 4.6, downloads: 125, tags: ['Knowledge','Agent'],
   screenshots: [],
   description: 'Highly-Scaleable Multi-Cloud Inference Engine & Compute Service',
   usage: '',
-  purchase: 'OPEN APP',
+  purchase: 'Pay per Use',
   details: 'SEE DETAILS',
   companyName: 'T-Systems', url: 'http://www.t-systems.com',background: ''
 }
 
 const A2 = {
   id: '4753dd4d-35aa-43f5-a84c-7cc280840345',
-  title: 'Cortana', rating: null, downloads: 0, tags: ['Knowledge','Agent'],
+  title: 'Cortana', rating: 4.8, downloads: 213, tags: ['Knowledge','Agent'],
   screenshots: [],
   description: 'AI Engine & Service On Azure',
   usage: '',
-  purchase: 'OPEN APP',
+  purchase: 'Pay per Use',
   details: 'SEE DETAILS',
   companyName: 'Microsoft', url: 'http://www.microsoft.com',background: ''
 }
 
 const S1 = {
   id: '4753dd4d-31af-43f5-a84c-7cb280840345',
-  title: 'Material Aggregation', rating: null, downloads: 0, tags: ['Knowledge','Skill'],
+  title: 'Material Aggregation Skill', rating: 4.1, downloads: 448, tags: ['Knowledge','Skill'],
   screenshots: [],
   description: 'Inference Skill to Aggregate Material Data Over Complex Product Structures.',
-  usage: '',
-  purchase: 'OPEN APP',
+  usage: 'You need a fitting agent booked.',
+  purchase: 'Pay per Use',
   details: 'SEE DETAILS',
   companyName: 'T-Systems', url: 'http://www.t-systems.com',background: ''
 }
 
 const S2 = {
   id: '0253dd4d-35af-43f5-a84c-7cc280848341',
-  title: 'Part Tracing', rating: null, downloads: 0, tags: ['Knowledge','Skill'],
+  title: 'Part Tracing Skill', rating: 4.2, downloads: 678, tags: ['Knowledge','Skill'],
   screenshots: [],
   description: 'Inference Skill to Trace Components in BMW-related vehicles and aggregate parts.',
-  usage: '',
-  purchase: 'OPEN APP',
+  usage: 'You need a fitting agent service booked.',
+  purchase: 'Pay per Use',
   details: 'SEE DETAILS',
   companyName: 'BMW', url: 'http://www.bmw.com',background: ''
+}
+
+const S3 = {
+  id: '0263dd4d-35af-43f5-a84c-7cc280848341',
+  title: 'Lot Impact Skill', rating: 3.8, downloads: 196, tags: ['Knowledge','Skill'],
+  screenshots: [],
+  description: 'Inference Skill to Compute the Impact of Material and Part Lots.',
+  usage: 'free for use',
+  purchase: 'OPEN APP',
+  details: 'SEE DETAILS',
+  companyName: 'Catena-X', url: 'http://catena-x.net',background: ''
 }
 
 export class AppState {
   public static state: AppState;
   //public apps: Application[] = [F, E, C, A, D, B];
-  public apps: Application[] = [M, M1, M2, N, O, P, Q, R, S, T, U,Y, A1, A2, S1, S2];
+  public apps: Application[] = [M, M1, M2, N, O, P, Q, R, S, T, U,Y, A1, A2, S1, S2, S3];
   public topApps: Application[] = [B, D, C, F, E, S1];
   public bizApps: Application[] = [C, E, F];
-  public myApps: Application[] = [A, B, R, A1, A2, S1, S2];
+  public myApps: Application[] = [A, B, R, A1, A2, S1, S2, S3];
   public sapapps: Application[] = [D];
   public connectedApps: Application[] = [B, D, A1, A2];
-  public addOns: Application[] = [G, H, I, J, K, L, S1, S2];
+  public addOns: Application[] = [G, H, I, J, K, L, S1, S2, S3];
   public appsNetwork: Application[] = [V];
   public agentApps: Application[] = [A1, A2];
-  public skillApps: Application[] = [S1, S2];
+  public skillApps: Application[] = [S1, S2, S3];
   @observable public isAdmin: boolean;
   public email = '';
   public readonly categories: any[] = [
@@ -418,8 +429,8 @@ export class AppState {
     }
 
     if (!B.url) {
-      this.dashboardCategories[0].apps = [A, D, A1, A2, S1, S2];
-      this.myApps = [A, D, A1, A2, S1, S2];
+      this.dashboardCategories[0].apps = [A, D, A1, A2, S1, S2, S3];
+      this.myApps = [A, D, A1, A2, S1, S2, S3];
     }
   }
 }

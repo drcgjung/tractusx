@@ -25,22 +25,16 @@ export default class Dashboard extends React.Component {
   public render() {
     return (
       <div className='w100pc h100pc df fdc'>
-        {AppState.state.isAdmin && <div className='ml50 mr50 mt50 bgwhite w100-100 df fdc'>
-          <img src='../catenabackgroundcut.png' alt='Catena-X'/>
-          <span className='fs20 bold ml50 mt0'>Welcome to Catena-X</span>
-          <span className='fs20 bold ml50'>Lets get started!</span>
-          <span className='fs14 ml50 mt30'>Please finish the following tasks to actively participate in the Catena-X Automotive Network.</span>
-          <div className='df ml50 mt50 aic'>
-            <Icon className='fgblack fs14 bold mr5' iconName='Forward' />
-            <span className='fs14'>Set up your </span>
-            <Link className='fglgreen fs14 bold mr5 tdn ml5' to='/home/myconnectors?tab=3'>CONNECTOR</Link>
-          </div>
-          <div className='df ml50 mt10 mb50 aic'>
-            <Icon className='fgblack fs14 bold mr5' iconName='Forward' />
-            <span className='fs14'>Install your first app. Find &amp; browse the</span>
-            <Link className='fglgreen fs14 bold mr5 tdn ml5' to='/home/appstore'>APP STORE</Link>
-          </div>
-        </div>}
+        <div className='ml50 mr50 mt50 bgwhite w100-100 df fdc'>
+           <img src='../catenabackgroundcut.png' alt='Catena-X'/>
+            <span className='fs20 bold ml50 mt0'>Welcome to the Hey Catena! Demo (based on Speedboat/Pre-Release-1)</span>
+
+                  <div className='df ml50 mt50 aic'>
+                    <Icon className='fgblack fs14 bold mr5' iconName='Forward' />
+                    <span className='fs14'>Visit the </span>
+                    <Link className='fglgreen fs14 bold mr5 tdn ml5' to={`${process.env.PUBLIC_URL}/home/knowledge`}>Knowledge Explorer</Link>
+                  </div>
+        </div>
         <div className='df fdc mt50'>
           {AppState.state.dashboardCategories.map((c, index) => (
             <div key={index} className='ml50 mr50 mb30 w100pc df fdc'>

@@ -24,6 +24,30 @@ export default class MyDataOverview extends React.Component {
 
     const gridData: any[] = [
       {
+        fileName: 'urn:cx:graph#serializedPart',
+        category: 'Traceability',
+        type: 'GraphAsset',
+        synced: 'Yes',
+        items: '15308',
+        size: '656MB',
+        uploadData: 'online',
+        user: 'Friedrich Schweizer',
+        typeIcon: '',
+        syncIcon: ''
+      },
+      {
+              fileName: 'urn:cx:graph#assemblyPartRelation',
+              category: 'Manufacturing',
+              type: 'GraphAsset',
+              synced: 'Yes',
+              items: '22.088',
+              size: '969MB',
+              uploadData: 'online',
+              user: 'Daniel Wilms',
+              typeIcon: '',
+              syncIcon: ''
+       },
+       {
         fileName: 'Vehicle BOM 01.07.2021',
         category: 'Traceability',
         type: 'upload',
@@ -114,7 +138,10 @@ export default class MyDataOverview extends React.Component {
         element.typeIcon = <Icon className='mr5 flex1' iconName='Upload' title='Downloaded' />
         element.tooltip = 'Downloaded';
       }
-      else {
+      else  if (element.type === 'GraphAsset') {
+        element.typeIcon = <Icon className='mr5 flex1' iconName='LinkedDatabase' title='Queryable' />
+        element.tooltip = 'Agent API Available';
+      } else {
         element.typeIcon = <Icon className='fs14 mr5 flex1' iconName='AllCurrency' title='Downloaded' />
       }
       if (element.synced === 'Yes') {
